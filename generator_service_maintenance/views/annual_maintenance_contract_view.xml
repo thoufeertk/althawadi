@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_annual_maintenance_contract_tree" model="ir.ui.view">
+            <field name="name">view.annual.maintenance.contract.tree</field>
+            <field name="model">annual.maintenance.contract</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="contract_partner_id"/>
+                    <field name="contract_start_date"/>
+                    <field name="contract_end_date"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_annual_maintenance_contract_form" model="ir.ui.view">
+            <field name="name">view.annual.maintenance.contract.form</field>
+            <field name="model">annual.maintenance.contract</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Generator Details">
+                    <header>
+                        <button string="Submit" type="object" name="action_submit" states="draft"
+                                class="oe_highlight" groups="base.group_user"/>
+                        <button string="Approve" type="object" name="action_approve" states="submit"
+                                class="oe_highlight" groups="account.group_account_manager"/>
+                        <button string="Reject" type="object" name="action_reject" states="submit"
+                                groups="base.group_user"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,submit,running"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title oe_read_only">
+                            <h1>
+                                <field name="name" nolabel="1" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                            </h1>
+                        </div>
+                        <group col="2" colspan="2">
+                            <group>
+                                <field name="contract_partner_id" string="Customer" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="cust_purchase_order_no"/>
+                                <field name="contract_order_no"/>
+                            </group>
+                            <group>
+                                <label for="contract_start_date" string="Date"/>
+                                <div class="o_row">
+                                    <field name="contract_start_date" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                                    <field name="contract_end_date" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="contract_amount" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Generator Database" invisible="1">
+                                <group string="Generator Details">
+                                    <group>
+                                        <field name="generator_id" context="{'for_generator': 1, 'form_view_ref': 'generator_service_maintenance.generator_type_form_view'}"
+                                               attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="engine_fsd_number" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="generator_serial_number" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="generator_kva_ph" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="engine_serial_number" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="engine_model" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="alternator_serial_number" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="alternator_frame_size" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="panel_amf" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="panel_amf_make" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                        <field name="last_hours" attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                    </group>
+                                </group>
+                                <group string="Spare Parts">
+                                    <field name="generator_spare_parts_ids" mode="tree" nolabel="1">
+                                        <tree>
+                                            <field name="generator_spare_parts"/>
+                                            <field name="generator_spare_parts_quantity"/>
+                                            <field name="generator_spare_parts_uom"/>
+                                            <field name="generator_spare_parts_cost"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Services and Checkpoints">
+                                <group string="Services"
+                                       attrs="{'invisible' : [('enable_routine_maintenance', '=', False),('enable_monitor_service', '=', False),('enable_deployment_service', '=', False),('enable_breakdown_service', '=', False)]}">
+                                    <group>
+                                        <field name="enable_routine_maintenance"
+                                               attrs="{'invisible' : [('enable_routine_maintenance', '=', False)]}"/>
+                                        <field name="enable_monitor_service"
+                                               attrs="{'invisible' : [('enable_monitor_service', '=', False)]}"/>
+                                        <field name="enable_deployment_service"
+                                               attrs="{'invisible' : [('enable_deployment_service', '=', False)]}"/>
+                                        <field name="enable_breakdown_service"
+                                               attrs="{'invisible' : [('enable_breakdown_service', '=', False)]}"/>
+                                    </group>
+                                </group>
+                                <group string="Checkpoints" class="o_label_nowrap">
+                                    <group string="General(Not BDS)"
+                                           attrs="{'invisible' : [('gen_service_visual_rust', '=', False),('gen_service_check_any_deposition', '=', False),('gen_service_check_any_cleanliness', '=', False)]}">
+                                        <field name="gen_service_visual_rust"
+                                               attrs="{'invisible' : [('gen_service_visual_rust', '=', False)]}"/>
+                                        <field name="gen_service_check_any_deposition"
+                                               attrs="{'invisible' : [('gen_service_check_any_deposition', '=', False)]}"/>
+                                        <field name="gen_service_check_any_cleanliness"
+                                               attrs="{'invisible' : [('gen_service_check_any_cleanliness', '=', False)]}"/>
+                                    </group>
+                                    <group string="Air Intake Check"
+                                           attrs="{'invisible' : [('air_service_leaks', '=', False),('air_service_cleaner_passage', '=', False),('air_service_piping_connection', '=', False)]}">
+                                        <field name="air_service_leaks"
+                                               attrs="{'invisible' : [('air_service_leaks', '=', False)]}"/>
+                                        <field name="air_service_cleaner_passage"
+                                               attrs="{'invisible' : [('air_service_cleaner_passage', '=', False)]}"/>
+                                        <field name="air_service_piping_connection"
+                                               attrs="{'invisible' : [('air_service_piping_connection', '=', False)]}"/>
+                                    </group>
+                                    <group string="Engine"
+                                           attrs="{'invisible' : [('engine_service_unusual_vibration', '=', False),('engine_service_mounting_hardware', '=', False)]}">
+                                        <field name="engine_service_unusual_vibration"
+                                               attrs="{'invisible' : [('engine_service_unusual_vibration', '=', False)]}"/>
+                                        <field name="engine_service_mounting_hardware"
+                                               attrs="{'invisible' : [('engine_service_mounting_hardware', '=', False)]}"/>
+                                    </group>
+                                    <group string="Generator Check"
+                                           attrs="{'invisible' : [('generator_service_passage', '=', False),('generator_service_control_panel', '=', False)]}">
+                                        <field name="generator_service_passage"
+                                               attrs="{'invisible' : [('generator_service_passage', '=', False)]}"/>
+                                        <field name="generator_service_control_panel"
+                                               attrs="{'invisible' : [('generator_service_control_panel', '=', False)]}"/>
+                                    </group>
+                                    <group string="R-Alarm Relays"
+                                           attrs="{'invisible' : [('alarm_service_test_reset', '=', False)]}">
+                                        <field name="alarm_service_test_reset"
+                                               attrs="{'invisible' : [('alarm_service_test_reset', '=', False)]}"/>
+                                    </group>
+                                    <group string="R-Alternator"
+                                           attrs="{'invisible' : [('alternator_service_insulation', '=', False)]}">
+                                        <field name="alternator_service_insulation"
+                                               attrs="{'invisible' : [('alternator_service_insulation', '=', False)]}"/>
+                                    </group>
+                                    <group string="Lube"
+                                           attrs="{'invisible' : [('lub_service_lube_oil_level', '=', False),
+                                           ('lub_service_lube_engine_oil_level', '=', False),
+                                           ('lub_service_lube_engine_oil_condition', '=', False),
+                                           ('lub_service_lube_oil_filter', '=', False),
+                                           ('lub_service_lube_governer_oil', '=', False),
+                                           ('lub_service_lube_oil_pressure', '=', False),('lub_service_hydraulic_governor_pressure', '=', False)]}">
+                                        <field name="lub_service_lube_oil_level"
+                                               attrs="{'invisible' : [('lub_service_lube_oil_level', '=', False)]}"/>
+                                        <field name="lub_service_lube_engine_oil_level"
+                                               attrs="{'invisible' : [('lub_service_lube_engine_oil_level', '=', False)]}"/>
+                                        <field name="lub_service_lube_engine_oil_condition"
+                                               attrs="{'invisible' : [('lub_service_lube_engine_oil_condition', '=', False)]}"/>
+                                        <field name="lub_service_lube_oil_filter"
+                                               attrs="{'invisible' : [('lub_service_lube_oil_filter', '=', False)]}"/>
+                                        <field name="lub_service_lube_governer_oil"
+                                               attrs="{'invisible' : [('lub_service_lube_governer_oil', '=', False)]}"/>
+                                        <field name="lub_service_lube_oil_pressure"
+                                               attrs="{'invisible' : [('lub_service_lube_oil_pressure', '=', False)]}"/>
+                                        <field name="lub_service_hydraulic_governor_pressure"
+                                               attrs="{'invisible' : [('lub_service_hydraulic_governor_pressure', '=', False)]}"/>
+                                    </group>
+                                    <group string="Electrical Check"
+                                           attrs="{'invisible' : [('electrical_service_battery', '=', False),('electrical_service_electrolyte', '=', False),('electrical_service_gravity', '=', False),('electrical_service_charging_system', '=', False),('electrical_service_load_breaker', '=', False)]}">
+                                        <field name="electrical_service_battery"
+                                               attrs="{'invisible' : [('electrical_service_battery', '=', False)]}"/>
+                                        <field name="electrical_service_electrolyte"
+                                               attrs="{'invisible' : [('electrical_service_electrolyte', '=', False)]}"/>
+                                        <field name="electrical_service_gravity"
+                                               attrs="{'invisible' : [('electrical_service_gravity', '=', False)]}"/>
+                                        <field name="electrical_service_charging_system"
+                                               attrs="{'invisible' : [('electrical_service_charging_system', '=', False)]}"/>
+                                        <field name="electrical_service_load_breaker"
+                                               attrs="{'invisible' : [('electrical_service_load_breaker', '=', False)]}"/>
+                                    </group>
+                                    <group string="Fuel"
+                                           attrs="{'invisible' : [('fuel_service_leaks', '=', False),('fuel_service_main_tank_level', '=', False),('fuel_service_day_tank_level', '=', False),('fuel_service_transfer_pump', '=', False),('fuel_service_drain_sediment', '=', False),('fuel_service_governor_linkage', '=', False),('fuel_service_governor_linkage', '=', False),('fuel_service_governor_linkage', '=', False),('fuel_service_governor_linkage', '=', False),('fuel_service_lines_connection', '=', False)]}">
+                                        <field name="fuel_service_leaks"
+                                               attrs="{'invisible' : [('fuel_service_leaks', '=', False)]}"/>
+                                        <field name="fuel_service_main_tank_level"
+                                               attrs="{'invisible' : [('fuel_service_main_tank_level', '=', False)]}"/>
+                                        <field name="fuel_service_day_tank_level"
+                                               attrs="{'invisible' : [('fuel_service_day_tank_level', '=', False)]}"/>
+                                        <field name="fuel_service_transfer_pump"
+                                               attrs="{'invisible' : [('fuel_service_transfer_pump', '=', False)]}"/>
+                                        <field name="fuel_service_drain_sediment"
+                                               attrs="{'invisible' : [('fuel_service_drain_sediment', '=', False)]}"/>
+                                        <field name="fuel_service_governor_linkage"
+                                               attrs="{'invisible' : [('fuel_service_governor_linkage', '=', False)]}"/>
+                                        <field name="fuel_service_lines_connection"
+                                               attrs="{'invisible' : [('fuel_service_lines_connection', '=', False)]}"/>
+                                        <field name="fuel_service_filter"
+                                               attrs="{'invisible' : [('fuel_service_filter', '=', False)]}"/>
+                                    </group>
+                                    <group string="Cooling System"
+                                           attrs="{'invisible' : [('cooling_service_coolant_leaks', '=', False),('cooling_service_radiator_air_passageway', '=', False),('cooling_service_hoses_connections', '=', False),('cooling_service_coolant_level', '=', False),('cooling_service_belt_condition_tension', '=', False),('cooling_service_grease_leak', '=', False),('cooling_service_operation_heater', '=', False)]}">
+                                        <field name="cooling_service_coolant_leaks"
+                                               attrs="{'invisible' : [('cooling_service_coolant_leaks', '=', False)]}"/>
+                                        <field name="cooling_service_radiator_air_passageway"
+                                               attrs="{'invisible' : [('cooling_service_radiator_air_passageway', '=', False)]}"/>
+                                        <field name="cooling_service_hoses_connections"
+                                               attrs="{'invisible' : [('cooling_service_hoses_connections', '=', False)]}"/>
+                                        <field name="cooling_service_coolant_level"
+                                               attrs="{'invisible' : [('cooling_service_coolant_level', '=', False)]}"/>
+                                        <field name="cooling_service_belt_condition_tension"
+                                               attrs="{'invisible' : [('cooling_service_belt_condition_tension', '=', False)]}"/>
+                                        <field name="cooling_service_grease_leak"
+                                               attrs="{'invisible' : [('cooling_service_grease_leak', '=', False)]}"/>
+                                        <field name="cooling_service_operation_heater"
+                                               attrs="{'invisible' : [('cooling_service_operation_heater', '=', False)]}"/>
+                                    </group>
+                                    <group string="R-Starting" attrs="{'invisible' : [('starting_service_auto_manual', '=', False),('starting_service_under_voltage', '=', False),('starting_service_terminal_voltage', '=', False),('starting_service_frequency', '=', False),('starting_service_load_current', '=', False),('starting_service_operation_total_hours', '=', False)
+                                        ]}">
+                                        <field name="starting_service_auto_manual"
+                                               attrs="{'invisible' : [('starting_service_auto_manual', '=', False)]}"/>
+                                        <field name="starting_service_under_voltage"
+                                               attrs="{'invisible' : [('starting_service_under_voltage', '=', False)]}"/>
+                                        <field name="starting_service_terminal_voltage"
+                                               attrs="{'invisible' : [('starting_service_terminal_voltage', '=', False)]}"/>
+                                        <field name="starting_service_frequency"
+                                               attrs="{'invisible' : [('starting_service_frequency', '=', False)]}"/>
+                                        <field name="starting_service_load_current"
+                                               attrs="{'invisible' : [('starting_service_load_current', '=', False)]}"/>
+                                        <field name="starting_service_operation_total_hours"
+                                               attrs="{'invisible' : [('starting_service_operation_total_hours', '=', False)]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_menu_annual_maintenence_contract">
+            <field name="name">Annual Maintenance Contract</field>
+            <field name="res_model">annual.maintenance.contract</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create new Annual Maintenance Contract
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to the Annual Maintenance Contract.
+                </p>
+            </field>
+        </record>
+
+         <record id="amc_search_view" model="ir.ui.view">
+            <field name="name">amc Search View</field>
+            <field name="model">annual.maintenance.contract</field>
+            <field name="arch" type="xml">
+                <search string="Search Amc">
+                    <field name="contract_partner_id"/>
+                    <field name="generator_id"/>
+                    <filter string="Submitted" name="approve" domain="[('state','=','submit')]"/>
+                    <filter string="Running" name="running" domain="[('state','=','running')]"/>
+                    <filter string="Rejected" name="reject" domain="[('state','=','reject')]"/>
+                    <filter string="Expired" name="reject" domain="[('state','=','expired')]"/>
+                    <filter string="Today" name="service_date" domain="[('contract_start_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('contract_start_date', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter string="Month" name="sevice_month" domain="[('contract_start_date','&gt;=',context_today().strftime('%%Y-%%m-01')),('contract_start_date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+                    <filter string="Next Month" name="next_month" domain="[('contract_start_date','&gt;=',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),('contract_start_date','&lt;',(context_today()+relativedelta(months=2)).strftime('%%Y-%%m-01'))]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Partner" name="contract_partner_id" context="{'group_by':'contract_partner_id'}"/>
+                        <filter string="Date" name="contract_start_date" context="{'group_by': 'contract_start_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <menuitem id="menu_annual_maintenence_contract" name="Annual Contracts"
+                  parent="generator_service_maintenance.menu_master_data"
+                  action="action_menu_annual_maintenence_contract"
+                  groups="base.group_system"/>
+    </data>
+</odoo>
+

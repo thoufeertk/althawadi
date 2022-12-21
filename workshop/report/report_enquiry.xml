@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="workshop_enquiry_pdf_report">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <br></br>
+                <div style="text-align:center;color:black!important;"><strong><h1>Enquiry Report</h1></strong></div>
+
+
+                    <t t-foreach="docs" t-as="doc">
+                        <div style="text-align:left;color:black!important;"><strong>Enquiry Number :<span t-esc="doc.enquiry_number"/></strong></div>
+                         <div style="text-align:left;color:black!important;"><strong>Date Enquiry :<span t-esc="doc.date_enquiry"/></strong></div>
+
+
+                        <table class="table" >
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;color:black!important;">Customer Name</th>
+                            <th style="text-align:left;color:black!important;">Address</th>
+                            <th style="text-align:left;color:black!important;">Type of Machine</th>
+                            <th style="text-align:left;color:black!important;">Service deadline</th>
+                            <th style="text-align:left;color:black!important;">Reason</th>
+                            <th style="text-align:left;color:black!important;">status</th>
+                        </tr>
+                    </thead>
+                            <tbody>
+                                    <td><span t-att-style="style" t-esc="doc.customer_name.name"/></td>
+                                    <td><span t-att-style="style" t-esc="doc.street"/></td>
+                                    <td><span t-att-style="style" t-esc="doc.machine_type.name"/></td>
+                                    <td><span t-att-style="style" t-esc="doc.service_deadline"/></td>
+                                    <td><span t-att-style="style" t-esc="doc.repair_reason"/></td>
+                                    <td><span t-att-style="style" t-esc="doc.warranty_status"/></td>
+                            </tbody>
+                        </table>
+                    </t>
+
+                </t>
+            </t>
+    </template>
+</odoo>

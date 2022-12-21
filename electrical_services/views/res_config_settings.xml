@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_res_config_electrical_settings" model="ir.ui.view">
+        <field name="name">view.res.config.electrical.settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+<!--                <div class="app_settings_block" data-string="Electrical" string="Electrical"-->
+<!--                     data-key="electrical_services">-->
+<!--                    <h2>Electrical Journal</h2>-->
+<!--                    <div class="row mt16 o_settings_container">-->
+<!--                        <div class="col-12 col-lg-6 o_setting_box">-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <label for="electrical_journal_id"/>-->
+<!--                                <div class="text-muted">-->
+<!--                                    Set default Journal for Electrical Services-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="o_setting_right_pane">-->
+<!--                                <field name="electrical_journal_id"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </xpath>
+        </field>
+    </record>
+    <record id="action_menu_electrical_config" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'electrical_services'}</field>
+    </record>
+    <menuitem id="electrical_configuration" name="Configuration"
+              parent="electrical_services.electrical_service_main_menu" sequence="16"/>
+    <menuitem id="electrical_settings" name="Settings" parent="electrical_configuration"
+              action="action_menu_electrical_config"/>
+</odoo>

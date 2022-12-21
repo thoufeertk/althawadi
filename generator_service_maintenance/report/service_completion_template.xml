@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_service_completion">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 align="center">Service Completion Report</h2>
+                        <div class="row">
+                            <t t-set="address">
+                                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                     t-esc="customer"
+                                     t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                            </t>
+                            <br/>
+                            <div id="informations" class="row mt32 mb32">
+                                <div t-if="start_date" class="col-6 bm-2">
+                                    <strong>Start Date:</strong>
+                                    <p t-esc="start_date" class="m-0"/>
+                                </div>
+                                <div t-if="end_date" class="col-6 bm-2">
+                                    <strong>End Date:</strong>
+                                    <p t-esc="end_date" class="m-0"/>
+                                </div>
+                            </div>
+                        </div>
+                        <t t-set="i" t-value="1"/>
+                        <table class="table table-sm o_main_table" name="service">
+                            <thead>
+                                <tr>
+                                    <th name="th_serv" class="text-right">
+                                        <span>Sl No.</span>
+                                    </th>
+                                    <th name="th_serv" class="text-right">
+                                        <span>Location</span>
+                                    </th>
+                                    <th name="th_serv" class="text-right">
+                                        <span>Capacity</span>
+                                    </th>
+                                    <th name="th_serv" class="text-right">
+                                        <span>Engine Type</span>
+                                    </th>
+                                    <th name="th_serv" class="text-right">
+                                        <span>Availability</span>
+                                    </th>
+                                    <th name="th_serv" class="text-right">
+                                        <span>Allocated Service</span>
+                                    </th>
+                                    <th name="th_serv" class="text-right">
+                                        <span>Remining Service</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="invoice_tbody">
+                                <t t-foreach="order_lines" t-as="line">
+                                    <tr>
+                                        <td class="text-right">
+                                            <span t-esc="i"/>
+                                            <t t-set="i" t-value="i+1"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span class="text-nowrap"
+                                                  t-field="line.order_id.service_bld_number"/><br/>
+                                            <span class="text-nowrap"
+                                                  t-field="line.order_id.service_road_number"/><br/>
+                                            <span class="text-nowrap"
+                                                  t-field="line.order_id.service_area_number"/><br/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.product_id.generator_kva_ph"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.product_id.engine_fsd_number"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.order_id.availability_reason"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.order_id.allocated_no_service"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.order_id.remaining_no_service"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <div id="informations" class="row mt32 mb32">
+                            <div t-if="total_amount" class="col-6 bm-2">
+                                <strong>Total Amount:</strong>
+                                <p t-esc="total_amount" class="m-0"
+                                   t-options="{'widget': 'monetary', 'display_currency': order_lines[0].order_id.currency_id}"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

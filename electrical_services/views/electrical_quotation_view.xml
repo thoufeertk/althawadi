@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_electrical_quotation_tree" model="ir.ui.view">
+            <field name="name">view.electrical.quotation.tree</field>
+            <field name="model">electrical.quotation</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Electrical Quotation" create="0">
+                    <field name="name"/>
+                    <field name="electrical_quotation_date"/>
+                    <field name="electrical_customer_id"/>
+                    <field name="electrical_project_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_electrical_quotation_form" model="ir.ui.view">
+            <field name="name">view.electrical.quotation.form</field>
+            <field name="model">electrical.quotation</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Electrical Quotation" create="0">
+                    <header>
+                        <button name="create_work_order"
+                                string="Create Work Order" type="object"
+                                attrs="{'invisible': ['|',('work_order_count', '!=', 0),('state','!=','approved')]}"
+                                class="oe_highlight"/>
+                        <button name="action_approve" string="Approve"
+                                type="object" states="draft"
+                                class="oe_highlight"/>
+                        <button name="action_reject" states="draft"
+                                type="object" string="Reject"
+                                class="oe_highlight"/>
+                        <button name="action_send_mail" string="Send By Email"
+                                type="object"
+                                class="oe_highlight"/>
+                        <button name="action_print" string="Print" type="object"
+                                state="workorder"
+                                class="oe_highlight"
+                                attrs='{"invisible": [("state", "!=", "workorder")]}'/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,approve,quotation"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box">
+                            <button class="oe_stat_button" name="button_electrical_work_order"
+                                    attrs="{'invisible': [('work_order_count', '=', 0)]}"
+                                    type="object" icon="fa-wrench">
+                                <field name="work_order_count" widget="statinfo" string="Work Order"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="electrical_quotation_date"/>
+                                <field name="electrical_customer_id"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="electrical_customer_address"/>
+                                <field name="electrical_site_ref" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="electrical_project_id"/>
+                                <field name="enquiry_id" attrs='{"invisible": [("enquiry_id", "=", False)]}'/>
+                                <label for="completion_time" string="Completion Time"/>
+                                <div>
+                                    <field name="completion_time" class="oe_inline" nolabel="1"/>
+                                    days
+                                </div>
+                            </group>
+                            <group>
+                                <field name="payment_term_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page id="electrical_scope_tab"
+                                  string="Electrical Scope">
+                                <field name="quotation_scope_line_ids"
+                                       mode="tree">
+                                    <tree editable="bottom" multi_edit="1">
+                                        <field name="quotation_scope_id"/>
+                                        <field name="quotation_scope_code"/>
+                                        <field name="quotation_scope_description"/>
+                                        <field name="quotation_scope_qty"/>
+                                        <field name="quotation_scope_price"/>
+                                        <field name="quotation_scope_tax"
+                                               widget="many2many_tags"
+                                               optional="show"/>
+                                        <field name="quotation_scope_tax_amount"
+                                               optional="hide"
+                                               sum="quotation_scope_tax_amount"/>
+                                        <field name="quotation_scope_subtotal"/>
+                                        <field name="quotation_scope_total"/>
+                                        <field name="warranty_status"/>
+                                    </tree>
+                                </field>
+                                <group name="note_group" col="6">
+                                    <group class="oe_subtotal_footer oe_right"
+                                           colspan="2" name="sale_total">
+                                        <field name="amount_untaxed"
+                                               widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="amount_tax"
+                                               widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                            <label for="amount_total"/>
+                                        </div>
+                                        <field name="amount_total" nolabel="1"
+                                               class="oe_subtotal_footer_separator"
+                                               widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                    </group>
+                                    <div class="oe_clear"/>
+                                </group>
+
+                            </page>
+                            <page id="electrical_spare_tab"
+                                  string="Electrical Accessories">
+                                <field name="quotation_spare_line_ids"
+                                       mode="tree">
+                                    <tree editable="bottom">
+                                        <field name="quotation_spare_parts_id"/>
+                                        <field name="quotation_spare_parts_qty"/>
+                                        <field name="quotation_spare_parts_unit_price"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+                id="action_menu_electrical_quotation">
+            <field name="name">Electrical Quotations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">electrical.quotation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Electrical Quotations
+                </p>
+                <p>
+                    Create a Quotation for Work order and enter the details of
+                    the customer.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_electrical_quotation" name="Quotations"
+                  parent="electrical_operations_main_menu"
+                  action="action_menu_electrical_quotation"/>
+
+    </data>
+</odoo>

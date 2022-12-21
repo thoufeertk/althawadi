@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <!--quotation mail-->
+        <record id="email_template_quotation" model="mail.template">
+            <field name="name">Workshop Quotation Email</field>
+            <field name="model_id" ref="workshop.model_workshop_quotation"/>
+            <field name="email_from">{{(user.email )}}</field>
+            <field name="email_to">{{object.customer_name.email}}</field>
+            <field name="subject">Ref {{object.name or 'n/a' }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <p>
+                    Hello,
+                    <br/>
+                    <br/>
+                    Your quotation
+                    <t t-out="object.name"/>
+                    amounting in
+                    <t t-out="object.amount_total"/>
+                    is ready for review.
+                    <br/>
+                    <br/>
+                    Do not hesitate to contact us if you have any questions.
+                    <br/>
+                </p>
+            </field>
+            <field name="report_template"
+                   ref="workshop.quotation_report"/>
+            <field name="report_name">{{(object.name or '').replace('/','_')}}</field>
+        </record>
+
+        <!--Email template for Material Request-->
+        <record id="email_template_workshop_material_request" model="mail.template">
+            <field name="name">Material Request</field>
+            <field name="model_id" ref="workshop.model_workshop_material_request"/>
+            <field name="email_from"></field>
+            <field name="email_to"></field>
+            <field name="subject">Material Request (Ref {{object.name}})</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <field name="body_html" type="html">
+                    <p style="margin-bottom:20px;">Hi, </p>
+                    <p style="margin-bottom:20px;">Material Request <t t-out="object.name"/> is ready for review.</p>
+                    <p style="margin-bottom:10px;"><b>Spare Parts Details</b></p>
+                    <table border="2" cellpadding="10">
+                        <tbody>
+                            <tr>
+                              <th style="padding: 5px;">Product</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                            </tr>
+<!--                            % for lines in object.material_bom_line:-->
+                           <t t-foreach="object.material_bom_line" t-as="lines">
+                            <tr>
+                              <td style="padding: 5px;"><t t-out="lines.product_id.name"/></td>
+                              <td><t t-out="lines.quantity"/></td>
+                              <td><t t-esc="lines.price * lines.quantity"
+                              /></td>
+                            </tr>
+                           </t>
+                        </tbody>
+                    </table>
+
+            </field>
+            <field name="report_template" ref="workshop.action_report_material_request"/>
+            <field name="report_name">{{(object.name or '').replace('/','_')}}</field>
+        </record>
+    </data>
+</odoo>
