@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_generator_service_tree" model="ir.ui.view">
+            <field name="name">view.generator.service.tree</field>
+            <field name="model">generator.service</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="service_customer"/>
+                    <field name="service_type"/>
+                    <field name="service_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_generator_service_form" model="ir.ui.view">
+            <field name="name">view.generator.service.form</field>
+            <field name="model">generator.service</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Generator Service">
+                    <header>
+                        <button name="create_quotation" string="Create Quotation" class="oe_highlight"
+                                type="object"
+                                attrs='{"invisible": [("state","!=","waiting")]}'
+                                groups="sales_team.group_sale_salesman,generator_service_maintenance.generator_engineer"/>
+                        <button name="service_start" string="Start"
+                                groups="generator_service_maintenance.generator_supervisor" states="draft"
+                                type="object"/>
+                        <button name="check_parts_availability" string="Check Availability"
+                                groups="generator_service_maintenance.generator_supervisor" states="waiting_material"
+                                type="object"/>
+                        <button name="service_submit" string="Submit" type="object" states="running"/>
+                        <button name="service_approve" string="Approve"
+                                groups="generator_service_maintenance.generator_supervisor" states="submit"
+                                type="object"/>
+                        <button name="service_reject" string="Reject"
+                                groups="generator_service_maintenance.generator_supervisor" states="submit"
+                                type="object"/>
+                        <button name="send_email" groups="generator_service_maintenance.generator_supervisor"
+                                string="Send by E-mail" type="object"/>
+                        <button name="print_service_report" string="Print"
+                                type="object"
+                                groups="generator_service_maintenance.generator_supervisor"/>
+                        <field name="state" widget="statusbar" force_save="1"
+                               statusbar_visible="draft,submit,approve"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box">
+                            <button class="oe_stat_button" name="button_generator_task"
+                                    attrs="{'invisible': [('state', '=','pending')]}"
+                                    type="object" icon="fa-tasks">Tasks
+                            </button>
+                            <button class="oe_stat_button" name="button_quotation"
+                                    attrs="{'invisible': [('quotation_count', '=', 0)]}"
+                                    type="object" icon="fa-pencil-square-o"
+                                    groups="sales_team.group_sale_salesman,generator_service_maintenance.generator_engineer">
+                                <field name="quotation_count" widget="statinfo" string="Quotation"/>
+                            </button>
+                            <button type="object" name="action_view_material_request" class="oe_stat_button"
+                                    icon="fa-file"
+                                    attrs="{'invisible':[('material_request_count', '=', 0)]}">
+                                <field name="material_request_count" widget="statinfo" string="Material Request"/>
+                            </button>
+                        </div>
+                        <div class="oe_title oe_read_only">
+                            <h1>
+                                <field name="name"
+                                       attrs="{'readonly': [('state', 'in', ('draft', 'running','submit','approve', 'invoice', 'reject'))]}"/>
+                            </h1>
+                        </div>
+                        <field name="service_generator_image" widget="image" class="oe_avatar"/>
+                        <group>
+                            <group>
+                                <field name="amc_check" invisible="1"/>
+                                <field name="generator_service_picking_id" invisible="1"/>
+                                <field name="service_date"
+                                       attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                <field name="service_customer"
+                                       attrs="{'readonly': [('state', 'not in', ('draft','waiting'))]}"/>
+                                <label for="street" string="Address:"/>
+                                <div class="o_address_format">
+                                    <field name="street" placeholder="Street..."
+                                           attrs="{'readonly': [('state', 'not in', ['draft','waiting'])]}"
+                                           class="o_address_street"/>
+                                    <field name="street2" placeholder="Street 2..."
+                                           attrs="{'readonly': [('state', 'not in', ['draft','waiting'])]}"
+                                           class="o_address_street"/>
+                                    <field name="city" placeholder="City"
+                                           attrs="{'readonly': [('state', 'not in', ['draft','waiting'])]}"
+                                           class="o_address_city"/>
+                                    <field name="state_id" class="o_address_state"
+                                           attrs="{'readonly': [('state', 'not in', ['draft','waiting'])]}"
+                                           placeholder="State"
+                                           options='{"no_open": True, "no_create": True}'
+                                           context="{'country_id': country_id, 'zip': zip}"/>
+                                    <field name="zip" placeholder="ZIP"
+                                           attrs="{'readonly': [('state', 'not in', ['draft','waiting'])]}"
+                                           class="o_address_zip"/>
+                                    <field name="country_id" placeholder="Country"
+                                           attrs="{'readonly': [('state', 'not in', ['draft','waiting'])]}"
+                                           class="o_address_country"
+                                           options="{'no_create_edit': True, 'no_open': True}"/>
+                                </div>
+                                <field name="service_generator_id"
+                                       context="{'for_generator': 1, 'form_view_ref': 'generator_service_maintenance.generator_type_form_view'}"
+                                       attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+
+                                <field name="service_type"
+                                       attrs="{'readonly': [('state', 'not in', ('draft','waiting'))]}"/>
+                            </group>
+                            <group>
+                                <field name="service_estimated_cost" groups="account.group_account_manager"
+                                       invisible="1"
+                                       attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"
+                                       widget="monetary"
+                                       options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="warranty_days"
+                                       attrs="{'invisible': [('state', 'not in', ('approve', 'invoice'))], 'readonly': [('state', '=', 'invoice')]}"/>
+                                <field name="gen_sale_order_id" string="Job Order"
+                                       attrs="{'readonly': [('state', '=', 'invoice')]}"/>
+                                <field name="amc_contract_id"
+                                       attrs="{'readonly': [('state', '=', 'invoice')]}"/>
+                                <field name="check_quotation_visibility" invisible="1"
+                                       attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Generator Database">
+                                <group string="Generator Details">
+                                    <group>
+                                        <field name="service_engine_fsd_number"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"
+                                               required="1" />
+                                        <field name="service_generator_serial_number"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_generator_kva_ph"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_engine_serial_number"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_engine_model"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="service_alternator_serial_number"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_alternator_frame_size"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_panel_amf"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_panel_amf_make"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_last_hours"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </group>
+                                </group>
+                                <group string="Spare Parts"
+                                       attrs="{'invisible' : [('service_type', 'in', ['monitor', 'deployment'])]}">
+
+                                    <field name="service_generator_spare_parts_ids" nolabel="1">
+                                        <tree editable="bottom"
+                                              decoration-danger="state not in ['assigned', 'done']"
+                                              multi_edit="1">
+                                            <field name="product_id" domain="[('type', '=', 'product')]"/>
+                                            <field name="name" invisible="1"/>
+                                            <field name="picking_type_id" optional="hide"/>
+                                            <field name="location_id" optional="hide"/>
+                                            <field name="location_dest_id" optional="hide"/>
+                                            <field name="product_uom_qty" string="Quantity"/>
+                                            <field name="reserved_availability" string="Reserved"/>
+                                            <field name="product_uom"/>
+                                            <field name="service_generator_spare_parts_cost" string="Price"/>
+                                            <field name="quantity_done" optional="hide"/>
+                                            <field name="product_uom_category_id" invisible="1"/>
+                                            <field name="company_id" invisible="1"/>
+                                            <field name="state" invisible="1"/>
+                                            <field name="picking_id" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="location_details" string="Location Details">
+                                <group string="Location Details">
+                                    <group>
+                                        <field name="service_bld_number"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_road_number"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_area_number"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_area"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_generator_running_hours"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="service_generator_piu_running_hours"
+                                               attrs="{'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_breakdown_date"
+                                               attrs="{'invisible': [('service_type','!=', 'breakdown')], 'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_initial_fault"
+                                               attrs="{'invisible': [('service_type','!=', 'breakdown')], 'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                        <field name="service_rectifications"
+                                               attrs="{'invisible': [('service_type','!=', 'breakdown')], 'readonly': [('state', 'in', ('running','submit','approve', 'invoice', 'reject'))]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="technician_details" string="Technician Details"
+                                  attrs="{'invisible': [('state','in', ('waiting'))]}">
+                                <field name="technician_details_ids" mode="tree" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="technician_id"/>
+                                        <field name="service_technician_mobile"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="check_points" string="Service Check Points">
+                                <group class="o_label_nowrap">
+                                    <group string="General"
+                                           attrs="{'invisible' : [('check_gen_service_visual_rust', '=', False),('check_gen_service_check_any_deposition', '=', False),('check_gen_service_check_any_cleanliness', '=', False)]}">
+                                        <field name="check_gen_service_visual_rust" invisible="1"/>
+                                        <field name="gen_service_visual_rust"
+                                               attrs="{'invisible' : [('check_gen_service_visual_rust', '=', False)]}"/>
+                                        <field name="dec_gen_service_visual_rust" nolabel="1"
+                                               attrs="{'invisible' : [('gen_service_visual_rust', '=', False)]}"/>
+                                        <field name="check_gen_service_check_any_deposition" invisible="1"/>
+                                        <field name="gen_service_check_any_deposition"
+                                               attrs="{'invisible' : [('check_gen_service_check_any_deposition', '=', False)]}"/>
+                                        <field name="dec_gen_service_check_any_deposition" nolabel="1"
+                                               attrs="{'invisible' : [('gen_service_check_any_deposition', '=', False)]}"/>
+                                        <field name="check_gen_service_check_any_cleanliness" invisible="1"/>
+                                        <field name="gen_service_check_any_cleanliness"
+                                               attrs="{'invisible' : [('check_gen_service_check_any_cleanliness', '=', False)]}"/>
+                                        <field name="dec_gen_service_check_any_cleanliness" nolabel="1"
+                                               attrs="{'invisible' : [('gen_service_check_any_cleanliness', '=', False)]}"/>
+                                    </group>
+                                    <group string="Air Intake Check"
+                                           attrs="{'invisible' : [('check_air_service_leaks', '=', False),('check_air_service_cleaner_passage', '=', False),('check_air_service_piping_connection', '=', False)]}">
+                                        <field name="check_air_service_leaks" invisible="1"/>
+                                        <field name="air_service_leaks"
+                                               attrs="{'invisible' : [('check_air_service_leaks', '=', False)]}"/>
+                                        <field name="dec_air_service_leaks" nolabel="1"
+                                               attrs="{'invisible' : [('air_service_leaks', '=', False)]}"/>
+                                        <field name="check_air_service_cleaner_passage" invisible="1"/>
+                                        <field name="air_service_cleaner_passage"
+                                               attrs="{'invisible' : [('check_air_service_cleaner_passage', '=', False)]}"/>
+                                        <field name="dec_air_service_cleaner_passage" nolabel="1"
+                                               attrs="{'invisible' : [('air_service_cleaner_passage', '=', False)]}"/>
+                                        <field name="check_air_service_piping_connection" invisible="1"/>
+                                        <field name="air_service_piping_connection"
+                                               attrs="{'invisible' : [('check_air_service_piping_connection', '=', False)]}"/>
+                                        <field name="dec_air_service_piping_connection" nolabel="1"
+                                               attrs="{'invisible' : [('air_service_piping_connection', '=', False)]}"/>
+                                    </group>
+                                    <group string="Engine"
+                                           attrs="{'invisible' : [('check_engine_service_unusual_vibration', '=', False),('check_engine_service_mounting_hardware', '=', False),]}">
+                                        <field name="check_engine_service_unusual_vibration" invisible="1"
+                                               attrs="{'invisible' : [('check_engine_service_unusual_vibration', '=', False)]}"/>
+                                        <field name="engine_service_unusual_vibration"
+                                               attrs="{'invisible' : [('check_engine_service_unusual_vibration', '=', False)]}"/>
+                                        <field name="dec_engine_service_unusual_vibration" nolabel="1"
+                                               attrs="{'invisible' : [('engine_service_unusual_vibration', '=', False)]}"/>
+                                        <field name="check_engine_service_mounting_hardware" invisible="1"/>
+                                        <field name="engine_service_mounting_hardware"
+                                               attrs="{'invisible' : [('check_engine_service_mounting_hardware', '=', False)]}"/>
+                                        <field name="dec_engine_service_mounting_hardware" nolabel="1"
+                                               attrs="{'invisible' : [('engine_service_mounting_hardware', '=', False)]}"
+                                        />
+                                    </group>
+                                    <group string="Generator Check"
+                                           attrs="{'invisible' : [('check_generator_service_passage', '=', False),('check_generator_service_control_panel', '=', False)]}">
+                                        <field name="check_generator_service_passage" invisible="1"/>
+                                        <field name="generator_service_passage"
+                                               attrs="{'invisible' : [('check_generator_service_passage', '=', False)]}"/>
+                                        <field name="dec_generator_service_passage" nolabel="1"
+                                               attrs="{'invisible' : [('generator_service_passage', '=', False)]}"/>
+                                        <field name="check_generator_service_control_panel" invisible="1"/>
+                                        <field name="generator_service_control_panel"
+                                               attrs="{'invisible' : [('check_generator_service_control_panel', '=', False)]}"/>
+                                        <field name="dec_generator_service_control_panel" nolabel="1"
+                                               attrs="{'invisible' : [('generator_service_control_panel', '=', False)]}"/>
+                                    </group>
+                                    <group string="R-Alarm Relays"
+                                           attrs="{'invisible' : [('check_alarm_service_test_reset', '=', False)]}">
+                                        <field name="check_alarm_service_test_reset" invisible="1"/>
+                                        <field name="alarm_service_test_reset"
+                                               attrs="{'invisible' : [('check_alarm_service_test_reset', '=', False)]}"/>
+                                        <field name="dec_alarm_service_test_reset" nolabel="1"
+                                               attrs="{'invisible' : [('alarm_service_test_reset', '=', False)]}"/>
+                                    </group>
+                                    <group string="R-Alternator"
+                                           attrs="{'invisible' : [('check_alternator_service_insulation', '=', False)]}">
+                                        <field name="check_alternator_service_insulation" invisible="1"/>
+                                        <field name="alternator_service_insulation"
+                                               attrs="{'invisible' : [('check_alternator_service_insulation', '=', False)]}"/>
+                                        <field name="dec_alternator_service_insulation" nolabel="1"
+                                               attrs="{'invisible' : [('alternator_service_insulation', '=', False)]}"/>
+                                    </group>
+                                    <group string="Lube"
+                                           attrs="{'invisible' : [('check_lub_service_lube_oil_level', '=', False),('check_lub_service_lube_engine_oil_level', '=', False),('check_lub_service_lube_engine_oil_condition', '=', False),('check_lub_service_lube_oil_pressure', '=', False),('check_lub_service_hydraulic_governor_pressure', '=', False)]}">
+                                        <field name="check_lub_service_lube_oil_level" invisible="1"/>
+                                        <field name="lub_service_lube_oil_level"
+                                               attrs="{'invisible' : [('check_lub_service_lube_oil_level', '=', False)]}"/>
+                                        <field name="dec_lub_service_lube_oil_level" nolabel="1"
+                                               attrs="{'invisible' : [('lub_service_lube_oil_level', '=', False)]}"/>
+                                        <field name="check_lub_service_lube_engine_oil_level" invisible="1"/>
+                                        <field name="lub_service_lube_engine_oil_level"
+                                               attrs="{'invisible' : [('check_lub_service_lube_engine_oil_level', '=', False)]}"/>
+                                        <field name="dec_lub_service_lube_engine_oil_level" nolabel="1"
+                                               attrs="{'invisible' : [('lub_service_lube_engine_oil_level', '=', False)]}"/>
+                                        <field name="check_lub_service_lube_engine_oil_condition" invisible="1"/>
+                                        <field name="lub_service_lube_engine_oil_condition"
+                                               attrs="{'invisible' : [('check_lub_service_lube_engine_oil_condition', '=', False)]}"/>
+                                        <field name="dec_lub_service_lube_engine_oil_condition" nolabel="1"
+                                               attrs="{'invisible' : [('lub_service_lube_engine_oil_condition', '=', False)]}"/>
+                                        <field name="check_lub_service_lube_oil_filter" invisible="1"/>
+                                        <field name="lub_service_lube_oil_filter"
+                                               attrs="{'invisible' : [('check_lub_service_lube_oil_filter', '=', False)]}"/>
+                                        <field name="dec_lub_service_lube_oil_filter" nolabel="1"
+                                               attrs="{'invisible' : [('lub_service_lube_oil_filter', '=', False)]}"/>
+                                        <field name="check_lub_service_lube_governer_oil" invisible="1"/>
+                                        <field name="lub_service_lube_governer_oil"
+                                               attrs="{'invisible' : [('check_lub_service_lube_governer_oil', '=', False)]}"/>
+                                        <field name="dec_lub_service_lube_governer_oil" nolabel="1"
+                                               attrs="{'invisible' : [('lub_service_lube_governer_oil', '=', False)]}"/>
+                                        <field name="check_lub_service_lube_oil_pressure" invisible="1"/>
+                                        <field name="lub_service_lube_oil_pressure"
+                                               attrs="{'invisible' : [('check_lub_service_lube_oil_pressure', '=', False)]}"/>
+                                        <field name="dec_lub_service_lube_oil_pressure" nolabel="1"
+                                               attrs="{'invisible' : [('lub_service_lube_oil_pressure', '=', False)]}"/>
+                                        <field name="check_lub_service_hydraulic_governor_pressure" invisible="1"/>
+                                        <field name="lub_service_hydraulic_governor_pressure"
+                                               attrs="{'invisible' : [('check_lub_service_hydraulic_governor_pressure', '=', False)]}"/>
+                                        <field name="dec_lub_service_hydraulic_governor_pressure" nolabel="1"
+                                               attrs="{'invisible' : [('lub_service_hydraulic_governor_pressure', '=', False)]}"/>
+                                    </group>
+                                    <group string="Electrical Check"
+                                           attrs="{'invisible' : [('check_electrical_service_battery', '=', False),('check_electrical_service_electrolyte', '=', False),('check_electrical_service_gravity', '=', False),('check_electrical_service_charging_system', '=', False),('check_electrical_service_load_breaker', '=', False)]}">
+                                        <field name="check_electrical_service_battery" invisible="1"/>
+                                        <field name="electrical_service_battery"
+                                               attrs="{'invisible' : [('check_electrical_service_battery', '=', False)]}"/>
+                                        <field name="dec_electrical_service_battery" nolabel="1"
+                                               attrs="{'invisible' : [('electrical_service_battery', '=', False)]}"/>
+                                        <field name="check_electrical_service_electrolyte" invisible="1"/>
+                                        <field name="electrical_service_electrolyte"
+                                               attrs="{'invisible' : [('check_electrical_service_electrolyte', '=', False)]}"/>
+                                        <field name="dec_electrical_service_electrolyte" nolabel="1"
+                                               attrs="{'invisible' : [('electrical_service_electrolyte', '=', False)]}"/>
+                                        <field name="check_electrical_service_gravity" invisible="1"/>
+                                        <field name="electrical_service_gravity"
+                                               attrs="{'invisible' : [('check_electrical_service_gravity', '=', False)]}"/>
+                                        <field name="dec_electrical_service_gravity" nolabel="1"
+                                               attrs="{'invisible' : [('electrical_service_gravity', '=', False)]}"/>
+                                        <field name="check_electrical_service_charging_system" invisible="1"/>
+                                        <field name="electrical_service_charging_system"
+                                               attrs="{'invisible' : [('check_electrical_service_charging_system', '=', False)]}"/>
+                                        <field name="dec_electrical_service_charging_system" nolabel="1"
+                                               attrs="{'invisible' : [('electrical_service_charging_system', '=', False)]}"/>
+                                        <field name="check_electrical_service_load_breaker" invisible="1"/>
+                                        <field name="electrical_service_load_breaker"
+                                               attrs="{'invisible' : [('check_electrical_service_load_breaker', '=', False)]}"/>
+                                        <field name="dec_electrical_service_load_breaker" nolabel="1"
+                                               attrs="{'invisible' : [('electrical_service_load_breaker', '=', False)]}"/>
+                                    </group>
+                                    <group string="Fuel"
+                                           attrs="{'invisible' : [('check_fuel_service_leaks', '=', False),('check_fuel_service_main_tank_level', '=', False),('check_fuel_service_day_tank_level', '=', False),('check_fuel_service_transfer_pump', '=', False),('check_fuel_service_drain_sediment', '=', False),('check_fuel_service_governor_linkage', '=', False),('check_fuel_service_lines_connection', '=', False),('check_fuel_service_filter', '=', False)]}">
+                                        <field name="check_fuel_service_leaks" invisible="1"/>
+                                        <field name="fuel_service_leaks"
+                                               attrs="{'invisible' : [('check_fuel_service_leaks', '=', False)]}"/>
+                                        <field name="dec_fuel_service_leaks" nolabel="1"
+                                               attrs="{'invisible' : [('fuel_service_leaks', '=', False)]}"/>
+                                        <field name="check_fuel_service_main_tank_level" invisible="1"/>
+                                        <field name="fuel_service_main_tank_level"
+                                               attrs="{'invisible' : [('check_fuel_service_main_tank_level', '=', False)]}"/>
+                                        <field name="dec_fuel_service_main_tank_level" nolabel="1"
+                                               attrs="{'invisible' : [('fuel_service_main_tank_level', '=', False)]}"/>
+                                        <field name="check_fuel_service_day_tank_level" invisible="1"/>
+                                        <field name="fuel_service_day_tank_level"
+                                               attrs="{'invisible' : [('check_fuel_service_day_tank_level', '=', False)]}"/>
+                                        <field name="dec_fuel_service_day_tank_level" nolabel="1"
+                                               attrs="{'invisible' : [('fuel_service_day_tank_level', '=', False)]}"/>
+                                        <field name="check_fuel_service_transfer_pump" invisible="1"/>
+                                        <field name="fuel_service_transfer_pump"
+                                               attrs="{'invisible' : [('check_fuel_service_transfer_pump', '=', False)]}"/>
+                                        <field name="dec_fuel_service_transfer_pump" nolabel="1"
+                                               attrs="{'invisible' : [('fuel_service_transfer_pump', '=', False)]}"/>
+                                        <field name="check_fuel_service_drain_sediment" invisible="1"/>
+                                        <field name="fuel_service_drain_sediment"
+                                               attrs="{'invisible' : [('check_fuel_service_drain_sediment', '=', False)]}"/>
+                                        <field name="dec_fuel_service_drain_sediment" nolabel="1"
+                                               attrs="{'invisible' : [('fuel_service_drain_sediment', '=', False)]}"/>
+                                        <field name="check_fuel_service_governor_linkage" invisible="1"/>
+                                        <field name="fuel_service_governor_linkage"
+                                               attrs="{'invisible' : [('check_fuel_service_governor_linkage', '=', False)]}"/>
+                                        <field name="dec_fuel_service_governor_linkage" nolabel="1"
+                                               attrs="{'invisible' : [('fuel_service_governor_linkage', '=', False)]}"/>
+                                        <field name="check_fuel_service_lines_connection" invisible="1"/>
+                                        <field name="fuel_service_lines_connection"
+                                               attrs="{'invisible' : [('check_fuel_service_lines_connection', '=', False)]}"/>
+                                        <field name="dec_fuel_service_lines_connection" nolabel="1"
+                                               attrs="{'invisible' : [('fuel_service_lines_connection', '=', False)]}"/>
+                                        <field name="check_fuel_service_filter" invisible="1"/>
+                                        <field name="fuel_service_filter"
+                                               attrs="{'invisible' : [('check_fuel_service_filter', '=', False)]}"/>
+                                        <field name="dec_fuel_service_filter" nolabel="1"
+                                               attrs="{'invisible' : [('fuel_service_filter', '=', False)]}"/>
+                                    </group>
+                                    <group string="Cooling System"
+                                           attrs="{'invisible' : [('check_cooling_service_coolant_leaks', '=', False),('check_cooling_service_radiator_air_passageway', '=', False),('check_cooling_service_hoses_connections', '=', False),('check_cooling_service_coolant_level', '=', False),('check_cooling_service_coolant_level', '=', False),('check_cooling_service_belt_condition_tension', '=', False),('check_cooling_service_grease_leak', '=', False),('check_cooling_service_operation_heater', '=', False)]}">
+                                        <field name="check_cooling_service_coolant_leaks" invisible="1"/>
+                                        <field name="cooling_service_coolant_leaks"
+                                               attrs="{'invisible' : [('check_cooling_service_coolant_leaks', '=', False)]}"/>
+                                        <field name="dec_cooling_service_coolant_leaks" nolabel="1"
+                                               attrs="{'invisible' : [('cooling_service_coolant_leaks', '=', False)]}"/>
+                                        <field name="check_cooling_service_radiator_air_passageway" invisible="1"/>
+                                        <field name="cooling_service_radiator_air_passageway"
+                                               attrs="{'invisible' : [('check_cooling_service_radiator_air_passageway', '=', False)]}"/>
+                                        <field name="dec_cooling_service_radiator_air_passageway" nolabel="1"
+                                               attrs="{'invisible' : [('cooling_service_radiator_air_passageway', '=', False)]}"/>
+                                        <field name="check_cooling_service_hoses_connections" invisible="1"/>
+                                        <field name="cooling_service_hoses_connections"
+                                               attrs="{'invisible' : [('check_cooling_service_hoses_connections', '=', False)]}"/>
+                                        <field name="dec_cooling_service_hoses_connections" nolabel="1"
+                                               attrs="{'invisible' : [('cooling_service_hoses_connections', '=', False)]}"/>
+                                        <field name="check_cooling_service_coolant_level" invisible="1"/>
+                                        <field name="cooling_service_coolant_level"
+                                               attrs="{'invisible' : [('check_cooling_service_coolant_level', '=', False)]}"/>
+                                        <field name="dec_cooling_service_coolant_level" nolabel="1"
+                                               attrs="{'invisible' : [('cooling_service_coolant_level', '=', False)]}"/>
+                                        <field name="dec_pressure_check" nolabel="1" placeholder="Pressure"
+                                               attrs="{'invisible' : [('cooling_service_coolant_level', '=', False)]}"/>
+                                        <field name="dec_temperature_check" nolabel="1" placeholder="Temperature"
+                                               attrs="{'invisible' : [('cooling_service_coolant_level', '=', False)]}"/>
+                                        <field name="check_cooling_service_belt_condition_tension" invisible="1"/>
+                                        <field name="cooling_service_belt_condition_tension"
+                                               attrs="{'invisible' : [('check_cooling_service_belt_condition_tension', '=', False)]}"/>
+                                        <field name="dec_cooling_service_belt_condition_tension" nolabel="1"
+                                               attrs="{'invisible' : [('cooling_service_belt_condition_tension', '=', False)]}"/>
+                                        <field name="check_cooling_service_grease_leak" invisible="1"/>
+                                        <field name="cooling_service_grease_leak"
+                                               attrs="{'invisible' : [('check_cooling_service_grease_leak', '=', False)]}"/>
+                                        <field name="dec_cooling_service_grease_leak" nolabel="1"
+                                               attrs="{'invisible' : [('cooling_service_grease_leak', '=', False)]}"/>
+                                        <field name="check_cooling_service_operation_heater" invisible="1"/>
+                                        <field name="cooling_service_operation_heater"
+                                               attrs="{'invisible' : [('check_cooling_service_operation_heater', '=', False)]}"/>
+                                        <field name="dec_cooling_service_operation_heater" nolabel="1"
+                                               attrs="{'invisible' : [('cooling_service_operation_heater', '=', False)]}"/>
+                                    </group>
+                                    <group string="R-Starting"
+                                           attrs="{'invisible' : [('check_starting_service_auto_manual', '=', False),('check_starting_service_under_voltage', '=', False),('check_starting_service_terminal_voltage', '=', False),('check_starting_service_frequency', '=', False),('check_starting_service_load_current', '=', False),('check_starting_service_operation_total_hours', '=', False)]}">
+                                        <field name="check_starting_service_auto_manual" invisible="1"/>
+                                        <field name="starting_service_auto_manual"
+                                               attrs="{'invisible' : [('check_starting_service_auto_manual', '=', False)]}"/>
+                                        <field name="dec_starting_service_auto_manual" nolabel="1"
+                                               attrs="{'invisible' : [('starting_service_auto_manual', '=', False)]}"/>
+                                        <field name="check_starting_service_under_voltage" invisible="1"/>
+                                        <field name="starting_service_under_voltage"
+                                               attrs="{'invisible' : [('check_starting_service_under_voltage', '=', False)]}"/>
+                                        <field name="dec_starting_service_under_voltage" nolabel="1"
+                                               attrs="{'invisible' : [('starting_service_under_voltage', '=', False)]}"/>
+                                        <field name="check_starting_service_terminal_voltage" invisible="1"/>
+                                        <field name="starting_service_terminal_voltage"
+                                               attrs="{'invisible' : [('check_starting_service_terminal_voltage', '=', False)]}"/>
+                                        <field name="dec_starting_service_terminal_voltage" nolabel="1"
+                                               attrs="{'invisible' : [('starting_service_terminal_voltage', '=', False)]}"/>
+                                        <field name="check_starting_service_frequency" invisible="1"/>
+                                        <field name="starting_service_frequency"
+                                               attrs="{'invisible' : [('check_starting_service_frequency', '=', False)]}"/>
+                                        <field name="dec_starting_service_frequency" nolabel="1"
+                                               attrs="{'invisible' : [('starting_service_frequency', '=', False)]}"/>
+                                        <field name="check_starting_service_load_current" invisible="1"/>
+                                        <field name="starting_service_load_current"
+                                               attrs="{'invisible' : [('check_starting_service_load_current', '=', False)]}"/>
+                                        <field name="dec_starting_service_load_current" nolabel="1"
+                                               attrs="{'invisible' : [('starting_service_load_current', '=', False)]}"/>
+                                        <field name="check_starting_service_operation_total_hours" invisible="1"/>
+                                        <field name="starting_service_operation_total_hours"
+                                               attrs="{'invisible' : [('check_starting_service_operation_total_hours', '=', False)]}"/>
+                                        <field name="dec_starting_service_operation_total_hours" nolabel="1"
+                                               attrs="{'invisible' : [('starting_service_operation_total_hours', '=', False)]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Service Kanban View  -->
+        <record model="ir.ui.view" id="view_service_kanban">
+            <field name="name">generator.service.kanban</field>
+            <field name="model">generator.service</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="name"/>
+                    <field name="service_customer"/>
+                    <field name="service_type"/>
+                    <field name="service_date"/>
+                    <field name="state"/>
+                    <field name="currency_id"/>
+                    <field name="service_estimated_cost"/>
+                    <field name="activity_state"/>
+                    <progressbar field="activity_state"
+                                 colors='{"planned": "success", "today": "warning", "overdue": "danger"}'/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top mb16">
+                                    <div class="o_kanban_record_headings mt4">
+                                        <strong class="o_kanban_record_title">
+                                            <span>
+                                                <t t-esc="record.service_customer.value"/>
+                                            </span>
+                                        </strong>
+                                    </div>
+                                    <strong>
+                                        <field name="service_estimated_cost" widget="monetary"/>
+                                    </strong>
+                                </div>
+                                <div class="text-muted">
+                                    <field name="service_type"/>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left text-muted">
+                                        <span>
+                                            <t t-esc="record.name.value"/>
+                                            <t t-esc="record.service_date.value"/>
+                                        </span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="state" widget="label_selection"
+                                               options="{'classes': {'draft': 'default', 'waiting': 'default', 'approve': 'success'}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_menu_generator_service">
+            <field name="name">Generator Service</field>
+            <field name="res_model">generator.service</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create new Generator Service
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to Generator Service.
+                </p>
+            </field>
+        </record>
+
+        <record id="generator_service_search_view" model="ir.ui.view">
+            <field name="name">Generators Service Search View</field>
+            <field name="model">generator.service</field>
+            <field name="arch" type="xml">
+                <search string="Search Generator">
+                    <field name="service_customer"/>
+                    <field name="service_date"/>
+                    <field name="service_generator_id"/>
+                    <filter string="Waiting For Approval" name="waiting" domain="[('state','=','waiting')]"/>
+                    <filter string="Running" name="running" domain="[('state','=','running')]"/>
+                    <filter string="Serviced" name="approve" domain="[('state','=','approve')]"/>
+                    <filter string="Invoiced" name="invoice" domain="[('state','=','invoice')]"/>
+                    <filter string="Rejected" name="reject" domain="[('state','=','reject')]"/>
+                    <filter string="Today" name="service_date"
+                            domain="[('service_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('service_date', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter string="Month" name="sevice_month"
+                            domain="[('service_date','&gt;=',context_today().strftime('%%Y-%%m-01')),('service_date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+                    <filter string="Next Month" name="next_month"
+                            domain="[('service_date','&gt;=',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),('service_date','&lt;',(context_today()+relativedelta(months=2)).strftime('%%Y-%%m-01'))]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Partner" name="service_customer" context="{'group_by':'service_customer'}"/>
+                        <filter string="Date" name="service_date" context="{'group_by': 'service_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <menuitem id="menu_generator_service" name="Service &amp; Maintenance" parent="menu_service_maintenance"
+                  action="action_menu_generator_service" sequence="1"
+                  groups="generator_service_maintenance.generator_technician"/>
+    </data>
+</odoo>

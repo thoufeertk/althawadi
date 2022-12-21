@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record id="service_request_mail" model="mail.template">
+            <field name="name">Service Status Email</field>
+            <field name="model_id" ref="generator_service_maintenance.model_generator_service"/>
+            <field name="email_from">{{(object.create_uid.email )}}</field>
+            <field name="email_to">{{object.service_customer.email }}</field>
+            <field name="subject">Ref {{object.name or 'n/a' }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">{{object.service_customer.lang}}</field>
+            <field name="body_html" type="html">
+                <p>Dear
+                    <t t-out="object.service_customer.name"/>
+                </p>
+                <p>Your service request for
+                    <t t-out="object.service_generator_name or 'n/a' "/>
+                    with serial number
+                    <t t-out="object.service_generator_serial_number or 'n/a'"/>
+                    with Engine FSD Number
+                    <t t-out="object.service_engine_fsd_number or 'n/a'"/>
+                    has been processed with Estimated service cost of
+                    <t t-out="object.create_uid.currency_id.symbol or 'n/a'"/>
+                    <t t-out=" object.service_estimated_cost or 'n/a'"/>
+                </p>
+
+                <p>If you have any questions, please let us know.
+                </p>
+                <p>Best regards,</p>
+                <!--                <![CDATA[-->
+                <!--                <p>Dear ${object.service_customer.name},</p>-->
+                <!--                <p>Your service request for ${object.service_generator_name or 'n/a' } with serial number ${object.service_generator_serial_number or 'n/a' } with Engine FSD Number ${object.service_engine_fsd_number or 'n/a' } has been processed with Estimated service cost of ${object.create_uid.currency_id.symbol or 'n/a' }${"%.2f" % object.service_estimated_cost or 'n/a' }</b></p>-->
+                <!--                <p>If you have any questions, please let us know.</p>-->
+                <!--                <p>Best regards,</p>-->
+                <!--            ]]>-->
+            </field>
+            <field name="report_template"
+                   ref="generator_service_maintenance.generator_document"/>
+            <field name="report_name">{{(object.name or '').replace('/','_')}}</field>
+        </record>
+
+        <!--Email template for Material Request-->
+        <record id="email_template_generator_material_request" model="mail.template">
+            <field name="name">Material Request</field>
+            <field name="model_id" ref="generator_service_maintenance.model_generator_material_request"/>
+            <field name="email_from"></field>
+            <field name="email_to"></field>
+            <field name="subject">Material Request (Ref {{object.name}})</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">{{object.partner_id.lang}}</field>
+            <field name="body_html" type="html">
+                    <p style="margin-bottom:20px;">Hi, </p>
+                    <p style="margin-bottom:20px;">Material Request <t t-out="object.name"/> is ready for review.</p>
+                    <p style="margin-bottom:10px;"><b>Spare Parts Details</b></p>
+                    <table border="2" cellpadding="10">
+                        <tbody>
+                            <tr>
+                              <th style="padding: 5px;">Product</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                            </tr>
+                            % for lines in object.material_bom_line:
+                            <tr>
+                              <td style="padding: 5px;"><t t-out="lines.product_id.name"/></td>
+                              <td><t t-out="lines.quantity"/></td>
+                              <td><t t-out="lines.price"/></td>
+                            </tr>
+                           % endfor
+                        </tbody>
+                    </table>
+
+            </field>
+            <field name="report_template" ref="generator_service_maintenance.action_report_material_request"/>
+            <field name="report_name">{{(object.name or '').replace('/','_')}}</field>
+        </record>
+    </data>
+</odoo>

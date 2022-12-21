@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <template id="material_request_report_document">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <h2 class="mt16">
+                            <span>Material Request #</span>
+                            <span t-field="doc.name"/>
+                        </h2>
+                        <div t-if="doc.report_check" class="row mt32 mb32" id="informations">
+                            <div t-if="doc.partner_id" class="col-auto mw-100 mb-2">
+                                <strong>Customer:</strong>
+                                <p class="m-0" t-field="doc.partner_id.name"/>
+                            </div>
+                            <div t-if="doc.pending_list_id"
+                                 class="col-auto mw-100 mb-2">
+                                <strong>Order</strong>
+                                <p class="m-0" t-field="doc.pending_list_id.name"/>
+                            </div>
+                            <div t-if="doc.date" class="col-auto mw-100 mb-2">
+                                <strong>Service Date:</strong>
+                                <p class="m-0" t-field="doc.date" t-options='{"widget": "date"}'/>
+                            </div>
+                            <div t-if="doc.order_priority" class="col-auto mw-100 mb-2">
+                                <strong>Service Priority:</strong>
+                                <p class="m-0" t-field="doc.order_priority"/>
+                            </div>
+                        </div>
+                        <t t-set="doc.report_check" t-value="False"/>
+                        <h3 class="mt16">Spare Parts Details</h3>
+                        <br />
+                        <t t-set="update" t-value="doc.update_report_value()"/>
+                        <table class="table table-sm o_main_table">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Product</th>
+                                    <th class="text-right">Quantity</th>
+                                    <th class="text-right">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody class="material_request_tbody">
+                                <t t-foreach="doc.material_bom_line"
+                                   t-as="line">
+                                    <tr>
+                                        <td class="text-left">
+                                            <span t-field="line.product_id.name"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="int(line.quantity)"/>&amp;nbsp;&amp;nbsp;
+                                            <span t-esc="line.product_id.uom_id.name"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.price"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <template id="material_request_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="workshop.material_request_report_document"
+                       t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

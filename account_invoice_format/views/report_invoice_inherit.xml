@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_document_bank" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[hasclass('clearfix')]" position="after">
+            <div class="row" t-if="o.company_id.bank_ids">
+                <dl id="bank_account" t-foreach="doc.company_id.bank_ids" t-as="ba" class="dl-horizontal text-muted">
+                    <dt>Bank:</dt>
+                    <dd><span t-field="ba.bank_id.name"/></dd>
+                    <dt>IBAN No.:</dt>
+                    <dd><span t-field="ba.acc_number"/></dd>
+                    <dt>Swift Code:</dt>
+                    <dd><span t-field="ba.bank_id.bic"/></dd>
+                    <dt>Country:</dt>
+                    <dd><span t-field="ba.bank_id.country"/></dd>
+                </dl>
+            </div>
+        </xpath>
+    </template>
+</odoo>

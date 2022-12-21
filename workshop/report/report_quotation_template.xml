@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="quotation_pdf_report_document">
+        <t t-call="web.external_layout">
+            <t t-set="doc" t-value="doc.with_context(lang=doc.customer_name.lang)"/>
+            <table class="table table-sm">
+                <tr>
+                    <td>
+                        <center>
+                            <h3>ELECTRIC MOTOR MECHANICAL INSPECTION REPORT</h3>
+                            <br/>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-sm">
+                <tr>
+                    <td style="text-align:left;">Customer Name :
+                        <t t-esc="doc.customer_name.name"/>
+                    </td>
+                    <td style="text-align:right;">Address :
+                        <t t-esc="doc.street"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pending Enquiry :
+                        <t t-esc="doc.pending_enquiry.name"/>
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-sm">
+                <thead>
+                    <th style="width:50%;text-align:left;"><b>Machine Details</b></th>
+                    <tr>
+                        <td>Machine Type :
+                            <t t-esc="doc.machine_id.name"/>
+                        </td>
+                        <td>Pole :
+                            <t t-esc="doc.pole"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Made :
+                            <t t-esc="doc.made"/>
+                        </td>
+                        <td> Volts Amps :
+                            <t t-esc="doc.volt"/></td>
+                    </tr>
+                    <tr>
+                        <td>Make :
+                            <t t-esc="doc.make"/>
+                        </td>
+                        <td>Hertz :
+                            <t t-esc="doc.hertz"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Kilowatt :
+                            <t t-esc="doc.kilo"/>
+                        </td>
+                        <td>motor no :
+                            <t t-esc="doc.motor_no"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Horsepower :
+                            <t t-esc="doc.horsepower"/>
+                        </td>
+                        <td>Rpm :
+                            <t t-esc="doc.rpm"/>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+            <br/>
+            <h4>Quotation Summary</h4>
+            <br/>
+            <table class="table table-bordered">
+                <thead>
+                    <tr align="left">
+                        <th>Machine Details</th>
+                        <th>Type Of Services</th>
+                        <th>Unit Price</th>
+                        <th>Unit Of Measure</th>
+                        <th>Quantity</th>
+                        <th>Discount</th>
+                        <th>Subtotal</th>
+                        <th>Total Tax</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="doc.work_quotation_line_ids" t-as="line">
+                        <tr>
+                            <t t-if="not line.display_type" name="account_invoice_line_accountable">
+                                <td align="left">
+                                    <span t-esc="line.product_id.name"/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line.name"/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line.price_unit" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line.product_uom.name"/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line.product_uom_qty"/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line.discount"/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line.price_tax" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                </td>
+                                <td align="left">
+                                    <span t-esc="line.price_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                </td>
+                            </t>
+                            <t t-if="line.display_type == 'line_section'">
+                                <td colspan="99">
+                                    <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                                </td>
+                                <t t-set="current_section" t-value="line"/>
+                                <t t-set="current_subtotal" t-value="0"/>
+                            </t>
+                            <t t-if="line.display_type == 'line_note'">
+                                <td colspan="99">
+                                    <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                                </td>
+                            </t>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <br/>
+            <table class="table table-sm">
+                <tr>
+                    <th style="text-align:left">
+                        <b>Details</b>
+                    </th>
+                </tr>
+                <tr>
+                    <td>Price :
+                        <t t-esc="doc.amount_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                </tr>
+                <tr>
+                    <td>Telephone :
+                        <t t-esc="doc.telephone"/></td>
+
+                </tr>
+                <tr>
+                    <td>Name :
+                        <t t-esc="doc.signed_name"/></td>
+                </tr>
+                <tr>
+
+                    <td>
+                        Signature :
+                        <t t-if="doc.digital_signature">
+                            <img t-att-src="image_data_uri(doc.digital_signature)"
+                                 style="max-height: 4cm; max-width: 8cm;"/>
+                        </t>
+                    </td>
+                </tr>
+            </table>
+        </t>
+    </template>
+    <template id="quote_pdf_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="workshop.quotation_pdf_report_document" t-lang="doc.customer_name.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

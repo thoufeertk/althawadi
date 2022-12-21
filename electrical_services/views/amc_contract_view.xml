@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_annual_electrical_contract_tree" model="ir.ui.view">
+            <field name="name">view.annual.electrical.contract.tree</field>
+            <field name="model">amc.contract</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="amc_customer_id"/>
+                    <field name="amc_start_date"/>
+                    <field name="amc_end_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_annual_maintenance_contract_form" model="ir.ui.view">
+            <field name="name">view.annual.electrical.contract.form</field>
+            <field name="model">amc.contract</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Annual Contract">
+                    <header>
+                        <button string="Submit" type="object" name="action_submit" states="draft"
+                                class="oe_highlight" groups="base.group_user"/>
+                        <button string="Approve" type="object" name="action_approve" states="submit"
+                                class="oe_highlight" groups="account.group_account_manager"/>
+                        <button string="Reject" type="object" name="action_reject" states="submit"
+                                groups="base.group_user"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,submit,running"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box">
+                        <button class="oe_stat_button" name="button_invoices"
+                                type="object" icon="fa-pencil-square-o" attrs="{'invisible': [('invoice_count','=',0)]}">
+                            <field name="invoice_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                        <div class="oe_title oe_read_only">
+                            <h1>
+                                <field name="name" nolabel="1"
+                                       attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                            </h1>
+                        </div>
+                        <group col="2" colspan="2">
+                            <group>
+                                <field name="amc_customer_id" string="Customer"
+                                       attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                            </group>
+                            <group>
+<!--                                <label for="contract_start_date" string="Date"/>-->
+                                <label for="amc_start_date" string="Date"/>
+                                <div class="o_row">
+                                    <field name="amc_start_date"
+                                           attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                                    <field name="amc_end_date"
+                                           attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="sale_order_reference"/>
+                                <field name="amc_contract_amount"
+                                       widget="monetary"
+                                       options="{'currency_field': 'currency_id'}"
+                                       attrs="{'readonly': [('state', 'in', ('submit', 'running','reject','expired'))]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page id="amc_electrical_scope_tab" string="Electrical Scope">
+                                <field name="amc_electrical_scope_ids" mode="tree">
+                                    <tree editable="bottom">
+                                        <field name="amc_scope_id" context="{'form_view_ref': 'electrical_services.electrical_scope_form_view'}"/>
+                                        <field name="amc_scope_code"/>
+                                        <field name="amc_scope_description"/>
+                                        <field name="amc_scope_price"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page id="electrical_parts_tab" string="Electrical Accessories">
+                                <field name="amc_electrical_parts_ids" mode="tree">
+                                    <tree editable="bottom">
+                                        <field name="amc_parts_id"/>
+                                        <field name="amc_parts_qty"/>
+                                        <field name="amc_parts_unit_price"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="annual_contract_search_view" model="ir.ui.view">
+            <field name="name">annual.contract.search.view</field>
+            <field name="model">amc.contract</field>
+            <field name="arch" type="xml">
+                <search string="Annual Contract Search">
+                    <field name="amc_customer_id"/>
+                    <field name="sale_order_reference"/>
+                    <filter string="Submitted" name="filter_approve" domain="[('state','=','submit')]"/>
+                    <filter string="Running" name="filter_running" domain="[('state','=','running')]"/>
+                    <filter string="Rejected" name="filter_reject" domain="[('state','=','reject')]"/>
+                    <filter string="Expired" name="filter_expired" domain="[('state','=','expired')]"/>
+                    <filter string="Today" name="filter_contract_date"
+                            domain="[('amc_start_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('amc_start_date', '&lt;=',datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter string="Month" name="filter_contract_month"
+                            domain="[('amc_start_date','&gt;=',context_today().strftime('%%Y-%%m-01')),('amc_start_date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+                    <filter string="Next Month" name="filter_next_month"
+                            domain="[('amc_start_date','&gt;=',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),('amc_start_date','&lt;',(context_today()+relativedelta(months=2)).strftime('%%Y-%%m-01'))]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Partner" name="filter_amc_customer_id"
+                                context="{'group_by':'amc_customer_id'}"/>
+                        <filter string="Date" name="filter_amc_start_date" context="{'group_by': 'amc_start_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="menu_annual_contract_action">
+            <field name="name">Annual Contract</field>
+            <field name="res_model">amc.contract</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Click here to create a new Annual Maintenance Contract.
+                </p>
+            </field>
+        </record>
+
+        <!-- menu items of annual contracts -->
+        <menuitem id="annual_contract_menu" name="Annual Contract"
+                  parent="electrical_services.electrical_service_masters_menu"
+                  action="menu_annual_contract_action"/>
+    </data>
+</odoo>
+
+

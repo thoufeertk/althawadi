@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+<!--        Sequence for annual maintenance contract-->
+        <record id="generator_amc_sequence" model="ir.sequence">
+            <field name="name">Annual Maintenance Contract</field>
+            <field name="code">annual.maintenance.contract</field>
+            <field name="prefix">AMC</field>
+            <field name="padding">3</field>
+        </record>
+<!--        Sequence for generator service-->
+        <record id="generator_service_sequence" model="ir.sequence">
+            <field name="name">Generator Service</field>
+            <field name="code">generator.service</field>
+            <field name="prefix">GS</field>
+            <field name="padding">3</field>
+        </record>
+<!--        Sequence for service quotation-->
+        <record id="service_quotation_sequence" model="ir.sequence">
+            <field name="name">Quotation</field>
+            <field name="code">service.quotation</field>
+            <field name="prefix">SQ</field>
+            <field name="padding">3</field>
+        </record>
+<!--        Sequence for Material Request-->
+        <record id="generator_material_request_sequence" model="ir.sequence">
+            <field name="name">Material Request</field>
+            <field name="code">generator.material.request</field>
+            <field name="prefix">GMR</field>
+            <field name="padding">3</field>
+        </record>
+    </data>
+</odoo>
