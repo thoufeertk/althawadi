@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="electrical_contract_sequence" model="ir.sequence">
+            <field name="name">Annual Contract</field>
+            <field name="code">amc.contract</field>
+            <field name="prefix">AEC</field>
+            <field name="padding">3</field>
+        </record>
+        <record id="electrical_enquiry_sequence" model="ir.sequence">
+            <field name="name">Enquiry Register</field>
+            <field name="code">electrical.enquiry.register</field>
+            <field name="prefix">ER</field>
+            <field name="padding">3</field>
+        </record>
+        <record id="electrical_quotation_sequence" model="ir.sequence">
+            <field name="name">Electrical Quotation</field>
+            <field name="code">electrical.quotation</field>
+            <field name="prefix">EQ</field>
+            <field name="padding">3</field>
+        </record>
+        <record id="electrical_work_order_sequence" model="ir.sequence">
+            <field name="name">Electrical Work Order</field>
+            <field name="code">electrical.work.order</field>
+            <field name="prefix">EWO</field>
+            <field name="padding">3</field>
+        </record>
+        <record id="electrical_material_request_sequence" model="ir.sequence">
+            <field name="name">Material Request</field>
+            <field name="code">electrical.material.request</field>
+            <field name="prefix">EMR</field>
+            <field name="padding">3</field>
+        </record>
+        <record id="completion_certificate_sequence" model="ir.sequence">
+            <field name="name">Completion Certificate</field>
+            <field name="code">completion.certificate</field>
+            <field name="prefix">CC</field>
+            <field name="padding">3</field>
+        </record>
+    </data>
+</odoo>

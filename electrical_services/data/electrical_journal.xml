@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="electrical_journal" model="account.journal">
+            <field name="name">Electrical Invoices</field>
+            <field name="code">EINV</field>
+            <field name="type">sale</field>
+        </record>
+    </data>
+</odoo>

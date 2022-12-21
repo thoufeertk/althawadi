@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="generator_tree_view" model="ir.ui.view">
+            <field name="name">product.product.inherited.generator.tree</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <tree string="Generator">
+                    <field name="name"/>
+                    <field name="engine_fsd_number"/>
+                    <field name="generator_serial_number"/>
+                    <field name="engine_serial_number"/>
+                    <field name="engine_model"/>
+                    <field name="alternator_serial_number"/>
+                </tree>
+            </field>
+        </record>
+        <record id="generator_type_form_view" model="ir.ui.view">
+            <field name="name">machine.type.form.view</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <form string="Generator">
+                    <sheet>
+                        <div class="oe_button_box">
+                            <button class="oe_stat_button" name="button_service"
+                                    type="object" icon="fa-list">
+                                <field name="service_count" widget="statinfo" string="Service"/>
+                            </button>
+                            <button class="oe_stat_button" name="button_quotation"
+                                    type="object" icon="fa-list">
+                                <field name="quotation_count" widget="statinfo" string="Quotation"/>
+                            </button>
+                        </div>
+                        <field name="image_1920" widget="image" class="oe_avatar"
+                               options="{'preview_image': 'image_128'}"/>
+                        <div class="oe_title">
+                            <label for="name" string="Engine FSD Number"/>
+                            <h1>
+                                <field name="name" string="Engine FSD Number"/>
+                            </h1>
+                        </div>
+                        <div>
+                            <field name="is_generator"/>
+                            <label for="is_generator"/>
+                        </div>
+                        <notebook>
+                            <page name="generator_details" string="Generator Details"
+                                  attrs="{'invisible': [('is_generator', '=', False)]}">
+                                <group string="Generator Details">
+                                    <group class="o_label_nowrap">
+                                        <field name="engine_fsd_number" string="Generator Name"
+                                               placeholder="Eg:Generator 230KV" required="1"/>
+                                        <field name="generator_serial_number"/>
+                                        <field name="generator_kva_ph"/>
+                                        <field name="engine_serial_number"/>
+                                    </group>
+                                    <group class="o_label_nowrap">
+                                        <field name="engine_model"/>
+                                        <field name="alternator_serial_number"/>
+                                        <field name="alternator_frame_size"/>
+                                        <field name="panel_amf"/>
+                                        <field name="panel_amf_make"/>
+                                        <field name="last_hours"/>
+                                        <field name="categ_id" string="Category"/>
+                                        <field name="taxes_id" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                                <group string="Spare Parts">
+                                    <field name="generator_spare_parts_ids" mode="tree" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="generator_spare_parts"/>
+                                            <field name="generator_spare_parts_quantity"/>
+                                            <field name="generator_spare_parts_uom"/>
+                                            <field name="generator_spare_parts_cost"/>
+                                            <field name="service_days"/>
+                                            <field name="spare_parts_id" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="service_history" string="Service History"
+                                  attrs="{'invisible': [('is_generator', '=', False)]}">
+                                <group string="Service History">
+                                    <field name="service_hour_history_ids" mode="tree" nolabel="1" readonly="1">
+                                        <tree editable="bottom">
+                                            <field name="service_type"/>
+                                            <field name="service_hour" widget="float_time"/>
+                                            <field name="service_date"/>
+                                            <field name="service_status" invisible="1"/>
+                                            <field name="service_history_id" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="cost_information" string="Cost Information"
+                                  attrs="{'invisible': [('is_generator', '=', False)]}">
+                                <group string="Cost Information">
+                                    <group class="o_label_nowrap">
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="routine_maintenance_cost" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="routine_month_cost" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="breakdown_service_cost" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="breakdown_month_cost" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                    </group>
+                                    <group class="o_label_nowrap">
+                                        <field name="deployment_service_cost" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="deployment_month_cost" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="monitor_service_cost" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="monitor_month_cost" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Accounting" name="invoicing" groups="account.group_account_user">
+                                <group name="properties">
+                                    <group string="Receivables">
+                                        <field name="property_account_income_id"
+                                               domain="[('internal_type','=','other'),('deprecated','=',False)]"
+                                               groups="account.group_account_user"/>
+                                    </group>
+                                    <group string="Payables" name="payables">
+                                        <field name="property_account_expense_id"
+                                               domain="[('internal_type','=','other'),('deprecated','=',False)]"
+                                               groups="account.group_account_user"/>
+                                    </group>
+                                </group>
+                                <group name="accounting"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="generator_search_view" model="ir.ui.view">
+            <field name="name">generator.search.view</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <search string="Generator Search">
+                    <field name="name"/>
+                    <field name="engine_fsd_number"/>
+                    <field name="generator_serial_number"/>
+                    <field name="engine_serial_number"/>
+                    <field name="engine_model"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Engine Model" name="engine_model"
+                                context="{'group_by':'engine_model'}"/>
+                        <filter string="Alternator Frame Size" name="alternator_frame_size"
+                                context="{'group_by': 'alternator_frame_size'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="action_menu_generator_details" model="ir.actions.act_window">
+            <field name="context">{'default_type': 'service', 'default_is_generator': True}</field>
+            <field name="name">Generators</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_generator', '!=', False)]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('generator_service_maintenance.generator_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('generator_service_maintenance.generator_type_form_view')})]"/>
+            <field name="search_view_id" ref="generator_search_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click here to create new Generator
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to Generator.
+                </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_menu_customer_details">
+            <field name="context">{'default_is_generator_customer': True}</field>
+            <field name="name">Customers</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('is_generator_customer', '!=', False)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click here to create new Customer
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to Customer.
+                </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_menu_spare_parts_details">
+            <field name="context">{'default_type': 'product'}</field>
+            <field name="name">Spare Parts</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('type', '=', 'product')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click here to create new Spare Parts
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to Spare Parts.
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_generator_service_maintenance" name="Generator Service"
+                  web_icon="generator_service_maintenance,static/description/web_icon.png"/>
+        <menuitem id="menu_master_data" name="Master Data" parent="menu_generator_service_maintenance" sequence="3"/>
+        <menuitem id="menu_generator_details" name="Generators" parent="menu_master_data"
+                  action="action_menu_generator_details"
+                  groups="generator_service_maintenance.generator_engineer"/>
+        <menuitem id="menu_customer_details" name="Customers" parent="menu_master_data"
+                  action="action_menu_customer_details"
+                  groups="generator_service_maintenance.generator_supervisor"/>
+        <menuitem id="menu_spare_parts_details" name="Spare Parts" parent="menu_master_data"
+                  action="action_menu_spare_parts_details"
+                  groups="generator_service_maintenance.generator_manager"/>
+        <menuitem id="menu_service_maintenance" name="Operations"
+                  parent="menu_generator_service_maintenance" sequence="1"/>
+    </data>
+</odoo>
+

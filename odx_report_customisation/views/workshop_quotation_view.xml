@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_product_form_inherit1" model="ir.ui.view">
+        <field name="name">product.form</field>
+        <field name="model">workshop.quotation</field>
+        <field name="inherit_id" ref="workshop.workshop_quotation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[5]" position="after">
+                <div>
+                    <sheet>
+                        <group>
+                        <group>
+                            <field name="odx_header" force_save="1"/>
+                            <field name="odx_warranty"/>
+                            <field name="odx_sales_man"/>
+                            <field name="odx_gate_pass_no"/>
+                            <field name="odx_testing" placeholder="Testing and Inspection"/>
+                            <field name="odx_extend_of_quote" placeholder="Extend of Quote"/>
+                            <field name="odx_terms_and_condition" placeholder="Terms and Condition"/>
+                        </group>
+                        </group>
+                    </sheet>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mechanical_journals" model="account.journal">
+            <field name="name">Mechanical Invoices</field>
+            <field name="code">MINV</field>
+            <field name="type">sale</field>
+        </record>
+    </data>
+</odoo>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <data>-->
+<!--        <record id="mechanical_journal" model="account.journal">-->
+<!--            <field name="name">Mechanical Invoices</field>-->
+<!--            <field name="code">EINV</field>-->
+<!--            <field name="type">sale</field>-->
+<!--        </record>-->
+<!--    </data>-->
+<!--</odoo>-->
+

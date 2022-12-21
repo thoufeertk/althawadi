@@ -1,0 +1,26 @@
+<odoo>
+
+    <template id="external_layout_standard" inherit_id="web.external_layout_standard">
+        <xpath expr="//div[@class='col-3 mb4']" position="replace">
+        <div class="col-3 mb4">
+            <t t-if="company">
+                <t t-if="company.header_image">
+                    <img t-if="company.header_image" t-att-src="image_data_uri(company.header_image)"  alt="Logo" style="height:110px; width:900px;"/>
+                </t>
+
+                <t t-if="not company.header_image">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"  alt="Logo" />
+                </t>
+            </t>
+            <div class="col-12">
+                <div style="border-bottom: 1px solid black; width:900px;" />
+            </div>
+        </div>
+        </xpath>
+
+        <xpath expr="//div[@class='col-6']" position="replace">
+
+        </xpath>
+    </template>
+
+</odoo>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_enquiry_register_tree" model="ir.ui.view">
+            <field name="name">view.mechanical.enquiry.register.tree</field>
+            <field name="model">mechanical.enquiry.register</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Enquiry Register">
+                    <field name="name"/>
+                    <field name="enquiry_date"/>
+                    <field name="enquiry_customer_id"/>
+                    <field name="mechanical_project"/>
+                    <field name="enquiry_project_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_enquiry_register_form" model="ir.ui.view">
+            <field name="name">view.mechanical.enquiry.register.form</field>
+            <field name="model">mechanical.enquiry.register</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Enquiry Register">
+                    <header>
+                        <field name="work_quotation_count" invisible="1"/>
+                        <button name="submit_enquiry" string="Submit"
+                                type="object" states="draft"
+                                class="oe_highlight"/>
+                        <button name="create_quotation"
+                                string="Create Quotation" type="object"
+                                states="submit,approve"
+                                class="oe_highlight"/>
+                        <button name="work_order_approve" string="Approve"
+                                type="object" states="waiting"
+                                class="oe_highlight"/>
+                        <button name="work_order_reject" string="Reject"
+                                type="object" states="waiting"
+                                class="oe_highlight"/>
+                        <button name="create_work_order" string="Create Work Order" type="object"
+                                attrs="{'invisible': ['|',('work_order_count', '!=', 0),('state','!=','approve')]}"
+                                class="oe_highlight"/>
+                        <button name="action_cancel" states="draft"
+                                type="object" string="Cancel"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,submit,quotation,approve"
+                               force_save="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="button_mechanical_quotation"
+                                    attrs="{'invisible': [('work_quotation_count', '=', 0)]}"
+                                    type="object" icon="fa-file">
+                                <field name="work_quotation_count" widget="statinfo" string="Quotation"/>
+                            </button>
+                            <button class="oe_stat_button" name="button_mechanical_work_order"
+                                    attrs="{'invisible': [('work_order_count', '=', 0)]}"
+                                    type="object" icon="fa-wrench">
+                                <field name="work_order_count" widget="statinfo" string="Work Order"/>
+                            </button>
+                            <button name="add_attachments" type="object"
+                                    class="oe_stat_button" icon="fa-paperclip">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Attachments</span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="enquiry_date"/>
+                                <field name="check_amc" invisible="1"/>
+                                <field name="enquiry_customer_id"
+                                       attrs="{'readonly': [('state', '=', 'quotation')]}"/>
+                            </group>
+                            <group>
+                                <field name="enquiry_customer_address"/>
+                                <field name="enquiry_site_reference" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="enquiry_project_id" invisible="1"/>
+                                <field name="mechanical_project"/>
+                                <field name="sale_order_id"/>
+                                <label for="completion_time" string="Completion Time"/>
+                                <div>
+                                    <field name="completion_time" class="oe_inline" nolabel="1"/>
+                                    days
+                                </div>
+                            </group>
+                            <group>
+<!--                                <field name="warranty"/>-->
+                                <field name="payment_term_id"/>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="contract_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page id="mechanical_scope_tab"
+                                  string="Mechanical Scope">
+                                <field name="enquiry_mechanical_scope_ids"
+                                       mode="tree">
+                                    <tree editable="bottom" multi_edit="1">
+                                        <field name="enquiry_scope_id"
+                                               context="{'default_is_mechanical': True,'form_view_ref': 'mechanical_services.mechanical_scope_form_view'}"/>
+                                        <field name="enquiry_scope_code"/>
+                                        <field name="enquiry_scope_description"/>
+                                        <field name="enquiry_scope_qty"/>
+                                        <field name="enquiry_scope_price" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="enquiry_tax"
+                                               widget="many2many_tags"
+                                               optional="show"/>
+                                        <field name="enquiry_tax_amount"
+                                               optional="hide" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="enquiry_subtotal" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="enquiry_total" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                    </tree>
+                                </field>
+                                <group name="note_group" col="6">
+                                    <group class="oe_subtotal_footer oe_right"
+                                           colspan="2" name="sale_total">
+                                        <field name="amount_untaxed"
+                                               widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <field name="amount_tax"
+                                               widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                            <label for="amount_total"/>
+                                        </div>
+                                        <field name="amount_total" nolabel="1"
+                                               class="oe_subtotal_footer_separator"
+                                               widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                    </group>
+                                    <div class="oe_clear"/>
+                                </group>
+
+                            </page>
+                            <page id="mechanical_spare_parts_tabs"
+                                  string="Mechanical Accessories">
+                                <field name="enquiry_mechanical_parts_ids"
+                                       mode="tree">
+                                    <tree editable="bottom">
+                                        <field name="enquiry_spare_parts_id"/>
+                                        <field name="enquiry_spare_parts_qty"/>
+                                        <field name="enquiry_spare_parts_unit_price"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window"
+                id="menu_mechanical_enquiry_action">
+            <field name="name">Enquiry Register</field>
+            <field name="res_model">mechanical.enquiry.register</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Click here to create a
+                    new Enquiry Register.
+                </p>
+            </field>
+        </record>
+
+        <!-- menu items of annual contracts -->
+        <menuitem id="mechanical_operations_main_menu" name="Operations"
+                  parent="mechanical_service_main_menu"
+                  sequence="1"/>
+        <menuitem id="mechanical_enquiry_menu" name="Enquiry Register"
+                  parent="mechanical_operations_main_menu"
+                  action="menu_mechanical_enquiry_action"/>
+    </data>
+</odoo>

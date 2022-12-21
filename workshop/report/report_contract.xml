@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="workshop_contract_reports">
+        <t t-call="web.html_container">
+            <table style="height:100px;border: 1px solid black;width:100%;padding:10px;text-align:center;">
+                <tr>
+                    <td style="text-align:center;">
+                        <img t-att-src="'data:image/png;base64,%s' % to_text(user.company_id.logo)"
+                             style="width:90px; height:80px;"/>
+                    </td>
+                    <td>
+                        <div style="float">
+                            <h2>CONTRACT REPORT</h2>
+                            <br/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <t t-foreach="docs" t-as="doc">
+                <table style="border: 1px solid black;width:100%;padding:10px;">
+                    <tr>
+                        <td>
+                            <div style="text-align:left;color:black!important;"><strong><span
+                                    t-esc="doc.name"/></strong></div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>Customer
+                        </td>
+                        <td>
+                            : <t t-esc="doc.contract_partner_id.name"/>
+                        </td>
+                        <td>From Date
+                        </td>
+                        <td>
+                            : <t t-esc="doc.contract_start_date"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AMC Amount
+                        </td>
+                        <td>
+                            : <t t-esc="doc.original_amount"/>
+                        </td>
+                        <td>Contract Amount
+                        </td>
+                        <td>
+                            : <t t-esc="doc.contract_amount"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Sale Order
+                        </td>
+                        <td>
+                            : <t t-esc="doc.sale_order.id"/>
+                        </td>
+                        <td>Machines
+                        </td>
+                        <td>
+                            : <t t-esc="doc.machines.id"/>
+                        </td>
+                    </tr>
+
+                </table>
+                <table style="border: 1px solid black;width:100%;padding:10px;">
+                    <thead>
+                        <tr style="border: 1px solid black;width:100%;padding:10px;">
+                            <th style="text-align:left;color:black!important;">MACHINE SERVICE DETAILS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="doc['service_required']" t-as="docs">
+                            <td>Machines :
+                            </td>
+                            <td><span t-att-style="style" t-esc="docs['contract_sale_product'].name"/></td>
+                            <td>Cost :
+                            </td>
+                            <td><span t-att-style="style" t-esc="docs['cost']"/></td>
+                        </t>
+                    </tbody>
+                </table>
+
+                <table style="border: 1px solid black;width:100%;padding:10px;">
+                    <thead>
+                        <tr style="border: 1px solid black;width:100%;padding:10px;">
+                            <th style="text-align:left;color:black!important;"> PARTS REQUIRED</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="doc.m_parts_required" t-as="line">
+                            <tr>
+                                <td>Machine :
+                                    <span t-esc="line.contract_sale_product.name"/>
+                                </td>
+                                <td>Products :
+                                    <span t-esc="line.contract_sale_product.name"/>
+                                </td>
+                                <td>Quantity :
+                                    <span t-esc="line.quantity"/>
+                                </td>
+                                <td>Unit :
+                                    <span t-esc="line.product_unit.name"/>
+                                </td>
+                                <td>
+                                    <span t-esc="line.cost"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+    </template>
+</odoo>

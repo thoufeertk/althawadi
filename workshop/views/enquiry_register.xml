@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="enquiry_register_filter" model="ir.ui.view">
+        <field name="name">enquiry.register.search</field>
+        <field name="model">enquiry.register</field>
+        <field name="priority">15</field>
+        <field name="arch" type="xml">
+            <search string="Customer">
+                <field name="customer_name" string="Customer" filter_domain="[('customer_name','ilike',self)]"/>
+                <field name="enquiry_number" string="Enquiry" filter_domain="[('enquiry_number','ilike',self)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="customer_name" domain="[]" context="{'group_by':'customer_name'}"/>
+                    <filter string="Priority" name="priority" domain="[]" context="{'group_by':'service_priority'}"/>
+                    <filter string="Machine Type" name="machine_type" domain="[]"
+                            context="{'group_by':'machine_type'}"/>
+                    <filter string="State" name="state" domain="[]"
+                            context="{'group_by':'state'}"/>
+                </group>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+            </search>
+        </field>
+    </record>
+    <record id="enquiry_register_form" model="ir.ui.view">
+        <field name="name">Enquiry Register</field>
+        <field name="model">enquiry.register</field>
+        <field name="arch" type="xml">
+            <form string="Enquiry Register">
+                <header>
+                    <button name="validate" class="btn-primary" type="object"
+                            string="Validate" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,done"/>
+                    <button name="create_inspection" class="btn-primary" type="object"
+                            string="Create Inspection" attrs="{'invisible': [('state', '!=', 'pending')]}"/>
+
+                </header>
+                <sheet>
+                    <div class="oe_button_box">
+                        <button class="oe_stat_button" name="button_inspection"
+                                type="object" icon="fa-pencil-square-o"
+                                attrs="{'invisible': [('inspection_count', '=', 0)]}">
+                            <field name="inspection_count" widget="statinfo" string="Inspection"/>
+                        </button>
+                    </div>
+                    <div>
+                        <h1>
+                            <field name="enquiry_number" readonly="1"/>
+                        </h1>
+                        <group>
+                            <div>
+                                <group>
+                                    <field name="customer_name" context="{
+                                            'res_partner_search_mode': 'customer'}"
+                                    />
+                                    <label for="street" string="Address:"/>
+                                    <div class="o_address_format">
+                                        <field name="street" placeholder="Street..."
+
+                                               class="o_address_street"/>
+                                        <field name="street2" placeholder="Street 2..."
+
+                                               class="o_address_street"/>
+                                        <field name="city" placeholder="City"
+
+                                               class="o_address_city"/>
+                                        <field name="state_id" class="o_address_state"
+                                               placeholder="State"
+                                               options='{"no_open": True, "no_create": True}'
+                                               context="{'country_id': country_id, 'zip': zip}"/>
+                                        <field name="zip" placeholder="ZIP"
+                                               class="o_address_zip"/>
+                                        <field name="country_id" placeholder="Country"
+                                               class="o_address_country"
+                                               options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                    <field name="machine_type"
+                                           context="{'form_view_ref': 'workshop.machine_type_form_view','default_is_machine': True,'default_type': 'service'}"
+                                    />
+                                </group>
+                            </div>
+                            <div>
+                                <group>
+                                    <field name="date_enquiry"/>
+                                    <field name="service_deadline"/>
+                                    <field name="repair_reason"/>
+                                    <field name="service_priority" widget="radio"/>
+                                    <field name="warranty_status"/>
+                                </group>
+                            </div>
+                        </group>
+                    </div>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="enquiry_register_tree" model="ir.ui.view">
+        <field name="name">enquiry.register.tree</field>
+        <field name="model">enquiry.register</field>
+        <field name="arch" type="xml">
+            <tree string="Enquiry Register">
+                <field name="date_enquiry"/>
+                <field name="enquiry_number"/>
+                <field name="customer_name"/>
+                <field name="service_priority"/>
+                <field name="machine_type"/>
+                <field name="service_deadline"/>
+                <field name="warranty_status"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="enquiry_register_action" model="ir.actions.act_window">
+        <field name="name">Enquiry Register</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">enquiry.register</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="search_view_id" ref="workshop.enquiry_register_filter"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Enquiry Register
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Enquiry Register.
+            </p>
+        </field>
+    </record>
+    <menuitem id="workshop_root" name="Workshop"
+              web_icon="workshop,static/description/web_icon.png"/>
+    <menuitem id="workshop_operations" name="Operations" parent="workshop_root" sequence="1"/>
+    <menuitem id="workshop_work_orders" name="Work Order" parent="workshop_root" sequence="2"/>
+    <menuitem id="workshop_master_data" name="Master Data" parent="workshop_root" sequence="4"/>
+    <menuitem id="enquiry_register_menu" name="Enquiry Register" sequence="1"
+              parent="workshop_operations" action="enquiry_register_action"/>
+
+
+    <record id="action_menu_workshop_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_customer': 1, 'res_partner_search_mode': 'customer',
+                               'default_customer_rank': 1}
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Customer
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Customer.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_customer_details" name="Customers" parent="workshop_master_data"
+              groups="workshop.group_workshop_supervisors,workshop.group_workshop_engineers,workshop.group_workshop_managers,workshop.group_workshop_super_admin,workshop.group_workshop_admin_level"
+              action="action_menu_workshop_customer" sequence="5"/>
+    <record id="employee_tree" model="ir.ui.view">
+        <field name="name">hr.employee.inherited.tree</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <tree string="Employee">
+                <field name="name"/>
+                <field name="work_phone"/>
+            </tree>
+        </field>
+    </record>
+    <record id="employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.inherited.form</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <form string="Employee">
+                <sheet>
+                    <field name="image_1920" widget='image' class="oe_avatar"
+                           options='{"zoom": true, "preview_image":"image_128"}'/>
+                    <div class="oe_title">
+                        <group>
+                            <field name="name"/>
+                            <field name="work_phone"/>
+                        </group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_menu_workshop_technician" model="ir.actions.act_window">
+        <field name="name">Technicians</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('workshop.employee_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('workshop.employee_form')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Technician
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Technician.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_technician_details" name="Technicians" parent="workshop_master_data"
+              groups="workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"
+              action="action_menu_workshop_technician" sequence="6"/>
+
+    <record id="action_menu_workshop_spare_parts" model="ir.actions.act_window">
+        <field name="name">Spare Parts</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('type', '!=', 'service')]</field>
+        <field name="context">{'default_type': 'product'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create new Spare Parts
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to the Spare Parts.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_spare_parts_details" name="Spare Parts" parent="workshop_master_data"
+              groups="workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"
+              action="action_menu_workshop_spare_parts" sequence="1"/>
+
+
+</odoo>

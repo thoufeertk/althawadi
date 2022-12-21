@@ -1,0 +1,39 @@
+<odoo>
+
+    <record id="workshop_view_form" model="ir.ui.view">
+        <field name="name">workshop wizard</field>
+        <field name="model">workshop.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Pending Report">
+                <separator string="Pending Report"/>
+                <group>
+                   <group>
+                     <field name="pending_operations" widget="radio"/>
+                   </group>
+                  <group >
+
+                    <field name="start_date" />
+                    <field name="end_date"/>
+                </group>
+                </group>
+                        <footer>
+                            <button name="print_pdf" string="PRINT PDF" type="object" class="oe_highlight" action="workshop_view_form"/>
+                            <button string="Cancel" class="btn btn-default" type="object" special="cancel"/>
+                        </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="workshop_wizard_action" model="ir.actions.act_window">
+        <field name="name">Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">workshop.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="workshop_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="report_menu" name="Reporting" parent="workshop_root" groups="workshop.group_workshop_supervisors,workshop.group_workshop_engineers,workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"/>
+    <menuitem id="wizard_menu" name="Workshop Report" parent="report_menu"
+              groups="workshop.group_workshop_supervisors,workshop.group_workshop_engineers,workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin" action="workshop_wizard_action"/>
+</odoo>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="pending_list_pdf_report">
+
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <br/>
+                    <t t-if="pending_operations == 'pending_enquiries'">
+                    <h2 align="center">Pending Enquiries</h2>
+                    </t>
+                    <t t-if="pending_operations == 'pending_quotations'">
+                    <h2 align="center">Pending Quotations</h2>
+                    </t>
+                    <t t-if="pending_operations == 'pending_workorders'">
+                    <h2 align="center">Pending Workorders</h2>
+                    </t>
+                    <t t-if="pending_operations == 'pending_delivery_notes'">
+                    <h2 align="center">Pending Deliverynotes</h2>
+                    </t>
+                    <div class="row mt32">
+                        <div class="col-xs-3">
+                            <strong>Date From:</strong>
+                            <t t-esc="start_date"/>
+                        </div>
+                        <div class="col-xs-3" style="margin-left:500px;">
+                            <strong>Date To:</strong>
+                            <t t-esc="end_date"/>
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <table border="1" class="table table-condensed" style="border-style:solid">
+                    <thead>
+                        <tr align="left">
+                            <th>SL N0</th>
+                            <th>Date</th>
+                            <th>Sequence Number</th>
+                            <th>Customer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="s_no" t-value="0"/>
+                        <tr t-foreach="docs" t-as="line">
+                            <t t-set="s_no" t-value="s_no+1"/>
+                            <t t-if="pending_operations == 'pending_enquiries'">
+                            <td align="left">
+                                <span t-esc="s_no"/>
+                                <td align="left"><span t-esc="line['date_enquiry']"/></td>
+                                <td align="left"><span t-esc="line['enquiry_number']"/></td>
+                                <td align="left"><span t-esc="line['name']"/></td>
+                            </td>
+                            </t>
+                            <t t-if="pending_operations == 'pending_quotations'">
+                            <td align="left">
+                                <span t-esc="s_no"/>
+                                <td align="left"><span t-esc="line['quote_date']"/></td>
+                                <td align="left"><span t-esc="line['name']"/></td>
+                                <td align="left"><span t-esc="line['name']"/></td>
+                            </td>
+                            </t>
+                             <t t-if="pending_operations == 'pending_workorders'">
+                            <td align="left">
+                                <span t-esc="s_no"/>
+                                <td align="left"><span t-esc="line['order_date']"/></td>
+                                <td align="left"><span t-esc="line['name']"/></td>
+                                <td align="left"><span t-esc="line['name']"/></td>
+                            </td>
+                            </t>
+                             <t t-if="pending_operations == 'pending_delivery_notes'">
+                            <td align="left">
+                                <span t-esc="s_no"/>
+                                <td align="left"><span t-esc="line['delivery_note_date']"/></td>
+                                <td align="left"><span t-esc="line['delivery_note_no']"/></td>
+                                <td align="left"><span t-esc="line['name']"/></td>
+                            </td>
+                            </t>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_electrical_site_ref_tree" model="ir.ui.view">
+            <field name="name">view.electrical.site.ref.tree</field>
+            <field name="model">electrical.site.ref</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Electrical Site Reference">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_electrical_site_ref_form" model="ir.ui.view">
+            <field name="name">view.electrical.site.ref.form</field>
+            <field name="model">electrical.site.ref</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Electrical Site Reference">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window"
+                id="action_menu_electrical_site_ref">
+            <field name="name">Electrical Site Reference</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">electrical.site.ref</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Electrical Site Reference
+                </p>
+                <p>
+                    Create a Electrical Site Reference.
+                </p>
+            </field>
+        </record>
+        <menuitem id="electrical_configuration" name="Configuration"
+                  parent="electrical_services.electrical_service_main_menu" sequence="16"/>
+        <menuitem id="menu_electrical_site_ref" name="Electrical Site Reference"
+                  parent="electrical_configuration"
+                  action="action_menu_electrical_site_ref"/>
+    </data>
+</odoo>

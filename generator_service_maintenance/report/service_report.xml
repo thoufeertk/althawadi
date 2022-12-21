@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <template id="report_generator_document_id">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-set="address">
+                        <t t-foreach="docs" t-as="line">
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                 t-esc="line.service_customer"
+                                 t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                        </t>
+                    </t>
+                    <div class="page">
+                        <table class="table table-bordered" style="border: 1px solid black;line-height: 4px !important;">
+                            <thead>
+                                <tr>
+                                    <t t-set="colspan" t-value="6"/>
+<!--                                    <th><strong>S/NO</strong></th>-->
+                                    <th><strong>CHECK POINTS</strong></th>
+                                    <th><strong>TICK</strong></th>
+                                    <th><strong>REMARK</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody class="invoice_tbody">
+                                <tr>
+                                    <td>
+                                        <strong>General</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>R-Visual Inspection for Rust</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_gen_service_visual_rust"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check Any Deposition (Oil, diesel, dust)</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_gen_service_check_any_deposition"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check the Cleanliness of the generator set</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_gen_service_check_any_cleanliness"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Air Intake Check</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check for Air Leaks</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_air_service_leaks"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check Air cleaner passageway for any restriction</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_air_service_cleaner_passage"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check piping and connections</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_air_service_piping_connection"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Engine</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check engine unusual vibration</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_engine_service_unusual_vibration"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check engine tightening mounting hardware</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_engine_service_mounting_hardware"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Generator Check</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check air inlet and outlet passageway (Canopy/S.S louvers)</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_generator_service_passage"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check control panel lamps</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_generator_service_control_panel"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>R-Alarm Relays</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Test and reset all alarms</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_alarm_service_test_reset"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>R-Alternator</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check and record alternator insulation resistance (IR)</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_alternator_service_insulation"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Lube</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check for oil level</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_lub_service_lube_engine_oil_level"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check engine oil level</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_lub_service_lube_engine_oil_level"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check engine oil condition</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_lub_service_lube_engine_oil_condition"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check Oil filter</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_lub_service_lube_oil_filter"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check Governer Oil</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_lub_service_lube_governer_oil"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check and record oil pressure</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_lub_service_lube_oil_pressure"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>R-Check hydraulic governor oil level</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_lub_service_hydraulic_governor_pressure"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Electrical Check</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check Check Battery</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_electrical_service_battery"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check electrolyte level</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_electrical_service_electrolyte"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check specific gravity</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_electrical_service_gravity"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>R-Check Charging system</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_electrical_service_charging_system"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>R-Check Load breaker</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_electrical_service_load_breaker"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Fuel</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check for fuel leaks</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_fuel_service_leaks"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check main tank level (S.S)</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_fuel_service_main_tank_level"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check day tank level (S.S)</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_fuel_service_day_tank_level"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check fuel transfer pump</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_fuel_service_transfer_pump"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Drain sediments from tank (S.S)</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_fuel_service_drain_sediment"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check governor and linkage to pump</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_fuel_service_governor_linkage"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check fuel lines and connection</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_fuel_service_lines_connection"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check fuel filter</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_fuel_service_filter"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Cooling System</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check coolant leaks</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_cooling_service_coolant_leaks"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check radiator air passageway for any restriction</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_cooling_service_radiator_air_passageway"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check hoses and connections</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_cooling_service_hoses_connections"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check Coolant level</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_cooling_service_coolant_level"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check belt condition and tension</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_cooling_service_belt_condition_tension"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check wobble and grease leak in fan Hub and drive pulley (S.S)</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_cooling_service_grease_leak"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check operation of Coolant heater</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_cooling_service_operation_heater"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>R-Starting</strong>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Start up the generator with selector switch set in auto/manual</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_starting_service_auto_manual"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check for under voltage</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_starting_service_under_voltage"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check and record terminal voltage</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_starting_service_terminal_voltage"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check and record Frequency</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_starting_service_frequency"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Check load current (S.S)</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_starting_service_load_current"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>Service operation total hours</span>
+                                    </td>
+                                    <td>
+                                        <span></span>
+                                    </td>
+                                    <td>
+                                        <span t-field="docs.dec_starting_service_operation_total_hours"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                    </div>
+                </t>
+            </t>
+        </template>
+        <template id="report_generator_document">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="line">
+                    <t t-call="generator_service_maintenance.report_generator_document_id"
+                       t-lang="line.service_customer.lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
