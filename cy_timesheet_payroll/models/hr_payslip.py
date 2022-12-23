@@ -6,12 +6,7 @@ from odoo import models, fields, api
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
 
-    @api.onchange('employee_id', 'struct_id', 'contract_id', 'date_from', 'date_to')
-    def _onchange_employee(self):
-        super(HrPayslip, self)._onchange_employee()
-        if self.employee_id:
-            self.get_timesheet_hours()
-        return
+
 
     def get_timesheet_hours(self):
         calendar_id = str(self.employee_id.resource_calendar_id.id)
@@ -73,3 +68,9 @@ class HrPayslip(models.Model):
             'number_of_hours': holiday,
             'amount': holiday * self.contract_id.holiday_overtime_wage,
         })]
+
+    @api.onchange('employee_id', 'struct_id', 'contract_id', 'date_from', 'date_to')
+    def _onchange_employee(self):
+        if self.employee_id:
+            self.get_timesheet_hours()
+        return
