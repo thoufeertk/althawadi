@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="mechanical_scope_tree_view" model="ir.ui.view">
+            <field name="name">mechanical.scope.tree.view</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <tree string="Mechanical Scope">
+                    <field name="name"/>
+                    <field name="mechanical_item_code"/>
+                    <field name="list_price"/>
+                </tree>
+            </field>
+        </record>
+        <record id="mechanical_scope_variant_tree_view" model="ir.ui.view">
+            <field name="name">mechanical.scope.tree.view</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <tree string="Mechanical Scope">
+                    <field name="name"/>
+                    <field name="mechanical_item_code"/>
+                    <field name="list_price"/>
+                </tree>
+            </field>
+        </record>
+        <record id="mechanical_scope_form_view" model="ir.ui.view">
+            <field name="name">mechanical.scope.form.view</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <form string="Mechanical Scope">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Mechanical Scope"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <div>
+                            <field name="is_mechanical"/>
+                            <label for="is_mechanical"/>
+                        </div>
+                        <notebook>
+                            <page name="mechanical_details" string="Mechanical Scope Details"
+                                  attrs="{'invisible': [('is_mechanical', '=', False)]}">
+                                <group string="Mechanical Details">
+                                    <group>
+                                        <field name="mechanical_item_code" placeholder="mechanical Scope Item Code"
+                                               attrs="{'required': [('is_mechanical', '=', True)]}"/>
+                                        <field name="mechanical_item_description" placeholder="Item description..."
+                                               attrs="{'required': [('is_mechanical', '=', True)]}"/>
+                                        <field name="list_price"
+                                               attrs="{'required': [('is_mechanical', '=', True)]}"/>
+                                        <field name="categ_id" string="Category"/>
+                                        <field name="taxes_id" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="variants" string="Variants" groups="product.group_product_variant">
+                                <field name="attribute_line_ids" widget="one2many" context="{'show_attribute': False}">
+                                    <tree string="Variants" editable="bottom">
+                                        <field name="attribute_id" attrs="{'readonly': [('id', '!=', False)]}"/>
+                                        <field name="value_ids" widget="many2many_tags"
+                                               options="{'no_create_edit': True}"
+                                               context="{'default_attribute_id': attribute_id, 'show_attribute': False}"/>
+                                    </tree>
+                                </field>
+                                <p class="oe_grey oe_edit_only">
+                                    <strong>Warning</strong>: adding or deleting attributes
+                                    will delete and recreate existing variants and lead
+                                    to the loss of their possible customizations.
+                                </p>
+                            </page>
+
+                            <page name="mechanical_spare_parts" string="Mechanical Accessories"
+                                  attrs="{'invisible': [('is_mechanical', '=', False)]}">
+                                <group>
+                                    <field name="mechanical_spare_parts_ids" mode="tree" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="spare_product_id"/>
+                                            <field name="spare_product_quantity"/>
+                                            <field name="spare_product_price"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Accounting" name="invoicing" groups="account.group_account_user">
+                                <group name="properties">
+                                    <group string="Receivables">
+                                        <field name="property_account_income_id"
+                                               domain="[('internal_type','=','other'),('deprecated','=',False)]"
+                                               groups="account.group_account_user"/>
+                                    </group>
+                                    <group string="Payables" name="payables">
+                                        <field name="property_account_expense_id"
+                                               domain="[('internal_type','=','other'),('deprecated','=',False)]"
+                                               groups="account.group_account_user"/>
+                                    </group>
+                                </group>
+                                <group name="accounting"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="mechanical_scope_variant_form_view" model="ir.ui.view">
+            <field name="name">mechanical.scope.form.view</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <form string="Mechanical Scope">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Mechanical Scope"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <div>
+                            <field name="is_mechanical"/>
+                            <label for="is_mechanical"/>
+                        </div>
+                        <notebook>
+                            <page name="mechanical_details" string="Mechanical Scope Details"
+                                  attrs="{'invisible': [('is_mechanical', '=', False)]}">
+                                <group string="Mechanical Details">
+                                    <group>
+                                        <field name="mechanical_item_code" placeholder="mechanical Scope Item Code"
+                                               attrs="{'required': [('is_mechanical', '=', True)]}"/>
+                                        <field name="mechanical_item_description" placeholder="Item description..."
+                                               attrs="{'required': [('is_mechanical', '=', True)]}"/>
+                                        <field name="list_price"
+                                               attrs="{'required': [('is_mechanical', '=', True)]}"/>
+                                        <field name="categ_id" string="Category"/>
+                                        <field name="taxes_id" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="mechanical_spare_parts" string="Mechanical Accessories"
+                                  attrs="{'invisible': [('is_mechanical', '=', False)]}">
+                                <group>
+                                    <field name="mechanical_spare_parts_ids" mode="tree" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="spare_product_id"/>
+                                            <field name="spare_product_quantity"/>
+                                            <field name="spare_product_price"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Accounting" name="invoicing" groups="account.group_account_user">
+                                <group name="properties">
+                                    <group string="Receivables">
+                                        <field name="property_account_income_id"
+                                               domain="[('internal_type','=','other'),('deprecated','=',False)]"
+                                               groups="account.group_account_user"/>
+                                    </group>
+                                    <group string="Payables" name="payables">
+                                        <field name="property_account_expense_id"
+                                               domain="[('internal_type','=','other'),('deprecated','=',False)]"
+                                               groups="account.group_account_user"/>
+                                    </group>
+                                </group>
+                                <group name="accounting"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

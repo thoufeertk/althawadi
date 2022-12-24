@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="workshop_scopeofwork_tree" model="ir.ui.view">
+        <field name="name">workshop.scopeofwork.tree</field>
+        <field name="model">workshop.scopeofwork</field>
+        <field name="arch" type="xml">
+            <tree string="Scope of Work">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record id="workshop_scopeofwork_form" model="ir.ui.view">
+        <field name="name">workshop.scopeofwork.form</field>
+        <field name="model">workshop.scopeofwork</field>
+        <field name="arch" type="xml">
+            <form string="Scope of Work">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Description of Scope of Work..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="workshop_scopeofwork_menu_action" model="ir.actions.act_window">
+        <field name="name">Scope Of Work</field>
+        <field name="res_model">workshop.scopeofwork</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Scope Of Work
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Scope Of Work.
+            </p>
+        </field>
+    </record>
+    <menuitem id="workshop_scopeofwork_menu" name="Scope Of Work" parent="workshop_master_data"
+              groups="workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"
+              action="workshop_scopeofwork_menu_action" sequence="4"/>
+</odoo>

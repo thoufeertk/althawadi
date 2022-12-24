@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <template id="mech_certificate_report_doc">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <center>
+                            <h3>Completion Certificate</h3>
+                            <br/>
+                            <br/>
+                        </center>
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div id="informations">
+                                <div class="float-left">
+                                    <strong>Start Date:</strong>
+                                    <t t-esc="start_date"/>
+                                </div>
+                                <div class="float-right">
+                                    <strong>End Date:</strong>
+                                    <t t-esc="end_date"/>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <table class="table table-sm o_main_table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Certificate No.
+                                        </th>
+                                        <th class="text-left">Customer</th>
+                                        <th class="text-left">Completion Time
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="certificate_tbody">
+                                    <t t-foreach="docs" t-as="doc">
+                                        <tr>
+                                            <td>
+                                                <t t-esc="doc['certificate_no']"/>
+                                            </td>
+                                            <td class="text-left">
+                                                <t t-esc="doc['enquiry_customer_id']"/>
+                                            </td>
+                                            <td class="text-left">
+                                                <t t-esc="doc['enquiry_date']"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

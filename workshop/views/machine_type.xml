@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="machine_type_tree" model="ir.ui.view">
+        <field name="name">machine.type.tree</field>
+        <field name="model">machine.type</field>
+        <field name="arch" type="xml">
+            <tree string="Machine Type">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record id="machine_type_form" model="ir.ui.view">
+        <field name="name">machine.type.form</field>
+        <field name="model">machine.type</field>
+        <field name="arch" type="xml">
+            <form string="Machine Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Eg:Induction Motor"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Description of Machine Type..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="machine_type_menu_action" model="ir.actions.act_window">
+        <field name="name">Machine Type</field>
+        <field name="res_model">machine.type</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Machine Type
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Machine Type.
+            </p>
+        </field>
+    </record>
+    <menuitem id="machine_type_menu" name="Machine Type" parent="workshop_master_data"
+              groups="workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"
+              action="machine_type_menu_action" sequence="4"/>
+</odoo>

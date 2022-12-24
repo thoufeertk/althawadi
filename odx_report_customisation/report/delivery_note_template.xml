@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="workshop_delivery_notess">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-if="o.odx_header">
+                    <t t-call="web.external_layout">
+                        <style>
+                            @font-face {
+                            font-family: 'Tajawal-Black';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Black.ttf)
+                            format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-Bold';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Bold.ttf)
+                            format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-ExtraBold';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-ExtraBold.ttf) format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'ExtraLigh';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-ExtraLigh.ttf) format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-Light';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Light.ttf)
+                            format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-Medium';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Medium.ttf)
+                            format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-Regular';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Regular.ttf) format('opentype');
+                            }
+                            .regular{
+                            font-family: Tajawal-Regular;
+                            }
+                            .black{
+                            font-family: Tajawal-Black !important;
+                            /font-weight: bold;/
+                            }
+                            .light{
+                            font-family: Tajawal-Light;
+                            }
+                            .address_block span{
+                            line-height: initial !important;
+                            }
+                            .table-border {
+                            border: 1px solid !important;
+                            }
+                            table{
+                            margin-bottom: 1px !important;
+                            }
+                            .product_block td{
+                            border-right: 1px solid;
+                            border-left: 1px solid;
+                            border-bottom: 1px solid;
+
+                            border-top: 0px !important;
+                            padding: 5px 0px 5px 0px !important;
+                            }
+                        </style>
+                        <div class="page">
+                            <h2 style="text-align:center;">
+
+                                <!--                            7:35:33    <span t-if="o.state not in ['draft','sent']">Order</span>-->
+                                <span>
+                                    <b>
+                                        <u>Delivery Note</u>
+                                    </b>
+                                </span>
+
+                            </h2>
+                            <div class="row">
+                                <div class="col-8">
+                                    <table width="100%">
+                                        <tr>
+                                            <td>
+                                                <span>Delivery Note Date :</span>
+                                                <span t-field="o.delivery_note_date"/>
+
+                                                <br/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span>Delivery Note Number :</span>
+                                                <span t-field="o.delivery_note_no"/>
+                                            </td>
+                                        </tr>
+
+                                        <br/>
+
+                                    </table>
+                                </div>
+
+                            </div>
+                            <br/>
+                            <!--                        <b>Equipment Details</b>-->
+                            <table class="table table-sm" style="font-size:15px" height="100px">
+                                <thead>
+                                    <tr>
+                                        <th name="th_no" class="text-center table-border">Sl.No</th>
+                                        <th name="th_product_id" class="text-center table-border">Asset Number</th>
+                                        <th name="th_product_id" class="text-center table-border">Description</th>
+                                        <th name="th_product_id" class="text-center table-border">Motor Rating</th>
+                                        <th name="th_description" class="text-center table-border">Type of Service</th>
+                                        <th name="th_days" class="text-center table-border table-border">Date of
+                                            Supply
+                                        </th>
+                                        <th name="th_quantity" class="text-center table-border">Delivery Note Number
+                                        </th>
+                                        <th name="th_priceunit" class="text-center table-border">Qty</th>
+                                        <th name="th_discount" class="text-center table-border">Unit Price</th>
+                                        <th name="th_discount" class="text-center table-border">Dis (%)</th>
+                                        <th name="th_discount" class="text-center table-border">Net Price</th>
+                                        <th name="th_discount" class="text-center table-border">VAT</th>
+                                        <th name="th_discount" class="text-center table-border">Total (Inc.) Vat</th>
+                                        <!--                                    <th name="th_taxes" class="">Taxes</th>-->
+                                    </tr>
+                                </thead>
+                                <t t-set="sl" t-value="0"/>
+
+                                <t t-foreach="o.delivery_note_line" t-as="line">
+                                    <t t-if="not line.display_type == 'line_section'">
+                                        <tr>
+                                            <t t-set="sl" t-value="sl + 1"/>
+                                            <td class="table-border" width="20%">
+                                                <span t-esc="sl"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="o.odx_asset_no"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <t t-out="o.job_reference.initial_inspection.machine_type.name"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="o.odx_motor_rating"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="o.odx_date_of_supply"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="o.delivery_note_no"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.product_uom_qty"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.price_unit"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.discount"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.price_subtotal"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.price_tax"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.price_total"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-border">
+                                                Serial Number:
+                                            </td>
+                                            <td colspan="2" class="table-border">
+                                                <span t-field="o.job_reference.machine_serial_number"/>
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-border">
+                                                Gate Pass No:
+                                            </td>
+                                            <td colspan="2" class="table-border">
+                                                <span t-field="o.odx_gate_pass_no"/>
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </table>
+
+                            <br/>
+                            <br/>
+                            <br/>
+                            <table width="100%">
+                                <tr>
+                                    <!--                                <hr style="width:30%;float: right;"/>-->
+                                    <!--                                    <hr style="width:30%;float: left;"/>-->
+                                    <tr>
+                                        <td>Delivered By :
+                                            <span t-field="o.odx_delivered_by"/>
+                                        </td>
+                                        <td align="left" style="padding-left:375px">Received by :
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Driver :
+                                            <span t-field="o.odx_driver"/>
+                                        </td>
+                                        <td align="left" style="padding-left:375px">Name :
+                                            <span t-field="o.customer_name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vehicle Number :
+                                            <span t-field="o.odx_vehicle_no"/>
+                                        </td>
+                                        <td align="right" style="padding-left:375px;">Date :
+                                            <span t-field="o.odx_received_date"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Authorized Signature :
+                                        </td>
+                                        <td align="left" style="padding-left:375px" >Telephone Number :
+                                            <span t-field="o.customer_name.phone"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+
+                                        </td>
+                                        <td align="left" style="padding-left:375px">Signature:</td>
+                                    </tr>
+                                    <!--                                <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">-->
+                                    <!--                                    <b>Prepared By :</b>-->
+                                    <!--                                </td>-->
+
+                                    <br/>
+                                    <br/>
+
+
+                                </tr>
+                            </table>
+
+                        </div>
+                    </t>
+                </t>
+                <t t-else="">
+                    <t t-call="odx_report_customisation.report_header_minimal_hiba_ntg">
+                    </t>
+                    <t t-call="web.external_layout">
+                        <style>
+                            @font-face {
+                            font-family: 'Tajawal-Black';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Black.ttf)
+                            format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-Bold';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Bold.ttf)
+                            format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-ExtraBold';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-ExtraBold.ttf) format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'ExtraLigh';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-ExtraLigh.ttf) format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-Light';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Light.ttf)
+                            format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-Medium';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Medium.ttf)
+                            format('opentype');
+                            }
+                            @font-face {
+                            font-family: 'Tajawal-Regular';
+                            src: local('Tajawal'), local('Tajawal'),
+                            url(/arabic_taxable_invoice_knk/static/src/fonts/Tajawal-Regular.ttf) format('opentype');
+                            }
+                            .regular{
+                            font-family: Tajawal-Regular;
+                            }
+                            .black{
+                            font-family: Tajawal-Black !important;
+                            /font-weight: bold;/
+                            }
+                            .light{
+                            font-family: Tajawal-Light;
+                            }
+                            .address_block span{
+                            line-height: initial !important;
+                            }
+                            .table-border {
+                            border: 1px solid !important;
+                            }
+                            table{
+                            margin-bottom: 1px !important;
+                            }
+                            .product_block td{
+                            border-right: 1px solid;
+                            border-left: 1px solid;
+                            border-bottom: 1px solid;
+
+                            border-top: 0px !important;
+                            padding: 5px 0px 5px 0px !important;
+                            }
+                        </style>
+                        <div class="page">
+                            <h2 style="text-align:center;">
+
+                                <!--                            7:35:33    <span t-if="o.state not in ['draft','sent']">Order</span>-->
+                                <span>
+                                    <b>
+                                        <u>Delivery Note</u>
+                                    </b>
+                                </span>
+
+                            </h2>
+                            <div class="row">
+                                <div class="col-8">
+                                    <table width="100%">
+                                        <tr>
+                                            <td>
+                                                <span>Delivery Note Date :</span>
+                                                <span t-field="o.delivery_note_date"/>
+
+                                                <br/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span>Delivery Note Number :</span>
+                                                <span t-field="o.delivery_note_no"/>
+                                            </td>
+                                        </tr>
+
+                                        <br/>
+
+                                    </table>
+                                </div>
+
+                            </div>
+                            <br/>
+                            <!--                        <b>Equipment Details</b>-->
+                            <table class="table table-sm" style="font-size:15px" height="100px">
+                                <thead>
+                                    <tr>
+                                        <th name="th_no" class="text-center table-border">Sl.No</th>
+                                        <th name="th_product_id" class="text-center table-border">Asset Number</th>
+                                        <th name="th_product_id" class="text-center table-border">Description</th>
+                                        <th name="th_product_id" class="text-center table-border">Motor Rating</th>
+                                        <th name="th_description" class="text-center table-border">Type of Service</th>
+                                        <th name="th_days" class="text-center table-border table-border">Date of
+                                            Supply
+                                        </th>
+                                        <th name="th_quantity" class="text-center table-border">Delivery Note Number
+                                        </th>
+                                        <th name="th_priceunit" class="text-center table-border">Qty</th>
+                                        <th name="th_discount" class="text-center table-border">Unit Price</th>
+                                        <th name="th_discount" class="text-center table-border">Dis (%)</th>
+                                        <th name="th_discount" class="text-center table-border">Net Price</th>
+                                        <th name="th_discount" class="text-center table-border">VAT</th>
+                                        <th name="th_discount" class="text-center table-border">Total (Inc.) Vat</th>
+                                        <!--                                    <th name="th_taxes" class="">Taxes</th>-->
+                                    </tr>
+                                </thead>
+                                <t t-set="sl" t-value="0"/>
+
+                                <t t-foreach="o.delivery_note_line" t-as="line">
+                                    <t t-if="not line.display_type == 'line_section'">
+                                        <tr>
+                                            <t t-set="sl" t-value="sl + 1"/>
+                                            <td class="table-border" width="20%">
+                                                <span t-esc="sl"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="o.odx_asset_no"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <t t-out="o.job_reference.initial_inspection.machine_type.name"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="o.odx_motor_rating"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.name"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="o.odx_date_of_supply"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="o.delivery_note_no"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.product_uom_qty"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.price_unit"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.discount"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.price_subtotal"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.price_tax"/>
+                                            </td>
+                                            <td class="table-border">
+                                                <span t-field="line.price_total"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-border">
+                                                Serial Number:
+                                            </td>
+                                            <td colspan="2" class="table-border">
+                                                <span t-field="o.job_reference.machine_serial_number"/>
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-border">
+                                                Gate Pass No:
+                                            </td>
+                                            <td colspan="2" class="table-border">
+                                                <span t-field="o.odx_gate_pass_no"/>
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                            <td class="table-border">
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </table>
+
+                            <br/>
+                            <br/>
+                            <br/>
+                            <table width="100%">
+                                <tr>
+
+                                    <!--                                <hr style="width:30%;float: right;"/>-->
+                                    <!--                                    <hr style="width:30%;float: left;"/>-->
+                                    <tr>
+                                        <td>Delivered By :
+                                            <span t-field="o.odx_delivered_by"/>
+                                        </td>
+                                        <td align="left" style="padding-left:375px">Received by
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Driver :
+                                            <span t-field="o.odx_driver"/>
+                                        </td>
+                                        <td align="left" style="padding-left:375px" >Name :
+                                             <span t-field="o.customer_name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vehicle Number :
+                                            <span t-field="o.odx_vehicle_no"/>
+                                        </td>
+                                        <td align="left" style="padding-left:375px">Date :
+                                            <span t-field="o.odx_received_date"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Authorized Signature :
+                                        </td>
+                                        <td align="left" style="padding-left:375px">Telephone Number :
+                                            <span t-field="o.customer_name.phone"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+
+                                        </td>
+                                        <td align="left" style="padding-left:375px" >Signature:</td>
+                                    </tr>
+                                    <!--                                <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">-->
+                                    <!--                                    <b>Prepared By :</b>-->
+                                    <!--                                </td>-->
+
+                                    <br/>
+                                    <br/>
+
+
+                                </tr>
+                            </table>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
