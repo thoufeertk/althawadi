@@ -47,7 +47,7 @@ class ProductTemplate(models.Model):
             price_list.append(service.cost)
             print(price_list)
         print(sum(price_list))
-        self.price = sum(price_list)
+        self.list_price = sum(price_list)
 
 
     def action_open_attribute_values(self):
