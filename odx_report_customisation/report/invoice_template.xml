@@ -75,201 +75,268 @@
                         </style>
                         <div class="page">
                             <h2 style="text-align:center;">
-
                                 <!--                            7:35:33    <span t-if="o.state not in ['draft','sent']">Order</span>-->
                                 <span>
                                     <b>
-                                        <u>Invoice</u>
+                                        <u>TAX INVOICE</u>
                                     </b>
                                 </span>
-
                             </h2>
+                            <br/>
+                            <br/>
                             <div class="row">
-                                <div class="col-8">
-                                    <table width="100%">
+                                <div class="col-12">
+                                    <table style="border:1px solid black;margin-left: auto;margin-right: auto;"
+                                           width="100%">
                                         <tr>
-                                            <td>
-                                                Invoice Date :
+                                            <td class="table-border" style="padding-left:5px">
+                                                <span t-field="o.company_id"/>
+                                                <br/>
+                                                <span t-field="o.street"/>
+                                                <span t-field="o.zip"/>
+                                                <span t-field="o.city"/>
+                                                <br/>
+                                                <span t-field="o.country_id"/>
+                                            </td>
+                                            <td class="table-border" style="padding-left:5px">
+                                                <span>Invoice No :</span>
+                                                <span t-field="o.name"/>
+                                                <br/>
+                                                <span>Invoice Date</span>
                                                 <span t-field="o.invoice_date"/>
-
+                                                <br/>
+                                                <span>Order No :</span>
+                                                <span t-field="o.invoice_origin"/>
                                                 <br/>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
-                                                <span>Source :</span>
-                                                <span t-field="o.invoice_origin"/>
+                                            <td class="table-border" style="padding-left:5px" width="50%">
+                                                <span>Buyer</span>
+                                                <span t-field="o.partner_id"/>
+                                                <br/>
+                                                <span t-field="o.partner_id.street"/>
+                                                <span t-field="o.partner_id.city"/>
+                                                <br/>
+                                                <span t-field="o.partner_id.country_id"/>
+                                            </td>
+                                            <td style="padding-left:5px">
+                                                <span>Payment Terms :</span>
+                                                <span t-esc="o.invoice_payment_term_id.name"/>
+                                                <br/>
+                                                <span>Payment Mode :</span>
+                                                <span t-field="o.payment_reference"/>
                                             </td>
                                         </tr>
-                                        <br/>
-
-                                        <tr>
-                                            <td>
-                                                <span>Sales ID :</span>
-                                                <span t-field="o.invoice_user_id.odx_sales_id"/>
-                                            </td>
-                                        </tr>
-
                                     </table>
                                 </div>
                             </div>
                             <br/>
-                            <table class="table table-sm" style="font-size:15px" height="100px">
-                                <thead>
+                            <br/>
+                            <div>
+                                <table width="100%  ">
                                     <tr>
-                                        <th name="th_no" class="text-center table-border">Sl.No</th>
-                                        <th name="th_product_id" class="text-center table-border">Asset Number</th>
-                                        <th name="th_product_id" class="text-center table-border">Description</th>
-                                        <th name="th_product_id" class="text-center table-border">Motor Rating</th>
-                                        <th name="th_description" class="text-center table-border">Type of Service</th>
-                                        <th name="th_days" class="text-center table-border table-border">Date of
-                                            Supply
-                                        </th>
-                                        <th name="th_quantity" class="text-center table-border">Delivery Note Number
-                                        </th>
-                                        <th name="th_priceunit" class="text-center table-border">Qty</th>
-                                        <th name="th_discount" class="text-center table-border">Unit Price</th>
-                                        <th name="th_discount" class="text-center table-border">Dis (%)</th>
-                                        <th name="th_discount" class="text-center table-border">Net Price</th>
-                                        <th name="th_discount" class="text-center table-border">VAT</th>
-                                        <th name="th_discount" class="text-center table-border">Total (Inc.) Vat</th>
-                                        <!--                                    <th name="th_taxes" class="">Taxes</th>-->
-                                    </tr>
-                                </thead>
-                                <t t-set="sl" t-value="0"/>
-
-                                <t t-foreach="o.invoice_line_ids" t-as="line">
-                                    <t t-if="not line.display_type == 'line_section'">
-                                        <tr>
-                                            <t t-set="sl" t-value="sl + 1"/>
-                                            <td class="table-border" width="20%">
-                                                <span t-esc="sl"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="o.odx_asset_number"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <t t-esc="o.odx_machine_name"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="o.odx_motor_rating"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.product_id"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.date_of_supply"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.delivery_ref"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.quantity"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.price_unit"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.discount"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.price_subtotal"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.tax_ids"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.price_total"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="table-border">
-                                                Serial Number:
-                                            </td>
-                                            <td colspan="2" class="table-border">
-                                                <span t-field="o.odx_serial"/>
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="table-border">
-                                                Gate Pass No:
-                                            </td>
-                                            <td colspan="2" class="table-border">
-                                                <span t-field="o.odx_gate_pass"/>
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                        </tr>
-                                    </t>
-                                </t>
-                            </table>
-
-                            <br/>
-                            <br/>
-                            <br/>
-                            <table width="100%">
-                                <tr>
-                                    <!--                                <hr style="width:30%;float: right;"/>-->
-                                    <!--                                    <hr style="width:30%;float: left;"/>-->
-                                    <td style="float:left;width:25%;text-align:center;">
-                                        <t t-if="o.odx_authorized_signature">
-                                            <img t-att-src="image_data_uri(o.odx_authorized_signature)"
-                                                 style="max-height: 3cm; max-width: 6cm;"/>
+                                        <t t-set="sl" t-value="0"/>
+                                        <t t-foreach="o.invoice_line_ids" t-as="line">
+                                            <t t-if="not line.display_type == 'line_section'">
+                                                <tr>
+                                                    <td>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span t-field="o.odx_machine_name"/>
+                                                        ,
+                                                        <span t-field="o.odx_asset_number"/>
+                                                        ,
+                                                        <span t-field="o.odx_motor_rating"/>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span>Date of Supply :</span>
+                                                        <span t-field="line.date_of_supply"/><![CDATA[&nbsp;&nbsp;]]> |
+                                                        <![CDATA[&nbsp;&nbsp;]]>
+                                                        <span>DN Number :</span>
+                                                        <span t-field="line.delivery_ref"/><![CDATA[&nbsp;&nbsp;]]> |
+                                                        <![CDATA[&nbsp;&nbsp;]]>
+                                                        <span>Job No :</span>
+                                                        <span t-field="o.job_number"/>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span>Serial No :</span>
+                                                        <span t-field="o.odx_serial"/><![CDATA[&nbsp;&nbsp;]]> |
+                                                        <![CDATA[&nbsp;&nbsp;]]>
+                                                        <span>Gate Pass No :</span>
+                                                        <span t-field="o.odx_gate_pass"/>
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="5%" name="th_no" class="text-center table-border">Sl.No
+                                                    </td>
+                                                    <td width="15%" name="th_description"
+                                                        class="text-center table-border">Type
+                                                        of Service
+                                                    </td>
+                                                    <td name="th_unitprice" class="text-center table-border">Qty
+                                                    </td>
+                                                    <td name="th_unitprice" class="text-center table-border">Unit
+                                                        Price
+                                                    </td>
+                                                    <td name="th_discount" class="text-center table-border">Disc</td>
+                                                    <td name="th_netprice" class="text-center table-border">Net
+                                                        Price
+                                                    </td>
+                                                    <td name="th_vat" class="text-center table-border">VAT</td>
+                                                    <td name="th_total" class="text-center table-border">Total
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <t t-set="sl" t-value="sl + 1"/>
+                                                    <td class="table-border">
+                                                        <span t-esc="sl"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.product_id"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.quantity"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.price_unit"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.discount"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.price_subtotal"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.tax_ids"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.price_total"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
                                         </t>
 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!--                                <hr style="width:30%;float: right;"/>-->
-                                    <!--                                    <hr style="width:30%;float: left;"/>-->
-                                    <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">
-                                        <b>Authorized Signature</b>
-                                    </td>
-                                    <td style="float:right;width:25%;text-align:center;">
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div style="margin-left: 50px;">
+                                    <span>Amount (in words)</span>
+                                    <br/>
+                                    <b><span t-esc="o.word_amt"/>(<span t-esc="o.amount_total"/>)
+                                    </b>
+                                    <br/>
+                                    <br/>
+                                    <span>VAT Amount (in words)</span>
+                                    <br/>
+                                    <b><span t-esc="o.word_tax"/>(<span t-esc="o.amount_tax"/>)
+                                    </b>
+                                </div>
+                                <div style="margin-left: 300px;">
+                                    <table width="100%">
+                                        <tr width="100%">
+                                            <td>Untaxed Amount</td>
+                                            <td>:
+                                                <span t-field="o.amount_untaxed"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+                                            <td>VAT Amount</td>
+                                            <td>:
+                                                <span t-field="o.amount_tax"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+                                            <td style="font-size: 18px;">
+                                                <b>Total</b>
+                                            </td>
+                                            <td style="font-size: 18px;">:
+                                                <b>
+                                                    <span t-field="o.amount_total"/>
+                                                </b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
 
-                                    </td>
-                                    <br/>
-                                    <br/>
-                                </tr>
-                            </table>
+                            </div>
+                            <br/>
+                            <div style="margin-left: 400px;">
+                                <b>
+                                    <span>Company's Bank Details</span>
+                                </b>
+                                <table width="100%">
+                                    <tr width="100%">
+                                        <t t-set="bank" t-value="o.get_bank_details(o.company_id)"/>
+                                        <td>A/C Holders Name</td>
+                                        <td>:
+                                            <span t-if="bank.partner_id.name" t-esc="bank.partner_id.name"/>
+                                        </td>
+                                    </tr>
+                                        <tr width="100%">
+                                            <td>Bank Name</td>
+                                            <td>:
+                                                <span t-if="bank.bank_id.name" t-esc="bank.bank_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+                                            <td>A/C No.</td>
+                                            <td>:
+                                                <span t-if="bank.acc_number" t-esc="bank.acc_number"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+                                            <td>IBAN</td>
+                                            <td>:
+                                                <span t-if="bank.bank_id.name" t-esc="bank.bank_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+<!--                                            <td>Branch &amp; SWIFT code</td>-->
+                                            <td>SWIFT code</td>
+                                            <td>:
+<!--                                                <span t-if="bank.bank_id.street2" t-esc="bank.bank_id.street2"/> <span t-if="bank.bank_id.street2 and bank.bank_id.bic">&amp;</span>-->
+                                                <span t-if="bank.bank_id.bic" t-esc="bank.bank_id.bic"/>
+                                            </td>
+                                        </tr>
+                                </table>
+                            </div>
+                            <!--                            <table width="100%">-->
+                            <!--                                <tr>-->
+                            <!--                                    &lt;!&ndash;                                <hr style="width:30%;float: right;"/>&ndash;&gt;-->
+                            <!--                                    &lt;!&ndash;                                    <hr style="width:30%;float: left;"/>&ndash;&gt;-->
+                            <!--                                    <td style="float:left;width:25%;text-align:center;">-->
+                            <!--                                        <t t-if="o.odx_authorized_signature">-->
+                            <!--                                            <img t-att-src="image_data_uri(o.odx_authorized_signature)"-->
+                            <!--                                                 style="max-height: 3cm; max-width: 6cm;"/>-->
+                            <!--                                        </t>-->
+
+                            <!--                                    </td>-->
+                            <!--                                </tr>-->
+                            <!--                                <tr>-->
+                            <!--                                    &lt;!&ndash;                                <hr style="width:30%;float: right;"/>&ndash;&gt;-->
+                            <!--                                    &lt;!&ndash;                                    <hr style="width:30%;float: left;"/>&ndash;&gt;-->
+                            <!--                                    <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">-->
+                            <!--                                        <b>Authorized Signature</b>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td style="float:right;width:25%;text-align:center;">-->
+
+                            <!--                                    </td>-->
+                            <!--                                    <br/>-->
+                            <!--                                    <br/>-->
+                            <!--                                </tr>-->
+                            <!--                            </table>-->
 
                         </div>
                     </t>
@@ -348,205 +415,269 @@
                         </style>
                         <div class="page">
                             <h2 style="text-align:center;">
-
                                 <!--                            7:35:33    <span t-if="o.state not in ['draft','sent']">Order</span>-->
                                 <span>
                                     <b>
-                                        <u>Invoice</u>
+                                        <u>TAX INVOICE</u>
                                     </b>
                                 </span>
-
                             </h2>
+                            <br/>
+                            <br/>
                             <div class="row">
-                                <div class="col-8">
-                                    <table width="100%">
+                                <div class="col-12">
+                                    <table style="border:1px solid black;margin-left: auto;margin-right: auto;"
+                                           width="100%">
                                         <tr>
-                                            <td>
-                                                Invoice Date :
+                                            <td class="table-border" style="padding-left:5px">
+                                                <span t-field="o.company_id"/>
+                                                <br/>
+                                                <span t-field="o.street"/>
+                                                <span t-field="o.zip"/>
+                                                <span t-field="o.city"/>
+                                                <br/>
+                                                <span t-field="o.country_id"/>
+                                            </td>
+                                            <td class="table-border" style="padding-left:5px">
+                                                <span>Invoice No :</span>
+                                                <span t-field="o.name"/>
+                                                <br/>
+                                                <span>Invoice Date</span>
                                                 <span t-field="o.invoice_date"/>
-
+                                                <br/>
+                                                <span>Order No :</span>
+                                                <span t-field="o.invoice_origin"/>
                                                 <br/>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
-                                                <span>Source :</span>
-                                                <span t-field="o.invoice_origin"/>
+                                            <td class="table-border" style="padding-left:5px" width="50%">
+                                                <span>Buyer</span>
+                                                <span t-field="o.partner_id"/>
+                                                <br/>
+                                                <span t-field="o.partner_id.street"/>
+                                                <span t-field="o.partner_id.city"/>
+                                                <br/>
+                                                <span t-field="o.partner_id.country_id"/>
+                                            </td>
+                                            <td style="padding-left:5px">
+                                                <span>Payment Terms :</span>
+                                                <span t-esc="o.invoice_payment_term_id.name"/>
+                                                <br/>
+                                                <span>Payment Mode :</span>
+                                                <span t-field="o.payment_reference"/>
                                             </td>
                                         </tr>
-                                        <br/>
-
-                                        <tr>
-                                            <td>
-                                                <span>Sales ID :</span>
-                                                <span t-field="o.invoice_user_id.odx_sales_id"/>
-                                            </td>
-                                        </tr>
-
                                     </table>
                                 </div>
                             </div>
                             <br/>
-                            <table class="table table-sm" style="font-size:15px" height="100px">
-                                <thead>
+                            <br/>
+                            <div>
+                                <table width="100%  ">
                                     <tr>
-                                        <th name="th_no" class="text-center table-border">Sl.No</th>
-                                        <th name="th_product_id" class="text-center table-border">Asset Number</th>
-                                        <th name="th_product_id" class="text-center table-border">Description</th>
-                                        <th name="th_product_id" class="text-center table-border">Motor Rating</th>
-                                        <th name="th_description" class="text-center table-border">Type of Service</th>
-                                        <th name="th_days" class="text-center table-border table-border">Date of
-                                            Supply
-                                        </th>
-                                        <th name="th_quantity" class="text-center table-border">Delivery Note Number
-                                        </th>
-                                        <th name="th_priceunit" class="text-center table-border">Qty</th>
-                                        <th name="th_discount" class="text-center table-border">Unit Price</th>
-                                        <th name="th_discount" class="text-center table-border">Dis (%)</th>
-                                        <th name="th_discount" class="text-center table-border">Net Price</th>
-                                        <th name="th_discount" class="text-center table-border">VAT</th>
-                                        <th name="th_discount" class="text-center table-border">Total (Inc.) Vat</th>
-                                        <!--                                    <th name="th_taxes" class="">Taxes</th>-->
-                                    </tr>
-                                </thead>
-                                <t t-set="sl" t-value="0"/>
-
-                                <t t-foreach="o.invoice_line_ids" t-as="line">
-                                    <t t-if="not line.display_type == 'line_section'">
-                                        <tr>
-                                            <t t-set="sl" t-value="sl + 1"/>
-                                            <td class="table-border" width="20%">
-                                                <span t-esc="sl"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="o.odx_asset_number"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <t t-esc="o.odx_machine_name"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="o.odx_motor_rating"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.product_id"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.date_of_supply"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.delivery_ref"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.quantity"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.price_unit"
-                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.discount"/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.price_subtotal"
-                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.tax_ids"
-                                                />
-                                            </td>
-                                            <td class="table-border">
-                                                <span t-field="line.price_total"
-                                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="table-border">
-                                                Serial Number:
-                                            </td>
-                                            <td colspan="2" class="table-border">
-                                                <span t-field="o.odx_serial"/>
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="table-border">
-                                                Gate Pass No:
-                                            </td>
-                                            <td colspan="2" class="table-border">
-                                                <span t-field="o.odx_gate_pass"/>
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                            <td class="table-border">
-                                            </td>
-                                        </tr>
-                                    </t>
-                                </t>
-                            </table>
-
-                            <br/>
-                            <br/>
-                            <br/>
-                            <table width="100%">
-                                <tr>
-                                    <!--                                <hr style="width:30%;float: right;"/>-->
-                                    <!--                                    <hr style="width:30%;float: left;"/>-->
-                                    <td style="float:left;width:25%;text-align:center;">
-                                        <t t-if="o.odx_authorized_signature">
-                                            <img t-att-src="image_data_uri(o.odx_authorized_signature)"
-                                                 style="max-height: 3cm; max-width: 6cm;"/>
+                                        <t t-set="sl" t-value="0"/>
+                                        <t t-foreach="o.invoice_line_ids" t-as="line">
+                                            <t t-if="not line.display_type == 'line_section'">
+                                                <tr>
+                                                    <td>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span t-field="o.odx_machine_name"/>
+                                                        ,
+                                                        <span t-field="o.odx_asset_number"/>
+                                                        ,
+                                                        <span t-field="o.odx_motor_rating"/>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span>Date of Supply :</span>
+                                                        <span t-field="line.date_of_supply"/><![CDATA[&nbsp;&nbsp;]]> |
+                                                        <![CDATA[&nbsp;&nbsp;]]>
+                                                        <span>DN Number :</span>
+                                                        <span t-field="line.delivery_ref"/><![CDATA[&nbsp;&nbsp;]]> |
+                                                        <![CDATA[&nbsp;&nbsp;]]>
+                                                        <span>Job No :</span>
+                                                        <span t-field="o.job_number"/>
+                                                        <br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <span>Serial No :</span>
+                                                        <span t-field="o.odx_serial"/><![CDATA[&nbsp;&nbsp;]]> |
+                                                        <![CDATA[&nbsp;&nbsp;]]>
+                                                        <span>Gate Pass No :</span>
+                                                        <span t-field="o.odx_gate_pass"/>
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="5%" name="th_no" class="text-center table-border">Sl.No
+                                                    </td>
+                                                    <td width="15%" name="th_description"
+                                                        class="text-center table-border">Type
+                                                        of Service
+                                                    </td>
+                                                    <td name="th_unitprice" class="text-center table-border">Qty
+                                                    </td>
+                                                    <td name="th_unitprice" class="text-center table-border">Unit
+                                                        Price
+                                                    </td>
+                                                    <td name="th_discount" class="text-center table-border">Disc</td>
+                                                    <td name="th_netprice" class="text-center table-border">Net
+                                                        Price
+                                                    </td>
+                                                    <td name="th_vat" class="text-center table-border">VAT</td>
+                                                    <td name="th_total" class="text-center table-border">Total
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <t t-set="sl" t-value="sl + 1"/>
+                                                    <td class="table-border">
+                                                        <span t-esc="sl"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.product_id"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.quantity"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.price_unit"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.discount"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.price_subtotal"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.tax_ids"/>
+                                                    </td>
+                                                    <td class="table-border">
+                                                        <span t-field="line.price_total"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
                                         </t>
 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <!--                                <hr style="width:30%;float: right;"/>-->
-                                    <!--                                    <hr style="width:30%;float: left;"/>-->
-                                    <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">
-                                        <b>Authorized Signature</b>
-                                    </td>
-                                    <td style="float:right;width:25%;text-align:center;">
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div style="margin-left: 50px;">
+                                    <span>Amount (in words)</span>
+                                    <br/>
+                                    <b><span t-esc="o.word_amt"/>(<span t-esc="o.amount_total"/>)
+                                    </b>
+                                    <br/>
+                                    <br/>
+                                    <span>VAT Amount (in words)</span>
+                                    <br/>
+                                    <b><span t-esc="o.word_tax"/>(<span t-esc="o.amount_tax"/>)
+                                    </b>
+                                </div>
+                                <div style="margin-left: 300px;">
+                                    <table width="100%">
+                                        <tr width="100%">
+                                            <td>Untaxed Amount</td>
+                                            <td>:
+                                                <span t-field="o.amount_untaxed"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+                                            <td>VAT Amount</td>
+                                            <td>:
+                                                <span t-field="o.amount_tax"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+                                            <td style="font-size: 18px;">
+                                                <b>Total</b>
+                                            </td>
+                                            <td style="font-size: 18px;">:
+                                                <b>
+                                                    <span t-field="o.amount_total"/>
+                                                </b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
 
-                                    </td>
-                                    <br/>
-                                    <br/>
-                                </tr>
-                            </table>
+                            </div>
+                            <br/>
+                            <div style="margin-left: 400px;">
+                                <b>
+                                    <span>Company's Bank Details</span>
+                                </b>
+                                <table width="100%">
+                                    <tr width="100%">
+                                        <t t-set="bank" t-value="o.get_bank_details(o.company_id)"/>
+                                        <td>A/C Holders Name</td>
+                                        <td>:
+                                            <span t-if="bank.partner_id.name" t-esc="bank.partner_id.name"/>
+                                        </td>
+                                    </tr>
+                                        <tr width="100%">
+                                            <td>Bank Name</td>
+                                            <td>:
+                                                <span t-if="bank.bank_id.name" t-esc="bank.bank_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+                                            <td>A/C No.</td>
+                                            <td>:
+                                                <span t-if="bank.acc_number" t-esc="bank.acc_number"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+                                            <td>IBAN</td>
+                                            <td>:
+                                                <span t-if="bank.bank_id.name" t-esc="bank.bank_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr width="100%">
+<!--                                            <td>Branch &amp; SWIFT code</td>-->
+                                            <td>SWIFT code</td>
+                                            <td>:
+<!--                                                <span t-if="bank.bank_id.street2" t-esc="bank.bank_id.street2"/> <span t-if="bank.bank_id.street2 and bank.bank_id.bic">&amp;</span>-->
+                                                <span t-if="bank.bank_id.bic" t-esc="bank.bank_id.bic"/>
+                                            </td>
+                                        </tr>
+                                </table>
+                            </div>
+                            <!--                            <table width="100%">-->
+                            <!--                                <tr>-->
+                            <!--                                    &lt;!&ndash;                                <hr style="width:30%;float: right;"/>&ndash;&gt;-->
+                            <!--                                    &lt;!&ndash;                                    <hr style="width:30%;float: left;"/>&ndash;&gt;-->
+                            <!--                                    <td style="float:left;width:25%;text-align:center;">-->
+                            <!--                                        <t t-if="o.odx_authorized_signature">-->
+                            <!--                                            <img t-att-src="image_data_uri(o.odx_authorized_signature)"-->
+                            <!--                                                 style="max-height: 3cm; max-width: 6cm;"/>-->
+                            <!--                                        </t>-->
+
+                            <!--                                    </td>-->
+                            <!--                                </tr>-->
+                            <!--                                <tr>-->
+                            <!--                                    &lt;!&ndash;                                <hr style="width:30%;float: right;"/>&ndash;&gt;-->
+                            <!--                                    &lt;!&ndash;                                    <hr style="width:30%;float: left;"/>&ndash;&gt;-->
+                            <!--                                    <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">-->
+                            <!--                                        <b>Authorized Signature</b>-->
+                            <!--                                    </td>-->
+                            <!--                                    <td style="float:right;width:25%;text-align:center;">-->
+
+                            <!--                                    </td>-->
+                            <!--                                    <br/>-->
+                            <!--                                    <br/>-->
+                            <!--                                </tr>-->
+                            <!--                            </table>-->
+
                         </div>
                     </t>
                 </t>

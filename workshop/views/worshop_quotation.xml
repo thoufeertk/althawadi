@@ -81,6 +81,7 @@
                             </group>
                             <group>
                                 <field name="customer_name"/>
+                                <field name="pending_enquiry" invisible="1"/>
                                 <label for="street" string="Address"/>
                                 <div class="o_address_format">
                                     <field name="street" placeholder="Street..." class="o_address_street"/>
@@ -113,22 +114,37 @@
                                 <field name="scope_of_work_description"/>
                             </group>
                             <group>
-                                <field name="machine_id" attrs="{'invisible': [('machine_id', '=', False)]}"/>
-                                <field name="made" attrs="{'invisible': [('made', '=', False)]}"/>
-                                <field name="make" attrs="{'invisible': [('make', '=', False)]}"/>
-                                <field name="kilo" attrs="{'invisible': [('kilo', '=', False)]}"/>
-                                <field name="kva" attrs="{'invisible': [('kva', '=', False)]}"/>
-                                <field name="horsepower" attrs="{'invisible': [('horsepower', '=', False)]}"/>
-                                <field name="machine_serial_number"
-                                       attrs="{'invisible': [('machine_serial_number', '=', False)]}"/>
-                                <field name="item_code" attrs="{'invisible': [('item_code', '=', False)]}"/>
-                                <field name="rpm" attrs="{'invisible': [('rpm', '=', False)]}"/>
-                                <field name="pole" attrs="{'invisible': [('pole', '=', False)]}"/>
-                                <field name="volt" attrs="{'invisible': [('volt', '=', False)]}"/>
-                                <field name="amps" attrs="{'invisible': [('amps', '=', False)]}"/>
-                                <field name="hertz" attrs="{'invisible': [('hertz', '=', False)]}"/>
-                                <field name="motor_no" attrs="{'invisible': [('motor_no', '=', False)]}"/>
-                                <field name="currency_id" invisible="1"/>
+                                <field name="machine_id"/>
+<!--                                <field name="machine_id" attrs="{'invisible': [('machine_id', '=', False)]}"/>-->
+                                <field name="made"/>
+<!--                                <field name="made" attrs="{'invisible': [('made', '=', False)]}"/>-->
+                                <field name="make"/>
+<!--                                <field name="make" attrs="{'invisible': [('make', '=', False)]}"/>-->
+                                <field name="kilo"/>
+<!--                                <field name="kilo" attrs="{'invisible': [('kilo', '=', False)]}"/>-->
+                                <field name="kva"/>
+<!--                                <field name="kva" attrs="{'invisible': [('kva', '=', False)]}"/>-->
+                                <field name="horsepower"/>
+<!--                                <field name="horsepower" attrs="{'invisible': [('horsepower', '=', False)]}"/>-->
+                                <field name="machine_serial_number"/>
+<!--                                <field name="machine_serial_number"-->
+<!--                                       attrs="{'invisible': [('machine_serial_number', '=', False)]}"/>-->
+                                <field name="item_code"/>
+<!--                                <field name="item_code" attrs="{'invisible': [('item_code', '=', False)]}"/>-->
+                                <field name="rpm"/>
+<!--                                <field name="rpm" attrs="{'invisible': [('rpm', '=', False)]}"/>-->
+                                <field name="pole"/>
+<!--                                <field name="pole" attrs="{'invisible': [('pole', '=', False)]}"/>-->
+                                <field name="volt"/>
+<!--                                <field name="volt" attrs="{'invisible': [('volt', '=', False)]}"/>-->
+                                <field name="amps" />
+<!--                                <field name="amps" attrs="{'invisible': [('amps', '=', False)]}"/>-->
+                                <field name="hertz" />
+<!--                                <field name="hertz" attrs="{'invisible': [('hertz', '=', False)]}"/>-->
+                                <field name="motor_no"/>
+<!--                                <field name="motor_no" attrs="{'invisible': [('motor_no', '=', False)]}"/>-->
+                                <field name="currency_id" invisible="0"/>
+<!--                                <field name="currency_id" invisible="1"/>-->
                             </group>
                         </group>
                         <div>
@@ -178,7 +194,8 @@
                             <group>
                                 <field name="signed_name"/>
                                 <field name="telephone"/>
-                                <field name="price" invisible="1"/>
+                                <field name="price" invisible="0"/>
+<!--                                <field name="price" invisible="1"/>-->
                                 <field name="digital_signature" widget="signature"/>
                             </group>
                         </group>

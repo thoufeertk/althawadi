@@ -82,7 +82,7 @@
                                     </field>
                                 </group>
                                 <group>
-                                    <field name="price" force_save="1"/>
+                                    <field name="list_price" force_save="1"/>
                                 </group>
                             </page>
                             <page string="Parts Required" attrs="{'invisible': [('is_machine', '=', False)]}">

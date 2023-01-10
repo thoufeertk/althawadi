@@ -29,7 +29,7 @@ class WorkshopQuotation(models.Model):
     phone = fields.Char()
     mobile = fields.Char()
 
-    machine_id = fields.Many2one('product.product', string="Machine", domain=[('is_machine', '=', True)], required=1)
+    machine_id = fields.Many2one('product.product', string="Machine", domain=[('is_machine', '=', True)], )
     made = fields.Char(string="Made")
     make = fields.Char(string="Make")
     kilo = fields.Char(string="Kilowatt (KW)")
@@ -88,8 +88,32 @@ class WorkshopQuotation(models.Model):
 
     @api.constrains('price')
     def _check_price(self):
-        if self.price == 0:
-            raise UserError(_("Price cannot be set as zero"))
+        # additional condition self.pending_enquiry for independent quotation creation odox
+        if self.pending_enquiry:
+            if self.price == 0:
+                raise UserError(_("Price cannot be set as zero"))
+
+
+
+    @api.onchange('machine_id')
+    def _onchange_machine_id(self):
+        if self.machine_id:
+            machine = self.env['product.template'].search([('id', '=', self.machine_id.product_tmpl_id.id)])
+            # product_varient = self.env['product.product'].search([('product_tmpl_id', '=', product_template.id)])
+            print("!!!!!!!!",machine)
+            self.made = machine.made
+            self.make = machine.make
+            self.kilo = machine.kilo
+            self.kva = machine.kva
+            self.horsepower = machine.horsepower
+            self.machine_serial_number = machine.machine_serial_number
+            self.item_code = machine.item_code
+            self.rpm = machine.rpm
+            self.pole = machine.pole
+            self.volt = machine.volt
+            self.amps = machine.amps
+            self.hertz = machine.hertz
+            self.motor_no = machine.motor_no
 
     def _compute_order_count(self):
         """count of work orders created for this quotation"""

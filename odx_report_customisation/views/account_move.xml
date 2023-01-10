@@ -13,7 +13,8 @@
                 <field name="odx_authorized_signature" widget="signature"/>
             </xpath>
              <xpath expr="//field[@name='vat_account_no']" position="after">
-                <field name="odx_header"/>
+                <field name="odx_header" string="With Header"/>
+                 <field name="job_number" string="Job Number"/>
             </xpath>
         </field>
     </record>
