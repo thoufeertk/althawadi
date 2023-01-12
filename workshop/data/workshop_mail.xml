@@ -26,8 +26,10 @@
                     <br/>
                 </p>
             </field>
+<!--            <field name="report_template"-->
+<!--                   ref="workshop.quotation_report"/>-->
             <field name="report_template"
-                   ref="workshop.quotation_report"/>
+                   ref="odx_report_customisation.quotation_report"/>
             <field name="report_name">{{(object.name or '').replace('/','_')}}</field>
         </record>
 
