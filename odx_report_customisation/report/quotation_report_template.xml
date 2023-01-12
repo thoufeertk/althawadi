@@ -92,11 +92,11 @@
                                             <td class="table-border" style="padding-left:5px">
                                                 <span t-field="o.company_id"/>
                                                 <br/>
-                                                <span t-field="o.street"/>
-                                                <span t-field="o.zip"/>
-                                                <span t-field="o.city"/>
+                                                <span t-field="o.company_id.street"/>
+                                                <span t-field="o.company_id.zip"/>
+                                                <span t-field="o.company_id.city"/>
                                                 <br/>
-                                                <span t-field="o.country_id"/>
+                                                <span t-field="o.company_id.country_id"/>
                                             </td>
                                             <td class="table-border" style="padding-left:5px">
                                                 <span>Date :</span>
@@ -105,38 +105,39 @@
                                                 <span>Quotation Number :</span>
                                                 <span t-field="o.name"/>
                                                 <br/>
-                                                <span>Validity :</span>
-                                                <span t-field="o.validity_date"/>Days
-                                                <br/>
+                                                <t t-if="o.validity_date">
+                                                    <span>Validity :</span>
+                                                    <span t-field="o.validity_date"/>Days
+                                                </t>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="table-border" style="padding-left:5px">
-                                                <span>Customer Name : </span>
+                                                <span>Customer Name :</span>
                                                 <span t-field="o.customer_name"/>
                                                 <br/>
-                                                <span>Address : </span>
+                                                <span>Address :</span>
                                                 <span t-field="o.street"/>
                                                 <span t-field="o.zip"/>
                                                 <span t-field="o.city"/>
                                                 <br/>
                                                 <span t-field="o.country_id"/>
                                                 <br/>
-                                                <span>Telephone : </span>
+                                                <span>Telephone :</span>
                                                 <span t-field="o.customer_name.phone"/>
                                                 <br/>
-                                                <span>Email : </span>
+                                                <span>Email :</span>
                                                 <span t-field="o.customer_name.email"/>
                                             </td>
                                             <td class="table-border" style="padding-left:5px">
 
-                                                <span>Serial Number :</span>
+                                                <span t-if="o.machine_serial_number">Serial Number :</span>
                                                 <span t-field="o.machine_serial_number"/>
                                                 <br/>
-                                                <span>Gate Pass No :</span>
+                                                <span t-if="o.odx_gate_pass_no">Gate Pass No :</span>
                                                 <span t-field="o.odx_gate_pass_no"/>
                                                 <br/>
-                                                <span>Sales ID :</span>
+                                                <span t-if="o.odx_sales_man.odx_sales_id">Sales ID :</span>
                                                 <span t-field="o.odx_sales_man.odx_sales_id"/>
                                                 <br/>
                                             </td>
@@ -147,46 +148,50 @@
                             <br/>
                             <b>Equipment Details</b>
                             <div>
-                                <table width="100%  ">
+                                <table width="100%">
+                                    <t t-set="sl" t-value="0"/>
+                                    <tr align="center">
+                                            <td width="5%" name="th_no" class="text-center table-border">Sl.No
+                                            </td>
+                                            <td width="15%" name="th_description"
+                                                class="text-center table-border">Type
+                                                of Service
+                                            </td>
+                                            <td name="th_qty" class="text-center table-border">Qty
+                                            </td>
+                                            <td name="th_unitprice" class="text-center table-border">Unit
+                                                Price
+                                            </td>
+                                            <t t-set="dis_count" t-value="0"/>
+                                            <t t-foreach="o.work_quotation_line_ids" t-as="line">
+                                                <t t-if="not line.display_type == 'line_section'">
+                                                    <t t-if="line.discount>0">
+                                                        <t t-set="dis_count" t-value="dis_count + 1"/>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                            <t t-if="dis_count>0">
+                                                <td name="th_discount" class="text-center table-border">Disc</td>
+                                            </t>
+                                            <td name="th_netprice" class="text-center table-border">Net
+                                                Price
+                                            </td>
+                                                    <td name="th_vat" class="text-center table-border">VAT Amount</td>
+                                            <td name="th_total" class="text-center table-border">Total
+                                            </td>
+                                        </tr>
                                     <tr>
-                                        <t t-set="sl" t-value="0"/>
                                         <t t-foreach="o.work_quotation_line_ids" t-as="line">
-                                            <t t-if="not line.display_type == 'line_section'">
-                                                <tr>
-                                                    <td>
-                                                        <br/>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5">
-                                                        <span style="font-size: 19px;" t-field="o.machine_id"/>
-                                                        ,
-                                                        <span style="font-size: 19px;" t-field="o.kilo"/>KW ,
-                                                        <span style="font-size: 19px;" t-field="o.horsepower"/>HP
-                                                        <br/>
-                                                    </td>
-                                                </tr>
-                                                <tr align="center">
-                                                    <td width="5%" name="th_no" class="text-center table-border">Sl.No
-                                                    </td>
-                                                    <td width="15%" name="th_description"
-                                                        class="text-center table-border">Type
-                                                        of Service
-                                                    </td>
-                                                    <td name="th_qty" class="text-center table-border">Qty
-                                                    </td>
-                                                    <td name="th_unitprice" class="text-center table-border">Unit
-                                                        Price
-                                                    </td>
-                                                    <td name="th_discount" class="text-center table-border">Disc</td>
-                                                    <td name="th_netprice" class="text-center table-border">Net
-                                                        Price
-                                                    </td>
-                                                    <td name="th_vat" class="text-center table-border">VAT</td>
-                                                    <td name="th_total" class="text-center table-border">Total
-                                                    </td>
-                                                </tr>
-                                                <tr align="center">
+                                            <t t-if="line.display_type == 'line_section'">
+                                                <t t-set="sl" t-value="0"/>
+                                                <td colspan="8" class="table-border">
+                                                    <b><span t-esc="line.name"/></b>
+                                                </td><br/>
+
+                                            </t>
+                                            <t t-else="">
+
+                                                    <tr align="center">
                                                     <t t-set="sl" t-value="sl + 1"/>
                                                     <td class="table-border">
                                                         <span t-esc="sl"/>
@@ -200,14 +205,17 @@
                                                     <td class="table-border">
                                                         <span t-field="line.price_unit"/>
                                                     </td>
-                                                    <td class="table-border">
-                                                        <span t-field="line.discount"/>
-                                                    </td>
+                                                    <t t-if="dis_count>0">
+                                                        <td class="table-border">
+                                                            <span t-field="line.discount"/>
+                                                        </td>
+                                                    </t>
+
                                                     <td class="table-border">
                                                         <span t-field="line.price_subtotal"/>
                                                     </td>
-                                                    <td class="table-border">
-                                                        <span t-field="line.tax_id"/>
+                                                        <td class="table-border">
+                                                        <span t-esc="'%.3f'% line.price_tax"/>
                                                     </td>
                                                     <td class="table-border">
                                                         <span t-field="line.price_total"/>
@@ -215,7 +223,6 @@
                                                 </tr>
                                             </t>
                                         </t>
-
                                     </tr>
                                 </table>
                             </div>
@@ -265,6 +272,7 @@
                             </table>
                             <br/>
                             <br/>
+                            <br/>
                             <table class="table table-sm">
                                 <tr>
                                     <th style="text-align:left">
@@ -278,28 +286,44 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <t t-if="o.sale_order_id.payment_term_id">
                                     <td>
                                         Payment Terms:
-                                        <span/>
+                                        <span t-field="o.sale_order_id.payment_term_id"/>
                                     </td>
+                                    </t>
                                 </tr>
                                 <tr>
+                                    <t t-if="o.sale_order_id.invoice_ids">
                                     <td>
                                         Payment Method:
-                                        <span/>
+                                        <t t-if="o.sale_order_id.invoice_ids">
+                                            <t t-foreach="o.sale_order_id.invoice_ids" t-as="invoice">
+                                                <t t-set="payments_vals" t-value="invoice.sudo()._get_reconciled_info_JSON_values()"/>
+                                                <t t-foreach="payments_vals" t-as="payment_vals">
+                                                    <span t-esc="payment_vals['journal_name']"/> &#160;
+                                                </t>
+                                            </t>
+                                        </t>
                                     </td>
+                                    </t>
                                 </tr>
                                 <tr>
+                                    <t t-if="o.odx_warranty">
                                     <td>
                                         Warranty :
                                         <span t-field="o.odx_warranty"/>
                                         Days
                                     </td>
+                                    </t>
                                 </tr>
                                 <tr>
+                                    <t t-if="o.sale_order_id.commitment_date">
                                     <td>
                                         Delivery:
+                                        <span t-field="o.sale_order_id.commitment_date" t-options='{"format": "MM/dd/yyyy"}'/>
                                     </td>
+                                    </t>
                                 </tr>
                             </table>
                             <table>
@@ -309,8 +333,6 @@
                             <br/>
                             <table width="100%">
                                 <tr>
-                                    <!--                                <hr style="width:30%;float: right;"/>-->
-                                    <!--                                    <hr style="width:30%;float: left;"/>-->
                                     <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">
                                         <b>Prepared By:</b>
                                     </td>
@@ -341,7 +363,6 @@
 
                                 </tr>
                             </table>
-
                         </div>
                     </t>
                 </t>
@@ -434,11 +455,11 @@
                                             <td class="table-border" style="padding-left:5px">
                                                 <span t-field="o.company_id"/>
                                                 <br/>
-                                                <span t-field="o.street"/>
-                                                <span t-field="o.zip"/>
-                                                <span t-field="o.city"/>
+                                                <span t-field="o.company_id.street"/>
+                                                <span t-field="o.company_id.zip"/>
+                                                <span t-field="o.company_id.city"/>
                                                 <br/>
-                                                <span t-field="o.country_id"/>
+                                                <span t-field="o.company_id.country_id"/>
                                             </td>
                                             <td class="table-border" style="padding-left:5px">
                                                 <span>Date :</span>
@@ -447,38 +468,39 @@
                                                 <span>Quotation Number :</span>
                                                 <span t-field="o.name"/>
                                                 <br/>
-                                                <span>Validity :</span>
-                                                <span t-field="o.validity_date"/>Days
-                                                <br/>
+                                                <t t-if="o.validity_date">
+                                                    <span>Validity :</span>
+                                                    <span t-field="o.validity_date"/>Days
+                                                </t>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="table-border" style="padding-left:5px">
-                                                <span>Customer Name : </span>
+                                                <span>Customer Name :</span>
                                                 <span t-field="o.customer_name"/>
                                                 <br/>
-                                                <span>Address : </span>
+                                                <span>Address :</span>
                                                 <span t-field="o.street"/>
                                                 <span t-field="o.zip"/>
                                                 <span t-field="o.city"/>
                                                 <br/>
                                                 <span t-field="o.country_id"/>
                                                 <br/>
-                                                <span>Telephone : </span>
+                                                <span>Telephone :</span>
                                                 <span t-field="o.customer_name.phone"/>
                                                 <br/>
-                                                <span>Email : </span>
+                                                <span>Email :</span>
                                                 <span t-field="o.customer_name.email"/>
                                             </td>
                                             <td class="table-border" style="padding-left:5px">
 
-                                                <span>Serial Number :</span>
+                                                <span t-if="o.machine_serial_number">Serial Number :</span>
                                                 <span t-field="o.machine_serial_number"/>
                                                 <br/>
-                                                <span>Gate Pass No :</span>
+                                                <span t-if="o.odx_gate_pass_no">Gate Pass No :</span>
                                                 <span t-field="o.odx_gate_pass_no"/>
                                                 <br/>
-                                                <span>Sales ID :</span>
+                                                <span t-if="o.odx_sales_man.odx_sales_id">Sales ID :</span>
                                                 <span t-field="o.odx_sales_man.odx_sales_id"/>
                                                 <br/>
                                             </td>
@@ -489,46 +511,50 @@
                             <br/>
                             <b>Equipment Details</b>
                             <div>
-                                <table width="100%  ">
+                                <table width="100%">
+                                    <t t-set="sl" t-value="0"/>
+                                    <tr align="center">
+                                            <td width="5%" name="th_no" class="text-center table-border">Sl.No
+                                            </td>
+                                            <td width="15%" name="th_description"
+                                                class="text-center table-border">Type
+                                                of Service
+                                            </td>
+                                            <td name="th_qty" class="text-center table-border">Qty
+                                            </td>
+                                            <td name="th_unitprice" class="text-center table-border">Unit
+                                                Price
+                                            </td>
+                                            <t t-set="dis_count" t-value="0"/>
+                                            <t t-foreach="o.work_quotation_line_ids" t-as="line">
+                                                <t t-if="not line.display_type == 'line_section'">
+                                                    <t t-if="line.discount>0">
+                                                        <t t-set="dis_count" t-value="dis_count + 1"/>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                            <t t-if="dis_count>0">
+                                                <td name="th_discount" class="text-center table-border">Disc</td>
+                                            </t>
+                                            <td name="th_netprice" class="text-center table-border">Net
+                                                Price
+                                            </td>
+                                                    <td name="th_vat" class="text-center table-border">VAT Amount</td>
+                                            <td name="th_total" class="text-center table-border">Total
+                                            </td>
+                                        </tr>
                                     <tr>
-                                        <t t-set="sl" t-value="0"/>
                                         <t t-foreach="o.work_quotation_line_ids" t-as="line">
-                                            <t t-if="not line.display_type == 'line_section'">
-                                                <tr>
-                                                    <td>
-                                                        <br/>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5">
-                                                        <span style="font-size: 19px;" t-field="o.machine_id"/>
-                                                        ,
-                                                        <span style="font-size: 19px;" t-field="o.kilo"/>KW ,
-                                                        <span style="font-size: 19px;" t-field="o.horsepower"/>HP
-                                                        <br/>
-                                                    </td>
-                                                </tr>
-                                                <tr align="center">
-                                                    <td width="5%" name="th_no" class="text-center table-border">Sl.No
-                                                    </td>
-                                                    <td width="15%" name="th_description"
-                                                        class="text-center table-border">Type
-                                                        of Service
-                                                    </td>
-                                                    <td name="th_qty" class="text-center table-border">Qty
-                                                    </td>
-                                                    <td name="th_unitprice" class="text-center table-border">Unit
-                                                        Price
-                                                    </td>
-                                                    <td name="th_discount" class="text-center table-border">Disc</td>
-                                                    <td name="th_netprice" class="text-center table-border">Net
-                                                        Price
-                                                    </td>
-                                                    <td name="th_vat" class="text-center table-border">VAT</td>
-                                                    <td name="th_total" class="text-center table-border">Total
-                                                    </td>
-                                                </tr>
-                                                <tr align="center">
+                                            <t t-if="line.display_type == 'line_section'">
+                                                <t t-set="sl" t-value="0"/>
+                                                <td colspan="8" class="table-border">
+                                                    <b><span t-esc="line.name"/></b>
+                                                </td><br/>
+
+                                            </t>
+                                            <t t-else="">
+
+                                                    <tr align="center">
                                                     <t t-set="sl" t-value="sl + 1"/>
                                                     <td class="table-border">
                                                         <span t-esc="sl"/>
@@ -542,14 +568,17 @@
                                                     <td class="table-border">
                                                         <span t-field="line.price_unit"/>
                                                     </td>
-                                                    <td class="table-border">
-                                                        <span t-field="line.discount"/>
-                                                    </td>
+                                                    <t t-if="dis_count>0">
+                                                        <td class="table-border">
+                                                            <span t-field="line.discount"/>
+                                                        </td>
+                                                    </t>
+
                                                     <td class="table-border">
                                                         <span t-field="line.price_subtotal"/>
                                                     </td>
-                                                    <td class="table-border">
-                                                        <span t-field="line.tax_id"/>
+                                                        <td class="table-border">
+                                                        <span t-esc="'%.3f'% line.price_tax"/>
                                                     </td>
                                                     <td class="table-border">
                                                         <span t-field="line.price_total"/>
@@ -620,28 +649,44 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <t t-if="o.sale_order_id.payment_term_id">
                                     <td>
                                         Payment Terms:
-                                        <span/>
+                                        <span t-field="o.sale_order_id.payment_term_id"/>
                                     </td>
+                                    </t>
                                 </tr>
                                 <tr>
+                                    <t t-if="o.sale_order_id.invoice_ids">
                                     <td>
                                         Payment Method:
-                                        <span/>
+                                        <t t-if="o.sale_order_id.invoice_ids">
+                                            <t t-foreach="o.sale_order_id.invoice_ids" t-as="invoice">
+                                                <t t-set="payments_vals" t-value="invoice.sudo()._get_reconciled_info_JSON_values()"/>
+                                                <t t-foreach="payments_vals" t-as="payment_vals">
+                                                    <span t-esc="payment_vals['journal_name']"/> &#160;
+                                                </t>
+                                            </t>
+                                        </t>
                                     </td>
+                                    </t>
                                 </tr>
                                 <tr>
+                                    <t t-if="o.odx_warranty">
                                     <td>
                                         Warranty :
                                         <span t-field="o.odx_warranty"/>
                                         Days
                                     </td>
+                                    </t>
                                 </tr>
                                 <tr>
+                                    <t t-if="o.sale_order_id.commitment_date">
                                     <td>
                                         Delivery:
+                                        <span t-field="o.sale_order_id.commitment_date" t-options='{"format": "MM/dd/yyyy"}'/>
                                     </td>
+                                    </t>
                                 </tr>
                             </table>
                             <table>

@@ -249,6 +249,7 @@ class WorkshopQuotation(models.Model):
         ir_model_data = self.env['ir.model.data']
         try:
             template_id = ir_model_data._xmlid_lookup('workshop.email_template_quotation')[2]
+            print('$$$$$$$$$$$$$$',template_id)
         except ValueError:
             template_id = False
         try:
