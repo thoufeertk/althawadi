@@ -63,6 +63,16 @@ workshop_order_technician_id,workshop.order.technician.user,model_workshop_order
 
 workshop_scopeofwork_id,workshop.scopeofwork.user,model_workshop_scopeofwork,,1,1,1,1
 
+workshop_testing_inspection,workshop.testing.inspection,model_workshop_testing_inspection,,1,1,1,1
+
+workshop_extend_quotes,workshop.extend.quotes,model_workshop_extend_quotes,,1,1,1,1
+
+workshop_workshop_delivery,workshop.delivery,model_workshop_delivery,,1,1,1,1
+
+workshop_workshop_warranty,workshop.warranty,model_workshop_warranty,,1,1,1,1
+
+workshop_workshop_payment_terms,workshop.payment.terms,model_workshop_payment_terms,,1,1,1,1
+
 work_quotation_line_id,workshop.work_quotation_line.user,model_work_quotation_line,,1,1,1,1
 
 quotation_required_parts_id,workshop.quotation_required_parts.user,model_quotation_required_parts,,1,1,1,1

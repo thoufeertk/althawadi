@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+
+
     <report
             id="quotation_report"
             string="Quotation"
@@ -7,6 +9,7 @@
             report_type="qweb-pdf"
             name="odx_report_customisation.report_quotation_print"
             file="odx_report_customisation.report_quotation_print"/>
+
 
     <report
             id="workshop_delivery_notes"

@@ -11,22 +11,39 @@
                         <group>
                             <group>
                                 <field name="odx_header" force_save="1"/>
-                                <field name="odx_warranty"/>
                                 <field name="odx_sales_man"/>
                                 <field name="odx_gate_pass_no"/>
-                                <field name="odx_testing" placeholder="Testing and Inspection"/>
-                                <field name="odx_extend_of_quote" placeholder="Extend of Quote"/>
-                                <field name="odx_terms_and_condition" placeholder="Terms and Condition"/>
                             </group>
                         </group>
                     </sheet>
                 </div>
             </xpath>
-<!--            <xpath expr="//field[@name='work_quotation_line_ids']/tree/field[@name='name']"-->
-<!--                   position="before">-->
-<!--                <field name="date_of_supply"/>-->
-<!--                <field name="delivery_ref"/>-->
-<!--            </xpath>-->
+            <xpath expr="//group[@name='machine']" position="after">
+
+                <group>
+                    <field name="odx_attention_id" placeholder="Attention"/>
+
+                        </group>
+                <group></group>
+                        <group>
+                    <field name="odx_warranty" placeholder="Warranty"/>
+                    <field name="odx_warranty_description"/>
+
+                    <field name="odx_testing" placeholder="Testing and Inspection"/>
+                    <field name="odx_testing_description"/>
+                </group>
+                <group>
+
+                    <field name="odx_extend_of_quote" placeholder="Extend of Quote"/>
+                    <field name="odx_extend_of_quote_description"/>
+
+                    <field name="odx_terms_and_condition" placeholder="Delivery"/>
+                    <field name="odx_terms_and_condition_description"/>
+
+                    <field name="odx_payment_term" placeholder="Payment Term"/>
+                    <field name="odx_payment_term_description"/>
+                </group>
+            </xpath>
         </field>
     </record>
 </odoo>
