@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="workshop_extend_of_quotes_tree" model="ir.ui.view">
+        <field name="name">workshop.extend.quotes.tree</field>
+        <field name="model">workshop.extend.quotes</field>
+        <field name="arch" type="xml">
+            <tree string="Extend Of Quotes">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record id="workshop_extend_of_quotes_form" model="ir.ui.view">
+        <field name="name">workshop.extend.quotes.form</field>
+        <field name="model">workshop.extend.quotes</field>
+        <field name="arch" type="xml">
+            <form string="Extend Of Quotes">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Description of Extend Of Quotes..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="workshop_extend_of_quotes_menu_action" model="ir.actions.act_window">
+        <field name="name">Extend Of Quotes</field>
+        <field name="res_model">workshop.extend.quotes</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Extend Of Quotes
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Extend Of Quotes.
+            </p>
+        </field>
+    </record>
+    <menuitem id="workshop_extend_of_quotes_menu" name="Extend Of Quotes" parent="workshop_master_data"
+              groups="workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"
+              action="workshop_extend_of_quotes_menu_action" sequence="4"/>
+</odoo>

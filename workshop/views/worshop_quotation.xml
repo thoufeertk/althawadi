@@ -109,11 +109,11 @@
                             </group>
                         </group>
                         <group>
-                            <group>
+                            <group name="scope">
                                 <field name="scope_of_work"/>
                                 <field name="scope_of_work_description"/>
                             </group>
-                            <group>
+                            <group name="machine">
                                 <field name="machine_id"/>
 <!--                                <field name="machine_id" attrs="{'invisible': [('machine_id', '=', False)]}"/>-->
                                 <field name="made"/>

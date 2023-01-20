@@ -19,3 +19,8 @@ from . import account_move
 from . import product
 from . import project_task
 from . import workshop_scope_of_work
+from . import workshop_testing_inspection
+from . import workshop_extend_of_quote
+from . import workshop_delivery
+from . import workshop_payment_terms
+from . import workshop_warranty

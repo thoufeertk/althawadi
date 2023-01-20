@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="workshop_warranty_tree" model="ir.ui.view">
+        <field name="name">workshop.warranty.tree</field>
+        <field name="model">workshop.warranty</field>
+        <field name="arch" type="xml">
+            <tree string="Workshop Warranty">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record id="workshop_warranty_form" model="ir.ui.view">
+        <field name="name">workshop.warranty.form</field>
+        <field name="model">workshop.warranty</field>
+        <field name="arch" type="xml">
+            <form string="Workshop Warranty">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Description of Workshop Warranty..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="workshop_warranty_menu_action" model="ir.actions.act_window">
+        <field name="name">Workshop Warranty</field>
+        <field name="res_model">workshop.warranty</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Workshop Warranty
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Workshop Warranty.
+            </p>
+        </field>
+    </record>
+    <menuitem id="workshop_warranty_menu" name="Workshop Warranty" parent="workshop_master_data"
+              groups="workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"
+              action="workshop_warranty_menu_action" sequence="4"/>
+</odoo>

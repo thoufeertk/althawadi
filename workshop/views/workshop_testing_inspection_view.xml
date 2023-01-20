@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="workshop_testing_inspection_tree" model="ir.ui.view">
+        <field name="name">workshop.testing.inspection.tree</field>
+        <field name="model">workshop.testing.inspection</field>
+        <field name="arch" type="xml">
+            <tree string="Testing And Inspection">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record id="workshop_testing_inspection_form" model="ir.ui.view">
+        <field name="name">workshop.testing.inspection.form</field>
+        <field name="model">workshop.testing.inspection</field>
+        <field name="arch" type="xml">
+            <form string="Testing And Inspection">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Description of Scope of Work..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="workshop_testing_inspection_menu_action" model="ir.actions.act_window">
+        <field name="name">Testing And Inspection</field>
+        <field name="res_model">workshop.testing.inspection</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Testing And Inspection
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Testing And Inspection.
+            </p>
+        </field>
+    </record>
+    <menuitem id="workshop_testing_inspection_menu" name="Testing and Inspection" parent="workshop_master_data"
+              groups="workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"
+              action="workshop_testing_inspection_menu_action" sequence="4"/>
+</odoo>

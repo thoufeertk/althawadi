@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="workshop_delivery_tree" model="ir.ui.view">
+        <field name="name">workshop.delivery.tree</field>
+        <field name="model">workshop.delivery</field>
+        <field name="arch" type="xml">
+            <tree string="Workshop Delivery">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record id="workshop_delivery_form" model="ir.ui.view">
+        <field name="name">workshop.delivery.form</field>
+        <field name="model">workshop.delivery</field>
+        <field name="arch" type="xml">
+            <form string="Workshop Delivery">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Description of workshop Delivery..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="workshop_delivery_menu_action" model="ir.actions.act_window">
+        <field name="name">Workshop Delivery</field>
+        <field name="res_model">workshop.delivery</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click here to create new Workshop Delivery
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to Workshop Delivery.
+            </p>
+        </field>
+    </record>
+    <menuitem id="workshop_delivery_menu" name="Workshop Delivery" parent="workshop_master_data"
+              groups="workshop.group_workshop_managers,workshop.group_workshop_admin_level,workshop.group_workshop_super_admin"
+              action="workshop_delivery_menu_action" sequence="4"/>
+</odoo>
