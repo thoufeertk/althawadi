@@ -46,6 +46,7 @@ class WorkshopQuotation(models.Model):
                                 tax_name_list.append(tax.tax_group_id.name)
                                 tax_dict = {
                                     'tax': tax.tax_group_id.name,
+                                    'name': tax.name,
                                     'tax_amount': tax_amount
                                 }
                                 tax_list.append(tax_dict)
@@ -54,6 +55,7 @@ class WorkshopQuotation(models.Model):
                         tax_name_list.append(tax.tax_group_id.name)
                         tax_dict = {
                                     'tax': tax.tax_group_id.name,
+                                    'name': tax.name,
                                     'tax_amount': tax_amount
                                 }
                         tax_list.append(tax_dict)

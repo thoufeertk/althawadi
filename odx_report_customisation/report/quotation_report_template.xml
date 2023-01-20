@@ -146,10 +146,10 @@
                             <br/>
 
                             <b>
-                                <span style="padding-top:25px;">Equipment Details</span>
+                                <span>Equipment Details</span>
                             </b>
 
-                            <table width="100%" style="margin-top:-15px;" class="table table-sm">
+                            <table width="100%" class="table table-sm">
                                 <t t-set="sl" t-value="0"/>
                                 <t t-set="total_discount" t-value="0"/>
                                 <t t-set="heading_count" t-value="1"/>
@@ -256,7 +256,7 @@
                                     <t t-foreach="o.tax_group()" t-as="tax">
                                         <tr>
                                             <td style="text-align:center">
-                                                <t t-esc="tax['tax']"/>:
+                                                <span>Value Added </span><t t-esc="tax['name']"/>:
                                             </td>
                                             <td style="text-align:right">
                                                 <t t-esc="tax['tax_amount']"
@@ -537,9 +537,11 @@
 
                             <br/>
 
-                            <b><span style="padding-top:25px;">Equipment Details</span></b>
+                            <b>
+                                <span>Equipment Details</span>
+                            </b>
 
-                            <table width="100%" style="margin-top:-15px;" class="table table-sm">
+                            <table width="100%" class="table table-sm">
                                 <t t-set="sl" t-value="0"/>
                                 <t t-set="total_discount" t-value="0"/>
                                 <t t-set="heading_count" t-value="1"/>
@@ -645,13 +647,13 @@
                                 <tr>
                                     <t t-foreach="o.tax_group()" t-as="tax">
                                         <tr>
-                                       <td style="text-align:center">
-                                           <t t-esc="tax['tax']"/>:
-                                    </td>
-                                        <td style="text-align:right">
-                                        <t t-esc="tax['tax_amount']"
-                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                    </td>
+                                            <td style="text-align:center">
+                                                <span>Value Added </span><t t-esc="tax['name']"/>:
+                                            </td>
+                                            <td style="text-align:right">
+                                                <t t-esc="tax['tax_amount']"
+                                                   t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </td>
                                         </tr>
                                     </t>
                                 </tr>
@@ -679,7 +681,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <table width="100%" >
+                            <table width="100%">
                                 <tr width="100%">
                                     <b>Scope of Work</b>
                                 </tr>
@@ -690,7 +692,7 @@
                                 <br/>
                                 <br/>
 
-                                <tr width="100%" >
+                                <tr width="100%">
                                     <b>Testing &amp; Inspection</b>
                                 </tr>
                                 <br/>
