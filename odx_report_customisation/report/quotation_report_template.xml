@@ -149,11 +149,14 @@
                                 <span>Equipment Details</span>
                             </b>
 
+
+
                             <table width="100%" class="table table-sm">
                                 <t t-set="sl" t-value="0"/>
                                 <t t-set="total_discount" t-value="0"/>
                                 <t t-set="heading_count" t-value="1"/>
-
+                                <t t-set="product_heading_count" t-value="1"/>
+                                <t t-set="heading_number" t-value="0"/>
 
                                 <t t-foreach="o.work_quotation_line_ids" t-as="line">
 
@@ -168,40 +171,83 @@
                                             </td>
                                         </tr>
                                         <br/>
-                                        <t t-if="heading_count==0">
-                                            <tr align="center">
-                                                <td width="5%" name="th_no" class="text-center ">Sl.No
-                                                </td>
-                                                <td width="15%" name="th_description"
-                                                    class="text-center ">Type
-                                                    of Service
-                                                </td>
-                                                <td name="th_qty" class="text-center ">Qty
-                                                </td>
-                                                <td name="th_unitprice" class="text-center ">Unit
-                                                    Price
-                                                </td>
-                                                <t t-set="dis_count" t-value="0"/>
-                                                <t t-foreach="o.work_quotation_line_ids" t-as="line">
-                                                    <t t-if="not line.display_type == 'line_section'">
-                                                        <t t-if="line.discount>0">
-                                                            <t t-set="dis_count" t-value="dis_count + 1"/>
+
+                                        <t t-if="heading_number==0">
+                                            <t t-if="heading_count==0">
+                                                <tr align="center">
+                                                    <t t-set="heading_number" t-value="heading_number+1"/>
+                                                    <td width="5%" name="th_no" class="text-center ">Sl.No
+                                                    </td>
+                                                    <td width="15%" name="th_description"
+                                                        class="text-center ">Type
+                                                        of Service
+                                                    </td>
+                                                    <td name="th_qty" class="text-center ">Qty
+                                                    </td>
+                                                    <td name="th_unitprice" class="text-center ">Unit
+                                                        Price
+                                                    </td>
+                                                    <t t-set="dis_count" t-value="0"/>
+                                                    <t t-foreach="o.work_quotation_line_ids" t-as="line">
+                                                        <t t-if="not line.display_type == 'line_section'">
+                                                            <t t-if="line.discount>0">
+                                                                <t t-set="dis_count" t-value="dis_count + 1"/>
+                                                            </t>
                                                         </t>
                                                     </t>
-                                                </t>
-                                                <t t-if="dis_count>0">
-                                                    <td name="th_discount" class="text-center ">Disc</td>
-                                                </t>
-                                                <td name="th_netprice" class="text-center ">Net
-                                                    Price
-                                                </td>
-                                                <td name="th_vat" class="text-center ">VAT Amount</td>
-                                                <td name="th_total" class="text-center ">Total
-                                                </td>
-                                            </tr>
+                                                    <t t-if="dis_count>0">
+                                                        <td name="th_discount" class="text-center ">Disc</td>
+                                                    </t>
+                                                    <td name="th_netprice" class="text-center ">Net
+                                                        Price
+                                                    </td>
+                                                    <td name="th_vat" class="text-center ">VAT Amount</td>
+                                                    <td name="th_total" class="text-center ">Total
+                                                    </td>
+                                                </tr>
+                                            </t>
                                         </t>
                                     </t>
                                     <t t-else="">
+
+                                        <t t-if="heading_number==0">
+                                            <t t-set="product_heading_count" t-value="product_heading_count-1"/>
+                                            <t t-if="product_heading_count==0">
+                                                <t t-set="heading_number" t-value="heading_number+1"/>
+
+                                                <tr align="center">
+                                                    <td width="5%" name="th_no" class="text-center ">Sl.No
+                                                    </td>
+                                                    <td width="15%" name="th_description"
+                                                        class="text-center ">Type
+                                                        of Service
+                                                    </td>
+                                                    <td name="th_qty" class="text-center ">Qty
+                                                    </td>
+                                                    <td name="th_unitprice" class="text-center ">Unit
+                                                        Price
+                                                    </td>
+                                                    <t t-set="dis_count" t-value="0"/>
+                                                    <t t-foreach="o.work_quotation_line_ids" t-as="line">
+                                                        <t t-if="not line.display_type == 'line_section'">
+                                                            <t t-if="line.discount>0">
+                                                                <t t-set="dis_count" t-value="dis_count + 1"/>
+                                                            </t>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="dis_count>0">
+                                                        <td name="th_discount" class="text-center ">Disc</td>
+                                                    </t>
+                                                    <td name="th_netprice" class="text-center ">Net
+                                                        Price
+                                                    </td>
+                                                    <td name="th_vat" class="text-center ">VAT Amount</td>
+                                                    <td name="th_total" class="text-center ">Total
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+
 
                                         <tr align="center">
                                             <t t-set="sl" t-value="sl + 1"/>
@@ -256,7 +302,8 @@
                                     <t t-foreach="o.tax_group()" t-as="tax">
                                         <tr>
                                             <td style="text-align:center">
-                                                <span>Value Added </span><t t-esc="tax['name']"/>:
+                                                <span>Value Added</span>
+                                                <t t-esc="tax['name']"/>:
                                             </td>
                                             <td style="text-align:right">
                                                 <t t-esc="tax['tax_amount']"
@@ -541,11 +588,14 @@
                                 <span>Equipment Details</span>
                             </b>
 
+
+
                             <table width="100%" class="table table-sm">
                                 <t t-set="sl" t-value="0"/>
                                 <t t-set="total_discount" t-value="0"/>
                                 <t t-set="heading_count" t-value="1"/>
-
+                                <t t-set="product_heading_count" t-value="1"/>
+                                <t t-set="heading_number" t-value="0"/>
 
                                 <t t-foreach="o.work_quotation_line_ids" t-as="line">
 
@@ -560,40 +610,83 @@
                                             </td>
                                         </tr>
                                         <br/>
-                                        <t t-if="heading_count==0">
-                                            <tr align="center">
-                                                <td width="5%" name="th_no" class="text-center ">Sl.No
-                                                </td>
-                                                <td width="15%" name="th_description"
-                                                    class="text-center ">Type
-                                                    of Service
-                                                </td>
-                                                <td name="th_qty" class="text-center ">Qty
-                                                </td>
-                                                <td name="th_unitprice" class="text-center ">Unit
-                                                    Price
-                                                </td>
-                                                <t t-set="dis_count" t-value="0"/>
-                                                <t t-foreach="o.work_quotation_line_ids" t-as="line">
-                                                    <t t-if="not line.display_type == 'line_section'">
-                                                        <t t-if="line.discount>0">
-                                                            <t t-set="dis_count" t-value="dis_count + 1"/>
+
+                                        <t t-if="heading_number==0">
+                                            <t t-if="heading_count==0">
+                                                <tr align="center">
+                                                    <t t-set="heading_number" t-value="heading_number+1"/>
+                                                    <td width="5%" name="th_no" class="text-center ">Sl.No
+                                                    </td>
+                                                    <td width="15%" name="th_description"
+                                                        class="text-center ">Type
+                                                        of Service
+                                                    </td>
+                                                    <td name="th_qty" class="text-center ">Qty
+                                                    </td>
+                                                    <td name="th_unitprice" class="text-center ">Unit
+                                                        Price
+                                                    </td>
+                                                    <t t-set="dis_count" t-value="0"/>
+                                                    <t t-foreach="o.work_quotation_line_ids" t-as="line">
+                                                        <t t-if="not line.display_type == 'line_section'">
+                                                            <t t-if="line.discount>0">
+                                                                <t t-set="dis_count" t-value="dis_count + 1"/>
+                                                            </t>
                                                         </t>
                                                     </t>
-                                                </t>
-                                                <t t-if="dis_count>0">
-                                                    <td name="th_discount" class="text-center ">Disc</td>
-                                                </t>
-                                                <td name="th_netprice" class="text-center ">Net
-                                                    Price
-                                                </td>
-                                                <td name="th_vat" class="text-center ">VAT Amount</td>
-                                                <td name="th_total" class="text-center ">Total
-                                                </td>
-                                            </tr>
+                                                    <t t-if="dis_count>0">
+                                                        <td name="th_discount" class="text-center ">Disc</td>
+                                                    </t>
+                                                    <td name="th_netprice" class="text-center ">Net
+                                                        Price
+                                                    </td>
+                                                    <td name="th_vat" class="text-center ">VAT Amount</td>
+                                                    <td name="th_total" class="text-center ">Total
+                                                    </td>
+                                                </tr>
+                                            </t>
                                         </t>
                                     </t>
                                     <t t-else="">
+
+                                        <t t-if="heading_number==0">
+                                            <t t-set="product_heading_count" t-value="product_heading_count-1"/>
+                                            <t t-if="product_heading_count==0">
+                                                <t t-set="heading_number" t-value="heading_number+1"/>
+
+                                                <tr align="center">
+                                                    <td width="5%" name="th_no" class="text-center ">Sl.No
+                                                    </td>
+                                                    <td width="15%" name="th_description"
+                                                        class="text-center ">Type
+                                                        of Service
+                                                    </td>
+                                                    <td name="th_qty" class="text-center ">Qty
+                                                    </td>
+                                                    <td name="th_unitprice" class="text-center ">Unit
+                                                        Price
+                                                    </td>
+                                                    <t t-set="dis_count" t-value="0"/>
+                                                    <t t-foreach="o.work_quotation_line_ids" t-as="line">
+                                                        <t t-if="not line.display_type == 'line_section'">
+                                                            <t t-if="line.discount>0">
+                                                                <t t-set="dis_count" t-value="dis_count + 1"/>
+                                                            </t>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="dis_count>0">
+                                                        <td name="th_discount" class="text-center ">Disc</td>
+                                                    </t>
+                                                    <td name="th_netprice" class="text-center ">Net
+                                                        Price
+                                                    </td>
+                                                    <td name="th_vat" class="text-center ">VAT Amount</td>
+                                                    <td name="th_total" class="text-center ">Total
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+
 
                                         <tr align="center">
                                             <t t-set="sl" t-value="sl + 1"/>
@@ -648,7 +741,8 @@
                                     <t t-foreach="o.tax_group()" t-as="tax">
                                         <tr>
                                             <td style="text-align:center">
-                                                <span>Value Added </span><t t-esc="tax['name']"/>:
+                                                <span>Value Added</span>
+                                                <t t-esc="tax['name']"/>:
                                             </td>
                                             <td style="text-align:right">
                                                 <t t-esc="tax['tax_amount']"
