@@ -75,6 +75,8 @@
                                         <field name="machine_type" options="{'no_create_edit': True}"
 
                                                context="{'form_view_ref': 'workshop.machine_type_form_view','default_is_machine': True,'default_type': 'service'}"/>
+                                        <field name="quantity"/>
+
                                     </group>
                                     <group>
                                         <field name="motor_no"/>

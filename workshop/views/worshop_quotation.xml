@@ -112,6 +112,7 @@
                             <group name="scope">
                                 <field name="scope_of_work"/>
                                 <field name="scope_of_work_description"/>
+                                <field name="quantity" force_save="1"/>
                             </group>
                             <group name="machine">
                                 <field name="machine_id"/>
@@ -152,7 +153,7 @@
                                    style="font-weight: bold;font-size: 18px;"/>
                             <field name="work_quotation_line_ids"
                                    widget="section_and_note_one2many"
-                                   mode="tree" nolabel="1">
+                                   mode="tree" nolabel="1" context="{'default_qty':quantity}">
                                 <tree editable="bottom" string="Quotation Items">
                                     <control>
                                         <create name="add_line_control" string="Add a line"/>

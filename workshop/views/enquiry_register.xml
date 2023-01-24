@@ -75,7 +75,9 @@
                                     </div>
                                     <field name="machine_type"
                                            context="{'form_view_ref': 'workshop.machine_type_form_view','default_is_machine': True,'default_type': 'service'}"
-                                    />
+                                           />
+                                    <field name="quantity"/>
+
                                 </group>
                             </div>
                             <div>
@@ -146,7 +148,7 @@
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[]</field>
         <field name="context">{'search_default_customer': 1, 'res_partner_search_mode': 'customer',
-                               'default_customer_rank': 1}
+            'default_customer_rank': 1}
         </field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">

@@ -6,7 +6,7 @@ class WorkshopQuotation(models.Model):
 
     # odx_testing = fields.Html(string='Testing & Inspection', help='Write here all about Testing and Inspection', )
     odx_testing = fields.Many2one('workshop.testing.inspection', string="Testing & Inspection")
-    odx_testing_description = fields.Text(related='odx_testing.description', string="Description")
+    odx_testing_description = fields.Text(related='odx_testing.description', string="Description", default='test')
     # odx_extend_of_quote = fields.Html(string='Extend of Quote')
     odx_extend_of_quote = fields.Many2one('workshop.extend.quotes', string="Extend Of Quotes")
     odx_extend_of_quote_description = fields.Text(related='odx_extend_of_quote.description', string="Description")
@@ -46,7 +46,7 @@ class WorkshopQuotation(models.Model):
                                 tax_name_list.append(tax.tax_group_id.name)
                                 tax_dict = {
                                     'tax': tax.tax_group_id.name,
-                                    'name': tax.name,
+                                    'description': tax.description,
                                     'tax_amount': tax_amount
                                 }
                                 tax_list.append(tax_dict)
@@ -55,7 +55,7 @@ class WorkshopQuotation(models.Model):
                         tax_name_list.append(tax.tax_group_id.name)
                         tax_dict = {
                                     'tax': tax.tax_group_id.name,
-                                    'name': tax.name,
+                                    'description': tax.description,
                                     'tax_amount': tax_amount
                                 }
                         tax_list.append(tax_dict)

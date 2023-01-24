@@ -20,6 +20,7 @@ class InitialInspection(models.Model):
     service_deadline = fields.Date(string="Service deadline", required=1)
     machine_type = fields.Many2one('product.product', string="Type of Machine", required=1,
                                    domain=[('is_machine', '=', True)])
+    quantity = fields.Float(string="Quantity")
     repair_reason = fields.Text(string="Customer reason for repair")
     # machine details
     category = fields.Many2one('machine.type', string="Machine Type/Category")
@@ -127,49 +128,49 @@ class InitialInspection(models.Model):
                 raise UserError(_("You cannot delete an entry which has been validated once."))
         return super(InitialInspection, self).unlink()
 
-    @api.onchange('machine_type')
-    def machine_details(self):
-        """updates machine details"""
-        self.parts_required = None
-        self.services = None
-        data = ['made', 'make', 'kilo', 'kva', 'horsepower', 'machine_serial_number', 'rpm', 'item_code',
-                'pole', 'volt', 'amps', 'hertz', 'motor_no']
-        no_value = {
-            'made': "", 'make': "", 'kilo': "", 'kva': "", 'horsepower': "", 'machine_serial_number': "", 'rpm': "",
-            'item_code': "",
-            'pole': "", 'volt': "", 'amps': "", 'hertz': "", 'motor_no': "",
-            'category': ""
-        }
-        self.update(no_value)
-        if self.machine_type:
-            machine_details = self.machine_type.read(data)[0]
-            self.category = self.machine_type.category.id
-            machine_details.pop('id')
-            self.update(machine_details)
-            data = ['product_id', 'quantity', 'product_unit', 'cost']
-            if self.amc_customer:
-                parts = self.contract_id.m_parts_required.filtered(
-                    lambda l: l.contract_sale_product.id == self.machine_type.id).read(data)
-            else:
-                parts = self.machine_type.m_parts_required.read(data)
-            for part in parts:
-                for item in part:
-                    if isinstance(part[item], tuple):
-                        part[item] = part[item][0]
-                part.pop('id')
-                self.parts_required |= self.parts_required.new(part)
-            data = ['mechanical_works', 'cost', 'total_hours']
-            if self.amc_customer:
-                services = self.contract_id.service_required.filtered(
-                    lambda l: l.contract_sale_product.id == self.machine_type.id).read(data)
-            else:
-                services = self.machine_type.service_required.read(data)
-            for service in services:
-                for item in service:
-                    if isinstance(service[item], tuple):
-                        service[item] = service[item][0]
-                service.pop('id')
-                self.services |= self.services.new(service)
+    # @api.onchange('machine_type')
+    # def machine_details(self):
+    #     """updates machine details"""
+    #     self.parts_required = None
+    #     self.services = None
+    #     data = ['made', 'make', 'kilo', 'kva', 'horsepower', 'machine_serial_number', 'rpm', 'item_code',
+    #             'pole', 'volt', 'amps', 'hertz', 'motor_no']
+    #     no_value = {
+    #         'made': "", 'make': "", 'kilo': "", 'kva': "", 'horsepower': "", 'machine_serial_number': "", 'rpm': "",
+    #         'item_code': "",
+    #         'pole': "", 'volt': "", 'amps': "", 'hertz': "", 'motor_no': "",
+    #         'category': ""
+    #     }
+    #     self.update(no_value)
+        # if self.machine_type:
+        #     # machine_details = self.machine_type.read(data)[0]
+        #     # self.category = self.machine_type.category.id
+        #     # machine_details.pop('id')
+        #     # self.update(machine_details)
+        #     # data = ['product_id', 'quantity', 'product_unit', 'cost']
+        #     # if self.amc_customer:
+        #     #     parts = self.contract_id.m_parts_required.filtered(
+        #     #         lambda l: l.contract_sale_product.id == self.machine_type.id).read(data)
+        #     # else:
+        #     #     parts = self.machine_type.m_parts_required.read(data)
+        #     # for part in parts:
+        #     #     for item in part:
+        #     #         if isinstance(part[item], tuple):
+        #     #             part[item] = part[item][0]
+        #     #     part.pop('id')
+        #     #     self.parts_required |= self.parts_required.new(part)
+        #     data = ['mechanical_works', 'cost', 'total_hours']
+        #     # if self.amc_customer:
+        #     #     services = self.contract_id.service_required.filtered(
+        #     #         lambda l: l.contract_sale_product.id == self.machine_type.id).read(data)
+        #     # else:
+        #     #     services = self.machine_type.service_required.read(data)
+        #     # for service in services:
+        #     #     for item in service:
+        #     #         if isinstance(service[item], tuple):
+        #     #             service[item] = service[item][0]
+        #     #     service.pop('id')
+        #     #     self.services |= self.services.new(service)
 
     def mechanical_report(self):
         """creates mechanical report"""
@@ -183,6 +184,7 @@ class InitialInspection(models.Model):
                 machine_details[data] = machine_details[data][0]
         machine_details['customer_name'] = self.customer_name.id
         machine_details['machine_type'] = self.machine_type.id
+        machine_details['quantity'] = self.quantity
         machine_details['job_no'] = self.id
         report = self.env['mechanical.report'].create(machine_details)
         return {

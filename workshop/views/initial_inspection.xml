@@ -65,6 +65,7 @@
                                     <field name="machine_type" options="{'no_create_edit': True}"
                                            context="{'form_view_ref': 'workshop.machine_type_form_view','default_is_machine': True,'default_type': 'service'}"
                                            attrs="{'invisible': ['|',('customer_name', '=', False),('service_deadline', '=', False)]}"/>
+                                    <field name="quantity"/>
                                     <field name="contract_id" attrs="{'invisible': [('amc_customer', '=', False)]}"/>
                                     <field name="contract_amount"
                                            attrs="{'invisible': [('amc_customer', '=', False)]}"/>

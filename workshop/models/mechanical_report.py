@@ -29,6 +29,7 @@ class MechanicalReport(models.Model):
     rpm = fields.Char(string="RPM")
     hertz = fields.Char(string="Hertz")
     name = fields.Char(string="Name")
+    quantity = fields.Float(string='Quantity')
     # stator data
     slots = fields.Integer(string="Number of Slots")
     core_length = fields.Float(string="Core Length")
@@ -132,7 +133,8 @@ class MechanicalReport(models.Model):
             customer_details['customer_name'] = self.customer_name.id
             customer_details['machine_id'] = self.machine_type.id
             customer_details['pending_enquiry'] = self.job_no.id
-            customer_details['price'] = self.job_no.work_price
+            customer_details['quantity'] = self.quantity
+            # customer_details['price'] = self.job_no.work_price
             machine_details.update(customer_details)
             quotation = self.env['workshop.quotation'].create(machine_details)
             quotation.onchange_pending_enquiry()

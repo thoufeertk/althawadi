@@ -19,6 +19,7 @@ class EnquiryRegister(models.Model):
     repair_reason = fields.Text(string="Customer reason for repair")
     machine_type = fields.Many2one('product.product', string="Type of Machine",
                                    required=True, domain=[('is_machine', '=', True)])
+    quantity = fields.Float(string="Quantity")
     # address
     street = fields.Char()
     street2 = fields.Char()
@@ -92,14 +93,14 @@ class EnquiryRegister(models.Model):
     def create_inspection(self):
         """creates inspection record with values from enquiry"""
         values = self.read(['enquiry_number', 'customer_name', 'service_priority',
-                            'service_deadline', 'machine_type', 'repair_reason'])[0]
+                            'service_deadline', 'machine_type', 'quantity', 'repair_reason'])[0]
         values.pop('id')
         values['enquiry_number'] = self.id
         for data in values:
             if isinstance(values[data], tuple):
                 values[data] = values[data][0]
         inspection_id = self.env['initial.inspection'].create(values)
-        inspection_id.machine_details()
+        # inspection_id.machine_details()
         return {
             'name': 'Customers',
             'type': 'ir.actions.act_window',

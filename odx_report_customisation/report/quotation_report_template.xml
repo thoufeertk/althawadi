@@ -148,9 +148,7 @@
                             <b>
                                 <span>Equipment Details</span>
                             </b>
-
-
-
+                            <br/>
                             <table width="100%" class="table table-sm">
                                 <t t-set="sl" t-value="0"/>
                                 <t t-set="total_discount" t-value="0"/>
@@ -258,7 +256,7 @@
                                                 <span t-field="line.product_id"/>
                                             </td>
                                             <td>
-                                                <span t-field="line.product_uom_qty"/>
+                                                <span t-esc="'%.0f'%  line.product_uom_qty"/>
                                             </td>
                                             <td>
                                                 <span t-esc="'%.3f'% line.price_unit"/>
@@ -302,8 +300,8 @@
                                     <t t-foreach="o.tax_group()" t-as="tax">
                                         <tr>
                                             <td style="text-align:center">
-                                                <span>Value Added</span>
-                                                <t t-esc="tax['name']"/>:
+                                                <span>Value Added Tax</span>
+                                                <t t-esc="tax['description']"/>:
                                             </td>
                                             <td style="text-align:right">
                                                 <t t-esc="tax['tax_amount']"
@@ -352,7 +350,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_testing.description"/>
+                                    <span t-field="o.odx_testing_description"/>
                                 </tr>
                                 <br/>
                                 <br/>
@@ -362,7 +360,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_terms_and_condition.description"/>
+                                    <span t-field="o.odx_terms_and_condition_description"/>
                                 </tr>
                                 <br/>
                                 <br/>
@@ -372,7 +370,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_payment_term.description"/>
+                                    <span t-field="o.odx_payment_term_description"/>
                                 </tr>
                                 <br/>
                                 <br/>
@@ -382,7 +380,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_extend_of_quote.description"/>
+                                    <span t-field="o.odx_extend_of_quote_description"/>
                                 </tr>
                                 <br/>
                                 <br/>
@@ -392,7 +390,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_warranty.description"/>
+                                    <span t-field="o.odx_warranty_description"/>
                                 </tr>
                                 <br/>
 
@@ -417,7 +415,7 @@
                                     <br/>
                                     <tr>
                                         <td>Name :
-                                            <t t-esc="o.signed_name"/>
+                                            <t t-esc="o.signed_name.name"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -428,8 +426,8 @@
                                     <tr>
                                         <td>
                                             Signature :
-                                            <t t-if="o.digital_signature">
-                                                <img t-att-src="image_data_uri(o.digital_signature)"
+                                            <t t-if="o.signed_name.sign_signature">
+                                                <img t-att-src="image_data_uri(o.signed_name.sign_signature)"
                                                      style="max-height: 4cm; max-width: 8cm;"/>
                                             </t>
                                         </td>
@@ -587,9 +585,7 @@
                             <b>
                                 <span>Equipment Details</span>
                             </b>
-
-
-
+                            <br/>
                             <table width="100%" class="table table-sm">
                                 <t t-set="sl" t-value="0"/>
                                 <t t-set="total_discount" t-value="0"/>
@@ -697,7 +693,7 @@
                                                 <span t-field="line.product_id"/>
                                             </td>
                                             <td>
-                                                <span t-field="line.product_uom_qty"/>
+                                                <span t-esc="'%.0f'%  line.product_uom_qty"/>
                                             </td>
                                             <td>
                                                 <span t-esc="'%.3f'% line.price_unit"/>
@@ -741,8 +737,8 @@
                                     <t t-foreach="o.tax_group()" t-as="tax">
                                         <tr>
                                             <td style="text-align:center">
-                                                <span>Value Added</span>
-                                                <t t-esc="tax['name']"/>:
+                                                <span>Value Added Tax</span>
+                                                <t t-esc="tax['description']"/>:
                                             </td>
                                             <td style="text-align:right">
                                                 <t t-esc="tax['tax_amount']"
@@ -791,7 +787,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_testing.description"/>
+                                    <span t-field="o.odx_testing_description"/>
                                 </tr>
                                 <br/>
                                 <br/>
@@ -801,7 +797,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_terms_and_condition.description"/>
+                                    <span t-field="o.odx_terms_and_condition_description"/>
                                 </tr>
                                 <br/>
                                 <br/>
@@ -811,7 +807,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_payment_term.description"/>
+                                    <span t-field="o.odx_payment_term_description"/>
                                 </tr>
                                 <br/>
                                 <br/>
@@ -821,7 +817,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_extend_of_quote.description"/>
+                                    <span t-field="o.odx_extend_of_quote_description"/>
                                 </tr>
                                 <br/>
                                 <br/>
@@ -831,7 +827,7 @@
                                 </tr>
                                 <br/>
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_warranty.description"/>
+                                    <span t-field="o.odx_warranty_description"/>
                                 </tr>
                                 <br/>
 
@@ -856,7 +852,7 @@
                                     <br/>
                                     <tr>
                                         <td>Name :
-                                            <t t-esc="o.signed_name"/>
+                                            <t t-esc="o.signed_name.name"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -867,8 +863,8 @@
                                     <tr>
                                         <td>
                                             Signature :
-                                            <t t-if="o.digital_signature">
-                                                <img t-att-src="image_data_uri(o.digital_signature)"
+                                            <t t-if="o.signed_name.sign_signature">
+                                                <img t-att-src="image_data_uri(o.signed_name.sign_signature)"
                                                      style="max-height: 4cm; max-width: 8cm;"/>
                                             </t>
                                         </td>

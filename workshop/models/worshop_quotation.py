@@ -49,12 +49,13 @@ class WorkshopQuotation(models.Model):
                               ('rejected', 'Rejected'), ('done', 'Done')],
                              default='draft', readonly=True, string='States')
     work_order_count = fields.Integer(compute='_compute_order_count')
-    price = fields.Float(string="Price", required=1)
-    signed_name = fields.Char(string="Name")
+    price = fields.Float(string="Price", store=True, compute='_compute_price')
+    signed_name = fields.Many2one('res.users', string="Name")
     telephone = fields.Char(string="Telephone")
     scope_of_work = fields.Many2one('workshop.scopeofwork', string="Scope of Work")
     scope_of_work_description = fields.Text(related='scope_of_work.description', string="Description")
     digital_signature = fields.Binary(string='Signature')
+    quantity = fields.Float(string='Quantity', store=True)
     work_quotation_line_ids = fields.One2many('work.quotation.line', 'quotation_id')
     parts_required = fields.One2many('quotation.required.parts', 'quotation_part_link',
                                      string="Parts Required")
@@ -86,21 +87,24 @@ class WorkshopQuotation(models.Model):
     currency_id = fields.Many2one('res.currency', 'Currency', default=_get_default_currency_id)
     comments = fields.Text(string='Additional Notes')
 
-    @api.constrains('price')
-    def _check_price(self):
-        # additional condition self.pending_enquiry for independent quotation creation odox
-        if self.pending_enquiry:
-            if self.price == 0:
-                raise UserError(_("Price cannot be set as zero"))
+    # @api.constrains('price')
+    # def _check_price(self):
+    #     # additional condition self.pending_enquiry for independent quotation creation odox
+    #     if self.pending_enquiry:
+    #         if self.price == 0:
+    #             raise UserError(_("Price cannot be set as zero"))
 
-
+    @api.onchange('signed_name')
+    def _onchange_signed_name_id(self):
+        if self.signed_name:
+            self.telephone = self.signed_name.phone
 
     @api.onchange('machine_id')
     def _onchange_machine_id(self):
         if self.machine_id:
             machine = self.env['product.template'].search([('id', '=', self.machine_id.product_tmpl_id.id)])
             # product_varient = self.env['product.product'].search([('product_tmpl_id', '=', product_template.id)])
-            print("!!!!!!!!",machine)
+            print("!!!!!!!!", machine)
             self.made = machine.made
             self.make = machine.make
             self.kilo = machine.kilo
@@ -114,6 +118,23 @@ class WorkshopQuotation(models.Model):
             self.amps = machine.amps
             self.hertz = machine.hertz
             self.motor_no = machine.motor_no
+
+    @api.depends('parts_required', 'services')
+    def _compute_price(self):
+        # compute price based on sum of spare parts cost,service cost
+        print(self.pending_enquiry.name, '////////////////////')
+        # is_work_order = self.env['workshop.order'].search([('initial_inspection', '=', self.pending_enquiry)])
+        # print('istttttt',is_work_order)
+        for rec in self:
+            spare_parts_amount = 0
+            service_amount = 0
+            for i in rec.parts_required:
+                print('qqqqqq', i.cost)
+                spare_parts_amount = spare_parts_amount + i.cost
+            # if self.
+            for j in rec.services:
+                service_amount = service_amount + (j.mechanical_works.lst_price * j.total_hours)
+            rec.price = spare_parts_amount + service_amount
 
     def _compute_order_count(self):
         """count of work orders created for this quotation"""
@@ -130,6 +151,7 @@ class WorkshopQuotation(models.Model):
     def create(self, vals):
         """Sets sequence code to '/'"""
         vals['name'] = '/'
+        print(vals, "Quotationnnnnnnnnnnnnnnnnnnnnnnnnnnnn")
         return super(WorkshopQuotation, self).create(vals)
 
     def unlink(self):
@@ -249,7 +271,7 @@ class WorkshopQuotation(models.Model):
         ir_model_data = self.env['ir.model.data']
         try:
             template_id = ir_model_data._xmlid_lookup('workshop.email_template_quotation')[2]
-            print('$$$$$$$$$$$$$$',template_id)
+            print('$$$$$$$$$$$$$$', template_id)
         except ValueError:
             template_id = False
         try:
@@ -299,14 +321,23 @@ class WorkshopQuotation(models.Model):
 class WorkQuotationLine(models.Model):
     _name = 'work.quotation.line'
 
+    def set_quantity(self):
+        print(self, 'qqqqqqqqqqqqq')
+        print(self.quotation_id, "Quotationnnnnnnnnnnnnnnnnn")
+        qty = self.quotation_id.quantity
+        print('qty', qty)
+        return qty
+
     quotation_id = fields.Many2one('workshop.quotation')
-    product_id = fields.Many2one('product.product', string='Machine Details')
-    name = fields.Char(string='Type Of Services')
+    product_id = fields.Many2one('product.product', string='Type Of Services',
+                                 domain="[('detailed_type', '=', 'service')]")
+    name = fields.Char(string='Description')
     display_type = fields.Selection([
         ('line_section', 'Section'),
         ('line_note', 'Note'),
     ], default=False, help="Technical field for UX purpose.")
-    product_uom_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=True, default=1.0)
+    product_uom_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=True,
+                                   default=set_quantity)
     price_unit = fields.Float('Unit Price', required=True, digits='Product Price', default=0.0)
     product_uom = fields.Many2one('uom.uom', string='Unit of Measure')
     discount = fields.Float(string='Discount (%)', digits='Discount', default=0.0)
@@ -315,6 +346,15 @@ class WorkQuotationLine(models.Model):
     price_subtotal = fields.Float(compute='_compute_amount', string='Subtotal', readonly=True, store=True)
     price_tax = fields.Float(compute='_compute_amount', string='Total Tax', readonly=True, store=True)
     price_total = fields.Float(compute='_compute_amount', string='Total', readonly=True, store=True)
+
+    @api.model
+    def create(self, vals):
+        print('@@@@@@@@@@@@@@', vals)
+        print(vals['quotation_id'],"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
+        quoatation_id = self.env['workshop.quotation'].browse(vals['quotation_id'])
+        print(quoatation_id,"llllllllllllllllllllllllllll")
+        vals['product_uom_qty'] = quoatation_id.quantity
+        return super(WorkQuotationLine, self).create(vals)
 
     @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
     def _compute_amount(self):
