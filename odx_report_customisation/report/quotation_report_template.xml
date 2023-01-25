@@ -104,8 +104,8 @@
                                                 <span>Email :</span>
                                                 <span t-field="o.customer_name.email"/>
                                                 <br/>
-                                                <span t-if="o.odx_sales_man">Sales ID :</span>
-                                                <span t-field="o.odx_sales_man"/>
+                                                <span t-if="o.signed_name">Sales ID :</span>
+                                                <span t-field="o.signed_name"/>
 
                                             </td>
                                             <td style="padding-left:5px">
@@ -285,55 +285,57 @@
                             </table>
                             <br/>
 
+                            <t t-if="o.work_quotation_line_ids">
+                                <table style="height: 60px; width: 380px; margin-left:550px;"
+                                       class="table table_border">
+                                    <tr>
+                                        <td style="text-align:center">
+                                            Amount Untaxed :
+                                        </td>
+                                        <td style="text-align:right">
+                                            <t t-esc="o.amount_untaxed"
+                                               t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <t t-foreach="o.tax_group()" t-as="tax">
+                                            <tr>
+                                                <td style="text-align:center">
+                                                    <span>Value Added Tax</span>
+                                                    <t t-esc="tax['description']"/>:
+                                                </td>
+                                                <td style="text-align:right">
+                                                    <t t-esc="tax['tax_amount']"
+                                                       t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tr>
 
-                            <table style="height: 60px; width: 380px; margin-left:550px;" class="table table_border">
-                                <tr>
-                                    <td style="text-align:center">
-                                        Amount Untaxed :
-                                    </td>
-                                    <td style="text-align:right">
-                                        <t t-esc="o.amount_untaxed"
-                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <t t-foreach="o.tax_group()" t-as="tax">
+                                    <t t-if="total_discount>0">
                                         <tr>
                                             <td style="text-align:center">
-                                                <span>Value Added Tax</span>
-                                                <t t-esc="tax['description']"/>:
+                                                Total Discount :
                                             </td>
                                             <td style="text-align:right">
-                                                <t t-esc="tax['tax_amount']"
-                                                   t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                <t t-esc="'%.3f'% total_discount"/>
+                                                <t t-esc="o.currency_id.symbol"/>
                                             </td>
                                         </tr>
                                     </t>
-                                </tr>
 
-                                <t t-if="total_discount>0">
+
                                     <tr>
-                                        <td style="text-align:center">
-                                            Total Discount :
-                                        </td>
+                                        <th style="text-align:center">
+                                            Amount Total :
+                                        </th>
                                         <td style="text-align:right">
-                                            <t t-esc="'%.3f'% total_discount"/>
-                                            <t t-esc="o.currency_id.symbol"/>
+                                            <t t-esc="o.amount_total"
+                                               t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
-                                </t>
-
-
-                                <tr>
-                                    <th style="text-align:center">
-                                        Amount Total :
-                                    </th>
-                                    <td style="text-align:right">
-                                        <t t-esc="o.amount_total"
-                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                    </td>
-                                </tr>
-                            </table>
+                                </table>
+                            </t>
                             <table width="100%">
                                 <tr width="100%">
                                     <b>Scope of Work</b>
@@ -407,31 +409,43 @@
                                 <tr>
                                     <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">
                                         <b>Prepared By:</b>
+                                        <br/>
+                                        <t t-if="o.signed_name.name">
+                                        <b>Name :</b>
+                                        <t t-esc="o.signed_name.name"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.telephone">
+                                        <b>Phone :</b>
+                                        <t t-esc="o.telephone"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.signed_name.sign_signature">
+                                            <img t-att-src="image_data_uri(o.signed_name.sign_signature)"
+                                                 style="max-height: 4cm; max-width: 8cm;"/>
+                                        </t>
+
                                     </td>
                                     <td style="float:right;width:25%;text-align:center;border-top: 2px solid black">
                                         <b>Approved By</b>
+                                        <br/>
+                                        <t t-if="o.approved_by.name">
+                                        <b>name :</b>
+                                        <t t-esc="o.approved_by.name"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.approved_by.phone">
+                                        <b>Phone :</b>
+                                        <t t-esc="o.approved_by.phone"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.approved_by.sign_signature">
+                                            <img t-att-src="image_data_uri(o.approved_by.sign_signature)"
+                                                 style="max-height: 4cm; max-width: 8cm;"/>
+                                        </t>
                                     </td>
                                     <br/>
                                     <br/>
-                                    <tr>
-                                        <td>Name :
-                                            <t t-esc="o.signed_name.name"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Telephone :
-                                            <t t-esc="o.telephone"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Signature :
-                                            <t t-if="o.signed_name.sign_signature">
-                                                <img t-att-src="image_data_uri(o.signed_name.sign_signature)"
-                                                     style="max-height: 4cm; max-width: 8cm;"/>
-                                            </t>
-                                        </td>
-                                    </tr>
 
                                 </tr>
                             </table>
@@ -541,8 +555,8 @@
                                                 <span>Email :</span>
                                                 <span t-field="o.customer_name.email"/>
                                                 <br/>
-                                                <span t-if="o.odx_sales_man">Sales ID :</span>
-                                                <span t-field="o.odx_sales_man"/>
+                                                <span t-if="o.signed_name">Sales ID :</span>
+                                                <span t-field="o.signed_name"/>
 
                                             </td>
                                             <td style="padding-left:5px">
@@ -722,55 +736,57 @@
                             </table>
                             <br/>
 
+                            <t t-if="o.work_quotation_line_ids">
+                                <table style="height: 60px; width: 380px; margin-left:550px;"
+                                       class="table table_border">
+                                    <tr>
+                                        <td style="text-align:center">
+                                            Amount Untaxed :
+                                        </td>
+                                        <td style="text-align:right">
+                                            <t t-esc="o.amount_untaxed"
+                                               t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <t t-foreach="o.tax_group()" t-as="tax">
+                                            <tr>
+                                                <td style="text-align:center">
+                                                    <span>Value Added Tax</span>
+                                                    <t t-esc="tax['description']"/>:
+                                                </td>
+                                                <td style="text-align:right">
+                                                    <t t-esc="tax['tax_amount']"
+                                                       t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tr>
 
-                            <table style="height: 60px; width: 380px; margin-left:550px;" class="table table_border">
-                                <tr>
-                                    <td style="text-align:center">
-                                        Amount Untaxed :
-                                    </td>
-                                    <td style="text-align:right">
-                                        <t t-esc="o.amount_untaxed"
-                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <t t-foreach="o.tax_group()" t-as="tax">
+                                    <t t-if="total_discount>0">
                                         <tr>
                                             <td style="text-align:center">
-                                                <span>Value Added Tax</span>
-                                                <t t-esc="tax['description']"/>:
+                                                Total Discount :
                                             </td>
                                             <td style="text-align:right">
-                                                <t t-esc="tax['tax_amount']"
-                                                   t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                <t t-esc="'%.3f'% total_discount"/>
+                                                <t t-esc="o.currency_id.symbol"/>
                                             </td>
                                         </tr>
                                     </t>
-                                </tr>
 
-                                <t t-if="total_discount>0">
+
                                     <tr>
-                                        <td style="text-align:center">
-                                            Total Discount :
-                                        </td>
+                                        <th style="text-align:center">
+                                            Amount Total :
+                                        </th>
                                         <td style="text-align:right">
-                                            <t t-esc="'%.3f'% total_discount"/>
-                                            <t t-esc="o.currency_id.symbol"/>
+                                            <t t-esc="o.amount_total"
+                                               t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
                                         </td>
                                     </tr>
-                                </t>
-
-
-                                <tr>
-                                    <th style="text-align:center">
-                                        Amount Total :
-                                    </th>
-                                    <td style="text-align:right">
-                                        <t t-esc="o.amount_total"
-                                           t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                                    </td>
-                                </tr>
-                            </table>
+                                </table>
+                            </t>
                             <table width="100%">
                                 <tr width="100%">
                                     <b>Scope of Work</b>
@@ -844,31 +860,43 @@
                                 <tr>
                                     <td style="float:left;width:25%;text-align:center;border-top: 2px solid black">
                                         <b>Prepared By:</b>
+                                        <br/>
+                                        <t t-if="o.signed_name.name">
+                                        <b>Name :</b>
+                                        <t t-esc="o.signed_name.name"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.telephone">
+                                        <b>Phone :</b>
+                                        <t t-esc="o.telephone"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.signed_name.sign_signature">
+                                            <img t-att-src="image_data_uri(o.signed_name.sign_signature)"
+                                                 style="max-height: 4cm; max-width: 8cm;"/>
+                                        </t>
+
                                     </td>
                                     <td style="float:right;width:25%;text-align:center;border-top: 2px solid black">
                                         <b>Approved By</b>
+                                        <br/>
+                                        <t t-if="o.approved_by.name">
+                                        <b>name :</b>
+                                        <t t-esc="o.approved_by.name"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.approved_by.phone">
+                                        <b>Phone :</b>
+                                        <t t-esc="o.approved_by.phone"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.approved_by.sign_signature">
+                                            <img t-att-src="image_data_uri(o.approved_by.sign_signature)"
+                                                 style="max-height: 4cm; max-width: 8cm;"/>
+                                        </t>
                                     </td>
                                     <br/>
                                     <br/>
-                                    <tr>
-                                        <td>Name :
-                                            <t t-esc="o.signed_name.name"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Telephone :
-                                            <t t-esc="o.telephone"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            Signature :
-                                            <t t-if="o.signed_name.sign_signature">
-                                                <img t-att-src="image_data_uri(o.signed_name.sign_signature)"
-                                                     style="max-height: 4cm; max-width: 8cm;"/>
-                                            </t>
-                                        </td>
-                                    </tr>
 
                                 </tr>
                             </table>

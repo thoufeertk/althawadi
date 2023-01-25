@@ -21,6 +21,10 @@ class MechanicalReport(models.Model):
     machine_serial_number = fields.Char(string="Serial Number")
     item_code = fields.Char(string="Item Code")
     pole = fields.Char(string="Pole")
+    made = fields.Char(string="Made")
+    item_code = fields.Char(string="Item Code")
+    motor_no = fields.Char(string="Motor No.")
+    make = fields.Char(string="Make")
     kilo = fields.Char(string="Kilowatt (KW)")
     kva = fields.Char(string="KVA")
     frame = fields.Char(string="Frame")
@@ -109,21 +113,22 @@ class MechanicalReport(models.Model):
                 raise UserError(_("You cannot delete an entry which has been validated once."))
         return super(MechanicalReport, self).unlink()
 
-    @api.onchange('machine_type')
-    def onchange_machine_type(self):
-        if self.machine_type:
-            machine_details = \
-                self.machine_type.read(['kilo', 'kva', 'horsepower', 'machine_serial_number', 'item_code', 'rpm',
-                                        'pole', 'volt', 'amps', 'hertz', 'motor_no'])[0]
-            machine_details.pop('id')
-            self.update(machine_details)
+    # @api.onchange('machine_type')
+    # def onchange_machine_type(self):
+    #     if self.machine_type:
+    #         machine_details = \
+    #             self.machine_type.read(['kilo', 'kva', 'horsepower', 'machine_serial_number', 'item_code', 'rpm',
+    #                                     'pole', 'volt', 'amps', 'hertz', 'motor_no'])[0]
+    #         machine_details.pop('id')
+    #         self.update(machine_details)
 
     def create_quotation(self):
         if self.machine_type:
-            machine_details = self.machine_type.read(
-                ['kilo', 'kva', 'horsepower', 'machine_serial_number', 'item_code', 'rpm', 'made', 'make',
-                 'pole', 'volt', 'amps', 'hertz', 'motor_no'])[0]
-            machine_details.pop('id')
+            # machine_details = self.machine_type.read(
+            #     ['kilo', 'kva', 'horsepower', 'machine_serial_number', 'item_code', 'rpm', 'made', 'make',
+            #      'pole', 'volt', 'amps', 'hertz', 'motor_no'])[0]
+            # machine_details.pop('id')
+            machine_details = {}
             customer_details = self.customer_name.read(['street', 'street2', 'city', 'state_id', 'zip', 'country_id'])[
                 0]
             customer_details.pop('id')
@@ -135,6 +140,19 @@ class MechanicalReport(models.Model):
             customer_details['pending_enquiry'] = self.job_no.id
             customer_details['quantity'] = self.quantity
             # customer_details['price'] = self.job_no.work_price
+            machine_details['horsepower'] = self.horsepower
+            machine_details['machine_serial_number'] = self.machine_serial_number
+            machine_details['item_code'] = self.item_code
+            machine_details['pole'] = self.pole
+            machine_details['kilo'] = self.kilo
+            machine_details['kva'] = self.kva
+            machine_details['volt'] = self.volt
+            machine_details['amps'] = self.amps
+            machine_details['rpm'] = self.rpm
+            machine_details['hertz'] = self.hertz
+            machine_details['made'] = self.made
+            machine_details['make'] = self.make
+            machine_details['motor_no'] = self.motor_no
             machine_details.update(customer_details)
             quotation = self.env['workshop.quotation'].create(machine_details)
             quotation.onchange_pending_enquiry()

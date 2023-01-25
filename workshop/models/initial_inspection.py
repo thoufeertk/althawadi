@@ -174,17 +174,33 @@ class InitialInspection(models.Model):
 
     def mechanical_report(self):
         """creates mechanical report"""
-        data = ['kilo', 'kva', 'horsepower', 'item_code', 'machine_serial_number', 'rpm', 'pole', 'volt', 'amps',
-                'hertz',
-                'motor_no']
-        machine_details = self.machine_type.read(data)[0]
-        machine_details.pop('id')
-        for data in machine_details:
-            if isinstance(machine_details[data], tuple):
-                machine_details[data] = machine_details[data][0]
+
+        # data = [ 'item_code', 'machine_serial_number', 'rpm', 'pole', 'volt', 'amps',
+        #         'hertz',
+        #         'motor_no']
+        # machine_details = self.machine_type.read(data)[0]
+        # machine_details.pop('id')
+        machine_details = {}
+        # for data in machine_details:
+        #     if isinstance(machine_details[data], tuple):
+        #         machine_details[data] = machine_details[data][0]
         machine_details['customer_name'] = self.customer_name.id
         machine_details['machine_type'] = self.machine_type.id
         machine_details['quantity'] = self.quantity
+        machine_details['horsepower'] = self.horsepower
+        machine_details['machine_serial_number'] = self.machine_serial_number
+        machine_details['item_code'] = self.item_code
+        machine_details['pole'] = self.pole
+        machine_details['kilo'] = self.kilo
+        machine_details['kva'] = self.kva
+        machine_details['volt'] = self.volt
+        machine_details['amps'] = self.amps
+        machine_details['rpm'] = self.rpm
+        machine_details['hertz'] = self.hertz
+        machine_details['made'] = self.made
+        machine_details['item_code'] = self.item_code
+        machine_details['motor_no'] = self.motor_no
+        machine_details['make'] = self.make
         machine_details['job_no'] = self.id
         report = self.env['mechanical.report'].create(machine_details)
         return {

@@ -11,7 +11,7 @@
                         <group>
                             <group>
                                 <field name="odx_header" force_save="1"/>
-                                <field name="odx_sales_man"/>
+                                <field name="odx_sales_man" invisible="1"/>
                                 <field name="odx_gate_pass_no"/>
                             </group>
                         </group>

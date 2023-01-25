@@ -75,7 +75,7 @@
                                         <field name="machine_type" options="{'no_create_edit': True}"
 
                                                context="{'form_view_ref': 'workshop.machine_type_form_view','default_is_machine': True,'default_type': 'service'}"/>
-                                        <field name="quantity"/>
+                                        <field name="quantity" invisible="1"/>
 
                                     </group>
                                     <group>
@@ -105,12 +105,16 @@
                             <group>
                                 <group>
                                     <field name="horsepower"/>
+                                    <field name="make"/>
+                                    <field name="item_code"/>
 
                                     <field name="volt"/>
                                 </group>
                                 <group>
                                     <field name="pole"/>
+                                    <field name="made"/>
                                     <field name="amps"/>
+                                    <field name="motor_no"/>
                                 </group>
                             </group>
                             <group>

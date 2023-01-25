@@ -14,6 +14,7 @@ class WorkshopQuotation(models.Model):
     amc_customer = fields.Boolean(string="Amc Customer", related='pending_enquiry.amc_customer')
     customer_name = fields.Many2one('res.partner', string="Customer Name", required=1,
                                     domain=[("customer_rank", ">", 0)])
+    approved_by = fields.Many2one('res.users', string="Approve_by")
     quote_date = fields.Date(string="Quotation Date", default=fields.Datetime.now)
     validity_date = fields.Integer(string="Validity")
     name = fields.Char(string="Quotation Number", copy=False)
@@ -49,7 +50,7 @@ class WorkshopQuotation(models.Model):
                               ('rejected', 'Rejected'), ('done', 'Done')],
                              default='draft', readonly=True, string='States')
     work_order_count = fields.Integer(compute='_compute_order_count')
-    price = fields.Float(string="Price", store=True, compute='_compute_price')
+    price = fields.Float(string="Cost", store=True, compute='_compute_price')
     signed_name = fields.Many2one('res.users', string="Name")
     telephone = fields.Char(string="Telephone")
     scope_of_work = fields.Many2one('workshop.scopeofwork', string="Scope of Work")
@@ -73,6 +74,14 @@ class WorkshopQuotation(models.Model):
     amount_untaxed = fields.Float(string='Amount Untaxed', compute='_compute_amount')
     amount_tax = fields.Float(string='Amount Tax', compute='_compute_amount')
     sale_order_id = fields.Many2one('sale.order', string="Sale Order")
+    check = fields.Boolean(compute='_compute_workorder')
+
+    def _compute_workorder(self):
+        work_order = self.env['workshop.order'].search([('initial_inspection', '=', self.pending_enquiry.id)])
+        if work_order:
+            self.check = True
+        else:
+            self.check = False
 
     def _compute_amount(self):
         for quotation in self:
@@ -99,42 +108,55 @@ class WorkshopQuotation(models.Model):
         if self.signed_name:
             self.telephone = self.signed_name.phone
 
-    @api.onchange('machine_id')
-    def _onchange_machine_id(self):
-        if self.machine_id:
-            machine = self.env['product.template'].search([('id', '=', self.machine_id.product_tmpl_id.id)])
-            # product_varient = self.env['product.product'].search([('product_tmpl_id', '=', product_template.id)])
-            print("!!!!!!!!", machine)
-            self.made = machine.made
-            self.make = machine.make
-            self.kilo = machine.kilo
-            self.kva = machine.kva
-            self.horsepower = machine.horsepower
-            self.machine_serial_number = machine.machine_serial_number
-            self.item_code = machine.item_code
-            self.rpm = machine.rpm
-            self.pole = machine.pole
-            self.volt = machine.volt
-            self.amps = machine.amps
-            self.hertz = machine.hertz
-            self.motor_no = machine.motor_no
+    # @api.onchange('machine_id')
+    # def _onchange_machine_id(self):
+    #     if self.machine_id:
+    #         machine = self.env['product.template'].search([('id', '=', self.machine_id.product_tmpl_id.id)])
+    #         # product_varient = self.env['product.product'].search([('product_tmpl_id', '=', product_template.id)])
+    #         print("!!!!!!!!", machine)
+    #         self.made = machine.made
+    #         self.make = machine.make
+    #         self.kilo = machine.kilo
+    #         self.kva = machine.kva
+    #         self.horsepower = machine.horsepower
+    #         self.machine_serial_number = machine.machine_serial_number
+    #         self.item_code = machine.item_code
+    #         self.rpm = machine.rpm
+    #         self.pole = machine.pole
+    #         self.volt = machine.volt
+    #         self.amps = machine.amps
+    #         self.hertz = machine.hertz
+    #         self.motor_no = machine.motor_no
 
     @api.depends('parts_required', 'services')
     def _compute_price(self):
         # compute price based on sum of spare parts cost,service cost
-        print(self.pending_enquiry.name, '////////////////////')
-        # is_work_order = self.env['workshop.order'].search([('initial_inspection', '=', self.pending_enquiry)])
-        # print('istttttt',is_work_order)
-        for rec in self:
-            spare_parts_amount = 0
-            service_amount = 0
-            for i in rec.parts_required:
-                print('qqqqqq', i.cost)
-                spare_parts_amount = spare_parts_amount + i.cost
-            # if self.
-            for j in rec.services:
-                service_amount = service_amount + (j.mechanical_works.lst_price * j.total_hours)
-            rec.price = spare_parts_amount + service_amount
+        print(self.pending_enquiry.name)
+        work_order = self.env['workshop.order'].search([('initial_inspection', '=', self.pending_enquiry.id)])
+        print('@@@@@@@@@@@@@@22',work_order.id)
+        if work_order:
+            for work_order in work_order:
+                cost = 0
+                for k in work_order.technician_ids:
+                    cost = cost + k.technician_id.timesheet_cost
+            for rec in self:
+                spare_parts_amount = 0
+                service_amount = 0
+                for i in rec.parts_required:
+                    spare_parts_amount = spare_parts_amount + i.cost
+                for j in rec.services:
+                    service_amount = service_amount + (cost * j.total_hours)
+                rec.price = spare_parts_amount + service_amount
+        else:
+            for rec in self:
+                spare_parts_amount = 0
+                service_amount = 0
+                for i in rec.parts_required:
+                    spare_parts_amount = spare_parts_amount + i.cost
+                for j in rec.services:
+                    service_amount = service_amount + (j.collective_cost * j.total_hours)
+                rec.price = spare_parts_amount + service_amount
+
 
     def _compute_order_count(self):
         """count of work orders created for this quotation"""
@@ -208,6 +230,9 @@ class WorkshopQuotation(models.Model):
         self.state = 'approved'
         self.pending_enquiry.state = 'done'
 
+        self.approved_by = self.env.user
+
+
     def reject(self):
         """rejects quote"""
         self.state = 'rejected'
@@ -219,12 +244,13 @@ class WorkshopQuotation(models.Model):
     @api.onchange('pending_enquiry')
     def onchange_pending_enquiry(self):
         """fills machine data"""
-        data = ['kilo', 'kva', 'horsepower', 'machine_serial_number', 'item_code', 'rpm', 'made', 'make', 'pole',
-                'volt',
-                'amps', 'hertz', 'motor_no']
+        # data = ['kilo', 'kva', 'horsepower', 'machine_serial_number', 'item_code', 'rpm', 'made', 'make', 'pole',
+        #         'volt',
+        #         'amps', 'hertz', 'motor_no']
         if self.pending_enquiry.machine_type:
-            machine_details = self.pending_enquiry.machine_type.read(data)[0]
-            machine_details.pop('id')
+            machine_details = {}
+            # machine_details = self.pending_enquiry.machine_type.read(data)[0]
+            # machine_details.pop('id')
             machine_details['machine_id'] = self.pending_enquiry.machine_type.id
             machine_details['customer_name'] = self.pending_enquiry.customer_name.id
 
@@ -321,13 +347,6 @@ class WorkshopQuotation(models.Model):
 class WorkQuotationLine(models.Model):
     _name = 'work.quotation.line'
 
-    def set_quantity(self):
-        print(self, 'qqqqqqqqqqqqq')
-        print(self.quotation_id, "Quotationnnnnnnnnnnnnnnnnn")
-        qty = self.quotation_id.quantity
-        print('qty', qty)
-        return qty
-
     quotation_id = fields.Many2one('workshop.quotation')
     product_id = fields.Many2one('product.product', string='Type Of Services',
                                  domain="[('detailed_type', '=', 'service')]")
@@ -336,8 +355,7 @@ class WorkQuotationLine(models.Model):
         ('line_section', 'Section'),
         ('line_note', 'Note'),
     ], default=False, help="Technical field for UX purpose.")
-    product_uom_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=True,
-                                   default=set_quantity)
+    product_uom_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=True)
     price_unit = fields.Float('Unit Price', required=True, digits='Product Price', default=0.0)
     product_uom = fields.Many2one('uom.uom', string='Unit of Measure')
     discount = fields.Float(string='Discount (%)', digits='Discount', default=0.0)
@@ -346,6 +364,10 @@ class WorkQuotationLine(models.Model):
     price_subtotal = fields.Float(compute='_compute_amount', string='Subtotal', readonly=True, store=True)
     price_tax = fields.Float(compute='_compute_amount', string='Total Tax', readonly=True, store=True)
     price_total = fields.Float(compute='_compute_amount', string='Total', readonly=True, store=True)
+
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        self.name = self.product_id.description_sale
 
     @api.model
     def create(self, vals):
@@ -393,6 +415,7 @@ class QuotationServices(models.Model):
     _description = 'Quotation Services'
 
     total_hours = fields.Float(string="Total hrs for completion", default=1.0)
+    collective_cost = fields.Float(string="Collective cost", default=0.0)
     mechanical_works = fields.Many2one('product.product', domain=[('type', '=', 'service'), ('is_machine', '=', False),
                                                                   ('is_workshop_service', '=', True)],
                                        string="Mechanical Works/Service List")
