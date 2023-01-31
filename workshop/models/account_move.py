@@ -7,7 +7,6 @@ class AccountMove(models.Model):
 
     pending_delivery_note = fields.Many2many('delivery.note', string="Pending Delivery Notes")
 
-
     def action_post(self):
         for pending_note in self.pending_delivery_note:
             pending_note.state = 'invoiced'
@@ -23,7 +22,8 @@ class SaleInvoice(models.TransientModel):
         sales = self.env['sale.order'].browse(self._context.get('active_ids', []))
         for sale in sales:
             if sale.workshop_delivery_note:
-                invoice = self.env['account.move'].search([('invoice_origin', '=', sale.name)], order='id desc', limit=1)
+                invoice = self.env['account.move'].search([('invoice_origin', '=', sale.name)], order='id desc',
+                                                          limit=1)
                 if invoice:
                     invoice.invoice_line_ids.update({
                         'date_of_supply': sale.workshop_delivery_note.delivery_note_date,
@@ -41,3 +41,14 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     workshop_delivery_note = fields.Many2one('delivery.note')
+
+
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.move.line'
+
+    item_code = fields.Char(string="Item Code", store=True)
+
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        if self.product_id:
+            self.item_code = self.product_id.default_code

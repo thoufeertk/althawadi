@@ -17,6 +17,7 @@ class AccountMoveInherit(models.Model):
     order_date = fields.Datetime(string='Order Date')
 
 
+
 class AccountMoveLineInherit(models.Model):
     _inherit = 'account.move.line'
 

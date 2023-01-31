@@ -27,7 +27,7 @@
                         <group>
                             <field name="name"/>
                             <field name="company_vat_no" string="Vat Account Number"/>
-                            <field name="invoice_origin" string="Buyers Order No."/>
+                            <field name="invoice_origin" string="Buyers Order No." readonly="0"/>
                             <field name="order_date"/>
                         </group>
                     </group>
@@ -62,6 +62,16 @@
                 <xpath expr="//field[@name='amount_residual']" position="attributes">
                     <attribute name="string">Balance Due</attribute>
                 </xpath>
+
+                <xpath expr="//field[@name='payment_reference']" position="attributes">
+                    <attribute name="string">Payment Mode</attribute>
+                    <attribute name="readonly">False</attribute>
+                </xpath>
+                <xpath expr="//field[@name='company_vat_no']" position="after">
+                    <xpath expr="//field[@name='payment_reference']" position="move"/>
+                </xpath>
+
+
 
             </field>
         </record>

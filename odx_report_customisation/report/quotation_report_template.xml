@@ -74,7 +74,7 @@
                             }
                         </style>
                         <div class="page">
-                            <h2 style="margin-top:-50px; text-align:center;">
+                            <h2 style=" text-align:center;">
                                 <span>
                                     <b>
                                         <u>Quotation</u>
@@ -336,7 +336,9 @@
                                     </tr>
                                 </table>
                             </t>
+
                             <table width="100%">
+                                <t t-if="o.scope_of_work">
                                 <tr width="100%">
                                     <b>Scope of Work</b>
                                 </tr>
@@ -344,9 +346,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.scope_of_work_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_testing">
                                 <tr width="100%">
                                     <b>Testing &amp; Inspection</b>
                                 </tr>
@@ -354,9 +358,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_testing_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_terms_and_condition">
                                 <tr width="100%">
                                     <b>Delivery</b>
                                 </tr>
@@ -364,9 +370,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_terms_and_condition_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_payment_term">
                                 <tr width="100%">
                                     <b>Payment Terms</b>
                                 </tr>
@@ -374,9 +382,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_payment_term_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_extend_of_quote">
                                 <tr width="100%">
                                     <b>Extend of Quote</b>
                                 </tr>
@@ -384,9 +394,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_extend_of_quote_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_warranty">
                                 <tr width="100%">
                                     <b>Warranty</b>
                                 </tr>
@@ -394,6 +406,7 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_warranty_description"/>
                                 </tr>
+                                </t>
                                 <br/>
 
 
@@ -441,7 +454,7 @@
                                         <br/>
                                         <t t-if="o.approved_by.sign_signature">
                                             <img t-att-src="image_data_uri(o.approved_by.sign_signature)"
-                                                 style="max-height: 4cm; max-width: 8cm;"/>
+                                                 style="max-height: 4cm; max-width: 6cm;"/>
                                         </t>
                                     </td>
                                     <br/>
@@ -525,7 +538,7 @@
                             }
                         </style>
                         <div class="page">
-                            <h2 style="margin-top:-50px; text-align:center;">
+                            <h2 style="margin-top:-30px; text-align:center;">
                                 <span>
                                     <b>
                                         <u>Quotation</u>
@@ -787,7 +800,8 @@
                                     </tr>
                                 </table>
                             </t>
-                            <table width="100%">
+                             <table width="100%">
+                                <t t-if="o.scope_of_work">
                                 <tr width="100%">
                                     <b>Scope of Work</b>
                                 </tr>
@@ -795,9 +809,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.scope_of_work_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_testing">
                                 <tr width="100%">
                                     <b>Testing &amp; Inspection</b>
                                 </tr>
@@ -805,9 +821,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_testing_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_terms_and_condition">
                                 <tr width="100%">
                                     <b>Delivery</b>
                                 </tr>
@@ -815,9 +833,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_terms_and_condition_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_payment_term">
                                 <tr width="100%">
                                     <b>Payment Terms</b>
                                 </tr>
@@ -825,9 +845,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_payment_term_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_extend_of_quote">
                                 <tr width="100%">
                                     <b>Extend of Quote</b>
                                 </tr>
@@ -835,9 +857,11 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_extend_of_quote_description"/>
                                 </tr>
+                                </t>
                                 <br/>
                                 <br/>
 
+                                <t t-if="o.odx_warranty">
                                 <tr width="100%">
                                     <b>Warranty</b>
                                 </tr>
@@ -845,9 +869,8 @@
                                 <tr width="100%" style="font-size: 15px;padding-left: 15px">
                                     <span t-field="o.odx_warranty_description"/>
                                 </tr>
+                                </t>
                                 <br/>
-
-
                             </table>
 
                             <br/>

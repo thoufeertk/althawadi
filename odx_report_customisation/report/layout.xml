@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="report_header_minimal_hiba_ntg">
-        <div class="header">
+        <div class="header" >
         </div>
         <div class="footer" style="font-size: 13px;font-family:Roboto;">
         </div>

@@ -108,25 +108,32 @@ class WorkshopQuotation(models.Model):
         if self.signed_name:
             self.telephone = self.signed_name.phone
 
-    # @api.onchange('machine_id')
-    # def _onchange_machine_id(self):
-    #     if self.machine_id:
-    #         machine = self.env['product.template'].search([('id', '=', self.machine_id.product_tmpl_id.id)])
-    #         # product_varient = self.env['product.product'].search([('product_tmpl_id', '=', product_template.id)])
-    #         print("!!!!!!!!", machine)
-    #         self.made = machine.made
-    #         self.make = machine.make
-    #         self.kilo = machine.kilo
-    #         self.kva = machine.kva
-    #         self.horsepower = machine.horsepower
-    #         self.machine_serial_number = machine.machine_serial_number
-    #         self.item_code = machine.item_code
-    #         self.rpm = machine.rpm
-    #         self.pole = machine.pole
-    #         self.volt = machine.volt
-    #         self.amps = machine.amps
-    #         self.hertz = machine.hertz
-    #         self.motor_no = machine.motor_no
+    @api.onchange('machine_id', 'kilo', 'horsepower', 'pole', 'kva', 'rpm')
+    def _onchange_machine_id(self):
+        if not self.pending_enquiry:
+            quotation_line = []
+            name_list = []
+            if self.machine_id and self.kilo and self.horsepower and self.pole and self.kva and self.rpm:
+                # if self.machine_id:
+                name_list.append(self.machine_id.name)
+                # if self.kilo:
+                name_list.append(self.kilo + 'KW')
+                # if self.horsepower:
+                name_list.append(self.horsepower + 'HP')
+                # if self.pole:
+                name_list.append(self.pole + 'Pole')
+                # if self.rpm:
+                name_list.append(self.rpm + 'RPM')
+                # if self.kva:
+                name_list.append(self.kva + 'Kva')
+                machine_rating = ', '.join(name_list)
+                quotation_line.append([0, 0, {
+                        'display_type': 'line_section',
+                        'name': machine_rating,
+                    }])
+            self.update({
+                    'work_quotation_line_ids': quotation_line,
+                })
 
     @api.depends('parts_required', 'services')
     def _compute_price(self):
@@ -371,10 +378,7 @@ class WorkQuotationLine(models.Model):
 
     @api.model
     def create(self, vals):
-        print('@@@@@@@@@@@@@@', vals)
-        print(vals['quotation_id'],"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
         quoatation_id = self.env['workshop.quotation'].browse(vals['quotation_id'])
-        print(quoatation_id,"llllllllllllllllllllllllllll")
         vals['product_uom_qty'] = quoatation_id.quantity
         return super(WorkQuotationLine, self).create(vals)
 

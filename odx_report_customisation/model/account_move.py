@@ -13,6 +13,14 @@ class InvoiceRelation(models.Model):
     odx_header = fields.Boolean(string="Print Header")
     odx_asset_number = fields.Char(string="Asset Number")
     job_number = fields.Char(string='Job Number')
+    supplier_ref = fields.Char(string="supplier's Ref.")
+    other_ref = fields.Char(string="other Ref.")
+    buyers_order_no = fields.Char(string="Buyer's order no")
+    despatch_document_no = fields.Char(string="Despatch document no")
+    despatch_through = fields.Char(string="Despatch through")
+    destination = fields.Many2one('stock.location', string='Destination')
+    terms_of_delivery = fields.Char(string='Terms of delivery')
+
 
     def compute_machine_name(self):
         # print(self.invoice_line_ids[0].name, 'iuhiu')
@@ -58,9 +66,13 @@ class InvoiceRelation(models.Model):
     word_tax = fields.Char(string="Amount In Words:", compute='_amount_in_word_tax')
 
     def get_bank_details(self, company):
+        print('###############3')
+        print('###############3',company)
         for rec in self:
-            partner = company.partner_id
+            partner = rec.partner_id
+            print('////////////',partner)
             bank = self.env['res.partner.bank'].search([('partner_id', '=', partner.id)], limit=1)
+            print('////////////',bank)
             return bank
 
 

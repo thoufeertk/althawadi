@@ -16,6 +16,15 @@
                 <field name="odx_header" string="With Header"/>
                  <field name="job_number" string="Job Number"/>
             </xpath>
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="supplier_ref" invisible="1"/>
+                <field name="other_ref" invisible="1"/>
+                <field name="buyers_order_no" invisible="1"/>
+                <field name="despatch_document_no" invisible="1"/>
+                <field name="despatch_through" invisible="1"/>
+                <field name="destination" invisible="1"/>
+                <field name="terms_of_delivery" invisible="1"/>
+            </xpath>
         </field>
     </record>
 </odoo>

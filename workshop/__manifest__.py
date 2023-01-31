@@ -8,7 +8,7 @@
     'website': 'https://cybrosys.com',
     'category': 'Tools',
     'depends': ['account_accountant', 'stock', 'project_data', 'cy_timesheet_payroll', 'purchase', 'sale',
-                'electrical_services', 'account_invoice_format','mail'],
+                'electrical_services', 'account_invoice_format', 'mail'],
     'license': 'AGPL-3',
     'data': [
         'security/security.xml',
