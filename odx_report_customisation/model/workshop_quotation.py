@@ -6,7 +6,7 @@ class WorkshopQuotation(models.Model):
 
     # odx_testing = fields.Html(string='Testing & Inspection', help='Write here all about Testing and Inspection', )
     odx_testing = fields.Many2one('workshop.testing.inspection', string="Testing & Inspection")
-    odx_testing_description = fields.Text(related='odx_testing.description', string="Description", default='test')
+    odx_testing_description = fields.Text(related='odx_testing.description', string="Description")
     # odx_extend_of_quote = fields.Html(string='Extend of Quote')
     odx_extend_of_quote = fields.Many2one('workshop.extend.quotes', string="Extend Of Quotes")
     odx_extend_of_quote_description = fields.Text(related='odx_extend_of_quote.description', string="Description")
@@ -21,6 +21,8 @@ class WorkshopQuotation(models.Model):
     odx_payment_term = fields.Many2one('workshop.payment.terms', string="Payment Term")
     odx_payment_term_description = fields.Text(related='odx_payment_term.description', string="Description")
     odx_attention_id = fields.Many2one('res.partner', string="Attention")
+    odx_details = fields.Many2one('workshop.details', string="Details")
+    odx_details_description = fields.Text(related="odx_details.description", string="Description")
 
     odx_header = fields.Boolean(string="With Header")
 

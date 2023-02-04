@@ -11,7 +11,6 @@
                         <group>
                             <group>
                                 <field name="odx_header" force_save="1"/>
-                                <field name="odx_sales_man" invisible="1"/>
                                 <field name="odx_gate_pass_no"/>
                             </group>
                         </group>
@@ -23,14 +22,18 @@
                 <group>
                     <field name="odx_attention_id" placeholder="Attention"/>
 
-                        </group>
-                <group></group>
-                        <group>
+                </group>
+                <group>
+                    <field name="odx_sales_man"/>
+                </group>
+                <group>
                     <field name="odx_warranty" placeholder="Warranty"/>
                     <field name="odx_warranty_description"/>
 
                     <field name="odx_testing" placeholder="Testing and Inspection"/>
                     <field name="odx_testing_description"/>
+
+
                 </group>
                 <group>
 
@@ -42,6 +45,13 @@
 
                     <field name="odx_payment_term" placeholder="Payment Term"/>
                     <field name="odx_payment_term_description"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='work_quotation_line_ids']" position="before">
+                <group>
+                <field name="odx_details" placeholder="Details"/>
+                <field name="odx_details_description"/>
                 </group>
             </xpath>
         </field>

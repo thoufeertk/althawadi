@@ -6,7 +6,7 @@
                 <t t-if="company">
                     <t t-if="company.header_image">
                         <img t-if="company.header_image" t-att-src="image_data_uri(company.header_image)" alt="Logo"
-                             style="margin-top:30px; height:110px; width:900px;"/>
+                             style=" height:150px; width:900px;"/>
                     </t>
 
                     <t t-if="not company.header_image">
@@ -26,7 +26,8 @@
             <ul class="list-inline mb4">
                 <t t-if="company.footer_image">
                     <div class="center">
-                        <img t-if="company.footer_image" t-att-src="image_data_uri(company.footer_image)" alt="Logo" style="margin-left:-250px;"/>
+                        <img t-if="company.footer_image" t-att-src="image_data_uri(company.footer_image)" alt="Logo"
+                             style="height:150px; width:900px; "/>
 
                     </div>
                 </t>

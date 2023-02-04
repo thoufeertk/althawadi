@@ -65,6 +65,8 @@ workshop_scopeofwork_id,workshop.scopeofwork.user,model_workshop_scopeofwork,,1,
 
 workshop_testing_inspection,workshop.testing.inspection,model_workshop_testing_inspection,,1,1,1,1
 
+workshop_workshop_details,workshop.details,model_workshop_details,,1,1,1,1
+
 workshop_extend_quotes,workshop.extend.quotes,model_workshop_extend_quotes,,1,1,1,1
 
 workshop_workshop_delivery,workshop.delivery,model_workshop_delivery,,1,1,1,1

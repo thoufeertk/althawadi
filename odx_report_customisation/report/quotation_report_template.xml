@@ -73,7 +73,7 @@
                             padding: 5px 0px 5px 0px !important;
                             }
                         </style>
-                        <div class="page">
+                        <div class="page" style="margin-top:-50px;">
                             <h2 style=" text-align:center;">
                                 <span>
                                     <b>
@@ -91,21 +91,44 @@
                                                 <span>Customer Name :</span>
                                                 <span t-field="o.customer_name"/>
                                                 <br/>
-                                                <span>Address :</span>
-                                                <span t-field="o.street"/>
-                                                <span t-field="o.zip"/>
-                                                <span t-field="o.city"/>
-                                                <br/>
-                                                <span t-field="o.country_id"/>
-                                                <br/>
-                                                <span>Telephone :</span>
-                                                <span t-field="o.customer_name.phone"/>
-                                                <br/>
-                                                <span>Email :</span>
-                                                <span t-field="o.customer_name.email"/>
-                                                <br/>
-                                                <span t-if="o.signed_name">Sales ID :</span>
-                                                <span t-field="o.signed_name"/>
+                                                <t t-if="o.customer_name.street">
+                                                    <span>Address:</span>
+                                                    <span t-field="o.customer_name.street"/>
+                                                </t><br/>
+                                                <t t-if="o.customer_name.street2">
+                                                    <span t-field="o.customer_name.street2"/>,
+                                                </t>
+                                                <t t-if="o.customer_name.city">
+                                                    <span t-field="o.customer_name.city"/>,
+                                                </t>
+                                                <t t-if="o.customer_name.state_id">
+                                                    <span t-field="o.customer_name.state_id"/>
+                                                </t><br/>
+                                                <t t-if="o.customer_name.zip">
+                                                    <span>Zip:</span>
+                                                    <span t-field="o.customer_name.zip"/>
+                                                    <br/>
+                                                </t>
+
+                                                <t t-if="o.customer_name.phone">
+                                                    <span>Phone:</span>
+                                                    <span t-field="o.customer_name.phone"/>
+                                                    <br/>
+                                                </t>
+                                                <t t-if="o.customer_name.mobile">
+                                                    <span>Mobile:</span>
+                                                    <span t-field="o.customer_name.mobile"/>
+                                                    <br/>
+                                                </t>
+                                                <t t-if="o.customer_name.email">
+                                                    <span>Mail:</span>
+                                                    <span t-field="o.customer_name.email"/>
+                                                    <br/>
+                                                </t>
+
+
+                                                <span t-if="o.odx_sales_man">Sales ID :</span>
+                                                <span t-field="o.odx_sales_man"/>
 
                                             </td>
                                             <td style="padding-left:5px">
@@ -149,6 +172,10 @@
                                 <span>Equipment Details</span>
                             </b>
                             <br/>
+                            <t t-if="o.odx_details">
+                                <span t-field="o.odx_details_description"/>
+                            </t><br/>
+
                             <table width="100%" class="table table-sm">
                                 <t t-set="sl" t-value="0"/>
                                 <t t-set="total_discount" t-value="0"/>
@@ -339,73 +366,73 @@
 
                             <table width="100%">
                                 <t t-if="o.scope_of_work">
-                                <tr width="100%">
-                                    <b>Scope of Work</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.scope_of_work_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Scope of Work</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.scope_of_work_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_testing">
-                                <tr width="100%">
-                                    <b>Testing &amp; Inspection</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_testing_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Testing &amp; Inspection</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_testing_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_terms_and_condition">
-                                <tr width="100%">
-                                    <b>Delivery</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_terms_and_condition_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Delivery</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_terms_and_condition_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_payment_term">
-                                <tr width="100%">
-                                    <b>Payment Terms</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_payment_term_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Payment Terms</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_payment_term_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_extend_of_quote">
-                                <tr width="100%">
-                                    <b>Extend of Quote</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_extend_of_quote_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Extend of Quote</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_extend_of_quote_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_warranty">
-                                <tr width="100%">
-                                    <b>Warranty</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_warranty_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Warranty</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_warranty_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
 
@@ -424,13 +451,18 @@
                                         <b>Prepared By:</b>
                                         <br/>
                                         <t t-if="o.signed_name.name">
-                                        <b>Name :</b>
-                                        <t t-esc="o.signed_name.name"/>
+                                            <b>Name :</b>
+                                            <t t-esc="o.signed_name.name"/>
                                         </t>
                                         <br/>
                                         <t t-if="o.telephone">
-                                        <b>Phone :</b>
-                                        <t t-esc="o.telephone"/>
+                                            <b>Phone :</b>
+                                            <t t-esc="o.telephone"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.signed_name.mobile">
+                                            <b>Mobile :</b>
+                                            <t t-esc="o.signed_name.mobile"/>
                                         </t>
                                         <br/>
                                         <t t-if="o.signed_name.sign_signature">
@@ -443,13 +475,18 @@
                                         <b>Approved By</b>
                                         <br/>
                                         <t t-if="o.approved_by.name">
-                                        <b>name :</b>
-                                        <t t-esc="o.approved_by.name"/>
+                                            <b>name :</b>
+                                            <t t-esc="o.approved_by.name"/>
                                         </t>
                                         <br/>
                                         <t t-if="o.approved_by.phone">
-                                        <b>Phone :</b>
-                                        <t t-esc="o.approved_by.phone"/>
+                                            <b>Phone :</b>
+                                            <t t-esc="o.approved_by.phone"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.approved_by.mobile">
+                                            <b>Phone :</b>
+                                            <t t-esc="o.approved_by.mobile"/>
                                         </t>
                                         <br/>
                                         <t t-if="o.approved_by.sign_signature">
@@ -537,7 +574,7 @@
                             padding: 5px 0px 5px 0px !important;
                             }
                         </style>
-                        <div class="page">
+                        <div class="page" style="margin-top:-50px;">
                             <h2 style="margin-top:-30px; text-align:center;">
                                 <span>
                                     <b>
@@ -555,21 +592,44 @@
                                                 <span>Customer Name :</span>
                                                 <span t-field="o.customer_name"/>
                                                 <br/>
-                                                <span>Address :</span>
-                                                <span t-field="o.street"/>
-                                                <span t-field="o.zip"/>
-                                                <span t-field="o.city"/>
-                                                <br/>
-                                                <span t-field="o.country_id"/>
-                                                <br/>
-                                                <span>Telephone :</span>
-                                                <span t-field="o.customer_name.phone"/>
-                                                <br/>
-                                                <span>Email :</span>
-                                                <span t-field="o.customer_name.email"/>
-                                                <br/>
-                                                <span t-if="o.signed_name">Sales ID :</span>
-                                                <span t-field="o.signed_name"/>
+                                                <t t-if="o.customer_name.street">
+                                                    <span>Address:</span>
+                                                    <span t-field="o.customer_name.street"/>
+                                                </t><br/>
+                                                <t t-if="o.customer_name.street2">
+                                                    <span t-field="o.customer_name.street2"/>,
+                                                </t>
+                                                <t t-if="o.customer_name.city">
+                                                    <span t-field="o.customer_name.city"/>,
+                                                </t>
+                                                <t t-if="o.customer_name.state_id">
+                                                    <span t-field="o.customer_name.state_id"/>
+                                                </t><br/>
+                                                <t t-if="o.customer_name.zip">
+                                                    <span>Zip:</span>
+                                                    <span t-field="o.customer_name.zip"/>
+                                                    <br/>
+                                                </t>
+
+                                                <t t-if="o.customer_name.phone">
+                                                    <span>Phone:</span>
+                                                    <span t-field="o.customer_name.phone"/>
+                                                    <br/>
+                                                </t>
+                                                <t t-if="o.customer_name.mobile">
+                                                    <span>Mobile:</span>
+                                                    <span t-field="o.customer_name.mobile"/>
+                                                    <br/>
+                                                </t>
+                                                <t t-if="o.customer_name.email">
+                                                    <span>Mail:</span>
+                                                    <span t-field="o.customer_name.email"/>
+                                                    <br/>
+                                                </t>
+
+
+                                                <span t-if="o.odx_sales_man">Sales ID :</span>
+                                                <span t-field="o.odx_sales_man"/>
 
                                             </td>
                                             <td style="padding-left:5px">
@@ -613,6 +673,9 @@
                                 <span>Equipment Details</span>
                             </b>
                             <br/>
+                            <t t-if="o.odx_details">
+                                <span t-field="o.odx_details_description"/>
+                            </t><br/>
                             <table width="100%" class="table table-sm">
                                 <t t-set="sl" t-value="0"/>
                                 <t t-set="total_discount" t-value="0"/>
@@ -800,75 +863,75 @@
                                     </tr>
                                 </table>
                             </t>
-                             <table width="100%">
+                            <table width="100%">
                                 <t t-if="o.scope_of_work">
-                                <tr width="100%">
-                                    <b>Scope of Work</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.scope_of_work_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Scope of Work</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.scope_of_work_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_testing">
-                                <tr width="100%">
-                                    <b>Testing &amp; Inspection</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_testing_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Testing &amp; Inspection</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_testing_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_terms_and_condition">
-                                <tr width="100%">
-                                    <b>Delivery</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_terms_and_condition_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Delivery</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_terms_and_condition_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_payment_term">
-                                <tr width="100%">
-                                    <b>Payment Terms</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_payment_term_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Payment Terms</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_payment_term_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_extend_of_quote">
-                                <tr width="100%">
-                                    <b>Extend of Quote</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_extend_of_quote_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Extend of Quote</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_extend_of_quote_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                                 <br/>
 
                                 <t t-if="o.odx_warranty">
-                                <tr width="100%">
-                                    <b>Warranty</b>
-                                </tr>
-                                <br/>
-                                <tr width="100%" style="font-size: 15px;padding-left: 15px">
-                                    <span t-field="o.odx_warranty_description"/>
-                                </tr>
+                                    <tr width="100%">
+                                        <b>Warranty</b>
+                                    </tr>
+                                    <br/>
+                                    <tr width="100%" style="font-size: 15px;padding-left: 15px">
+                                        <span t-field="o.odx_warranty_description"/>
+                                    </tr>
                                 </t>
                                 <br/>
                             </table>
@@ -885,13 +948,18 @@
                                         <b>Prepared By:</b>
                                         <br/>
                                         <t t-if="o.signed_name.name">
-                                        <b>Name :</b>
-                                        <t t-esc="o.signed_name.name"/>
+                                            <b>Name :</b>
+                                            <t t-esc="o.signed_name.name"/>
                                         </t>
                                         <br/>
                                         <t t-if="o.telephone">
-                                        <b>Phone :</b>
-                                        <t t-esc="o.telephone"/>
+                                            <b>Phone :</b>
+                                            <t t-esc="o.telephone"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.signed_name.mobile">
+                                            <b>Phone :</b>
+                                            <t t-esc="o.signed_name.mobile"/>
                                         </t>
                                         <br/>
                                         <t t-if="o.signed_name.sign_signature">
@@ -904,13 +972,18 @@
                                         <b>Approved By</b>
                                         <br/>
                                         <t t-if="o.approved_by.name">
-                                        <b>name :</b>
-                                        <t t-esc="o.approved_by.name"/>
+                                            <b>name :</b>
+                                            <t t-esc="o.approved_by.name"/>
                                         </t>
                                         <br/>
                                         <t t-if="o.approved_by.phone">
-                                        <b>Phone :</b>
-                                        <t t-esc="o.approved_by.phone"/>
+                                            <b>Phone :</b>
+                                            <t t-esc="o.approved_by.phone"/>
+                                        </t>
+                                        <br/>
+                                        <t t-if="o.approved_by.mobile">
+                                            <b>Phone :</b>
+                                            <t t-esc="o.approved_by.mobile"/>
                                         </t>
                                         <br/>
                                         <t t-if="o.approved_by.sign_signature">

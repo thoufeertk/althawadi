@@ -24,3 +24,4 @@ from . import workshop_extend_of_quote
 from . import workshop_delivery
 from . import workshop_payment_terms
 from . import workshop_warranty
+from . import workshop_details

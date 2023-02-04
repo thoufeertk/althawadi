@@ -41,6 +41,7 @@
         'views/timesheet.xml',
         'views/product.xml',
         'views/workshope_scopeofwork_view.xml',
+        'views/workshop_details_view.xml',
         'views/workshop_testing_inspection_view.xml',
         'views/workshop_extend_of_quotes_view.xml',
         'views/workshop_delivery.xml',
