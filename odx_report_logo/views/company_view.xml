@@ -7,14 +7,24 @@
             <field name="arch" type="xml">
                 <xpath expr="//notebook[last()]" position="inside">
                     <page string="Report Cofiguration">
-	                    <group string="Report Logo">
+                        <group string="Report Logo">
                             <group>
                                 <div style="width:100px;">
-                                <field name="header_image"  widget="image" options="{'size': [100, 100]}" type="base64"/>
-	                            <field name="footer_image"  widget="image" options="{'size': [100, 100]}" type="base64"/>
-                            </div>
+                                    <field name="header_image" widget="image" options="{'size': [100, 100]}"
+                                           type="base64"/>
+                                    <field name="footer_image" widget="image" options="{'size': [100, 100]}"
+                                           type="base64"/>
+                                </div>
                             </group>
-	                    </group>
+                        </group>
+                        <group string="Stamp">
+                            <group>
+                                <div style="width:100px;">
+                                    <field name="stamp_image" widget="image" options="{'size': [100, 100]}"
+                                           type="base64"/>
+                                </div>
+                            </group>
+                        </group>
                     </page>
                 </xpath>
             </field>
