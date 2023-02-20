@@ -138,8 +138,6 @@
                                                     <span>Offer Validity</span>
                                                 </t>
                                                 <br/>
-
-
                                                 <span t-if="o.machine_serial_number">Serial Number</span>
                                                 <br/>
                                                 <span t-if="o.quote_address_person">Attn</span>
@@ -559,8 +557,10 @@
                                 </tr>
                             </table>
                             <div style="margin-left:400px;">
+                                <t t-if="o.company_id.stamp_image">
                                 <img t-att-src="image_data_uri(o.company_id.stamp_image)"
                                      style="max-height: 4cm; max-width: 6cm;"/>
+                                </t>
                             </div>
                         </div>
                     </t>
@@ -1121,8 +1121,10 @@
                                 </tr>
                             </table>
                             <div style="margin-left:400px;">
+                                <t t-if="o.company_id.stamp_image">
                                 <img t-att-src="image_data_uri(o.company_id.stamp_image)"
                                      style="max-height: 4cm; max-width: 6cm;"/>
+                                </t>
                             </div>
                         </div>
                     </t>
